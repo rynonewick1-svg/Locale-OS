@@ -331,7 +331,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="view" id="view-audit">
     <div class="panel">
       <div class="panel-title">Run a visibility audit</div>
-      <div class="panel-sub">Generates a full AI audit and saves the results to the selected client. Run monthly to track score movement.</div>
+      <div class="panel-sub">Generates a directional visibility snapshot from the details below. The more real numbers you enter (review count, rating, links), the more accurate it is. Run monthly to track movement.</div>
       <div class="field-row">
         <div class="field"><label>Business name</label><input id="aBiz" placeholder="e.g. Mike's Plumbing"></div>
         <div class="field"><label>Owner's name</label><input id="aOwner" placeholder="e.g. Mike Johnson"></div>
@@ -343,14 +343,21 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <div class="field-row">
         <div class="field"><label>Google Business Profile status</label>
           <select id="aGbp"><option>Fully set up and active</option><option>Set up but rarely updated</option><option>Exists but unclaimed/unknown state</option><option>No profile</option></select></div>
-        <div class="field"><label>Google reviews</label>
-          <select id="aRev"><option>None</option><option>1–5</option><option>6–20</option><option selected>21–50</option><option>50+</option></select></div>
+        <div class="field"><label>Google Business Profile link <span style="color:var(--muted);font-weight:400">(optional but improves accuracy)</span></label><input id="aGbpLink" placeholder="Paste your Google listing URL"></div>
+      </div>
+      <div class="field-row">
+        <div class="field"><label>How many Google reviews do you have?</label><input id="aRevCount" type="number" min="0" placeholder="e.g. 14"></div>
+        <div class="field"><label>Average star rating</label><input id="aRating" type="number" min="0" max="5" step="0.1" placeholder="e.g. 4.7"></div>
       </div>
       <div class="field-row">
         <div class="field"><label>Website</label>
           <select id="aWeb"><option>Professional, regularly updated</option><option selected>Exists but outdated</option><option>Basic landing page only</option><option>No website</option></select></div>
+        <div class="field"><label>Website link <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="aWebLink" placeholder="e.g. yourbusiness.com.au"></div>
+      </div>
+      <div class="field-row">
         <div class="field"><label>Social media activity</label>
           <select id="aSoc"><option>Active on 2+ platforms</option><option selected>One platform, inconsistent</option><option>Accounts exist, dormant</option><option>None</option></select></div>
+        <div class="field"><label>Main social handle <span style="color:var(--muted);font-weight:400">(optional)</span></label><input id="aSocHandle" placeholder="e.g. @yourbusiness"></div>
       </div>
       <div class="field"><label>Biggest challenge & goals (optional)</label><textarea id="aGoals" placeholder="e.g. Relying entirely on word of mouth, wants 5 more quote requests per week..."></textarea></div>
       <button class="btn btn-primary" onclick="runAudit()">Generate audit ✦</button>
@@ -716,13 +723,18 @@ function prefillAudit(){
   document.getElementById('aLoc').value=c.location||'';
 }
 async function runAudit(){
-  const d={biz:val('aBiz'),owner:val('aOwner'),ind:val('aInd'),loc:val('aLoc'),gbp:val('aGbp'),rev:val('aRev'),web:val('aWeb'),soc:val('aSoc'),goals:val('aGoals')};
+  const d={biz:val('aBiz'),owner:val('aOwner'),ind:val('aInd'),loc:val('aLoc'),gbp:val('aGbp'),gbpLink:val('aGbpLink'),revCount:val('aRevCount'),rating:val('aRating'),web:val('aWeb'),webLink:val('aWebLink'),soc:val('aSoc'),socHandle:val('aSocHandle'),goals:val('aGoals')};
   if(!d.biz||!d.ind||!d.loc){toast('Business name, industry and location are required');return;}
   show('auditLoader',true); document.getElementById('auditResult').innerHTML='';
-  const prompt=`You are a senior local business marketing strategist at agency "${S.settings.agencyName||'Locale'}". Produce a local visibility audit.
+  const reviewInfo = d.revCount!=='' ? `${d.revCount} Google reviews${d.rating?` averaging ${d.rating} stars`:''}` : 'review count not provided';
+  const prompt=`You are a senior local business marketing strategist at "${S.settings.agencyName||'Locale'}". Produce a DIRECTIONAL local visibility snapshot based on the information the business owner has self-reported. This is a starting-point assessment, not a forensic measurement — be genuinely useful and specific, but do NOT state any figure as a precise measured fact that wasn't provided. Base review/rating commentary ONLY on the real numbers given.
 Business: ${d.biz} | Owner: ${d.owner} | Industry: ${d.ind} | Location: ${d.loc}
-GBP: ${d.gbp} | Reviews: ${d.rev} | Website: ${d.web} | Social: ${d.soc} | Goals/challenges: ${d.goals||'not given'}
-Return ONLY raw JSON: {"score":<0-100>,"scoreLabel":<string>,"overview":<2-3 paragraphs, specific to this business, separated by \\n\\n>,"quickWins":[<3 strings>],"topActions":[{"title":,"detail":} x5],"pillars":{"Google profile":<0-100>,"Reviews & reputation":<0-100>,"Website":<0-100>,"Social media":<0-100>,"Local search":<0-100>},"opportunity":<1 sentence>}`;
+Google Business Profile: ${d.gbp}${d.gbpLink?` (listing: ${d.gbpLink})`:''}
+Reviews: ${reviewInfo}
+Website: ${d.web}${d.webLink?` (${d.webLink})`:''}
+Social: ${d.soc}${d.socHandle?` (${d.socHandle})`:''}
+Goals/challenges: ${d.goals||'not given'}
+Scores are directional estimates from self-reported inputs. Where the owner gave real numbers (reviews/rating), reflect them accurately. Return ONLY raw JSON: {"score":<0-100>,"scoreLabel":<string>,"overview":<2-3 paragraphs, specific to this business, honest about being a directional snapshot, separated by \\n\\n>,"quickWins":[<3 strings>],"topActions":[{"title":,"detail":} x5],"pillars":{"Google profile":<0-100>,"Reviews & reputation":<0-100>,"Website":<0-100>,"Social media":<0-100>,"Local search":<0-100>},"opportunity":<1 sentence>}`;
   let audit;
   try{ audit=parseJSON(await callClaude(prompt,'audit')); }
   catch(e){ if(e.message==='RATE_LIMIT'){ show('auditLoader',false); toast('Slow down a moment — too many requests. Try again shortly.'); return; } audit=demoAudit(d); if(e.message!=='NO_KEY') toast('Showing demo audit (live AI unavailable)'); }
@@ -748,7 +760,7 @@ function renderAuditResult(d,a){
     <div class="panel">
       <div style="display:flex;align-items:center;gap:18px;padding-bottom:16px;border-bottom:1px solid var(--border);margin-bottom:16px">
         <div style="font-family:'DM Sans',sans-serif;font-weight:700;letter-spacing:-0.03em;font-size:52px;color:var(--accent);letter-spacing:-2px">${a.score}</div>
-        <div><div class="panel-title">${d.biz} — ${a.scoreLabel}</div><div style="font-size:12.5px;color:var(--muted)">${d.ind} · ${d.loc} · ${new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'})}</div></div>
+        <div><div class="panel-title">${d.biz} — ${a.scoreLabel}</div><div style="font-size:12.5px;color:var(--muted)">${d.ind} · ${d.loc} · ${new Date().toLocaleDateString('en-AU',{day:'numeric',month:'long',year:'numeric'})}</div><div style="font-size:11.5px;color:var(--muted2);margin-top:4px">Directional snapshot based on your inputs — not a measured audit</div></div>
         <button class="btn btn-primary" style="margin-left:auto" onclick="saveAuditToClient()">Save to client →</button>
       </div>
       <div class="oc-body">${a.overview.split('\n\n').map(p=>`<p style="margin-bottom:10px">${p}</p>`).join('')}</div>
@@ -780,6 +792,8 @@ function applyAuditToOwnBusiness(d, a){
     score: a.score,
     prevScore: (c.score && c.score>0) ? c.score : a.score,
     pillars: a.pillars,
+    reviews: (d.revCount!==''&&d.revCount!=null) ? parseInt(d.revCount)||0 : (c.reviews||0),
+    rating: (d.rating!==''&&d.rating!=null) ? parseFloat(d.rating)||0 : (c.rating||0),
     history: [...(c.history||[]), a.score].slice(-12),
     audit: {overview: a.overview, date: Date.now()},
     actions: a.topActions.slice(0,3).map((t,i)=>({t:t.title, d:t.detail, p:i===0?'high':i===1?'high':'med'}))
