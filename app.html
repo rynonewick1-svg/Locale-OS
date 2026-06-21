@@ -21,7 +21,7 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:14px;line-height:1.5;min-height:100vh}
 body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle at top left,rgba(245,166,35,0.07),transparent 32rem),radial-gradient(circle at top right,rgba(46,125,89,0.06),transparent 34rem);pointer-events:none;z-index:0}
-.app{display:grid;grid-template-columns:228px 1fr;min-height:100vh;position:relative;z-index:1}
+.app{display:grid;grid-template-columns:228px 1fr;min-height:100vh;position:relative}
 
 /* SIDEBAR */
 .sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:26px 0;position:sticky;top:0;height:100vh}
@@ -162,12 +162,13 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .api-banner a{color:#9a6a10;text-decoration:underline;cursor:pointer}
 .menu-btn{display:none;background:transparent;border:1px solid var(--border2);border-radius:var(--rs);width:40px;height:40px;align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;color:var(--text)}
 .menu-btn svg{width:20px;height:20px}
-.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(31,35,38,0.45);z-index:45}
+.sb-backdrop{display:none;position:fixed;inset:0;background:rgba(31,35,38,0.45);z-index:800}
 .sb-backdrop.open{display:block}
 @media(max-width:900px){
   .app{grid-template-columns:1fr}
-  .sidebar{position:fixed;left:0;top:0;height:100vh;width:264px;z-index:50;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 50px rgba(0,0,0,0.18);background:#fffcf7;overflow-y:auto}
+  .sidebar{position:fixed;left:0;top:0;height:100vh;width:264px;z-index:900;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 50px rgba(0,0,0,0.18);background:#fffcf7;overflow-y:auto}
   .sidebar.open{transform:translateX(0)}
+  .sidebar .nav-item{pointer-events:auto;cursor:pointer}
   .menu-btn{display:flex}
   .topbar{padding-left:18px;padding-right:18px}
   .topbar h1{font-size:19px}
@@ -234,8 +235,8 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   </div>
 </div>
 
-<div class="sb-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
 <div class="app">
+<div class="sb-backdrop" id="sbBackdrop" onclick="closeSidebar()"></div>
 
 <!-- ============ SIDEBAR ============ -->
 <aside class="sidebar">
