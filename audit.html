@@ -283,7 +283,13 @@ async function unlockResults(){
         industry: _auditData.ind,
         location: _auditData.loc,
         answers: _auditData,
-        score: _auditResult.score
+        score: _auditResult.score,
+        snapshot: {
+          scoreLabel: _auditResult.scoreLabel,
+          overview: _auditResult.overview,
+          topActions: _auditResult.topActions,
+          pillars: _auditResult.pillars
+        }
       });
     }
   } catch(e){ console.error('Lead save failed:', e); }
