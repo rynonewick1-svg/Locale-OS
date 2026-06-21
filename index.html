@@ -144,6 +144,26 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
   .feature,.feature.rev{grid-template-columns:1fr;gap:24px}
   .nav-links a:not(.btn){display:none}
 }
+
+/* ROI CALCULATOR */
+.roi-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;margin-top:42px}
+.roi-card{border:1px solid var(--line);background:var(--cream2);border-radius:20px;padding:30px 32px;box-shadow:0 24px 70px rgba(31,35,38,0.06)}
+.roi-slider-row{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:10px}
+.roi-slider-label{font-size:13.5px;font-weight:600;color:var(--charcoal)}
+.roi-slider-out{font-size:22px;font-weight:700;letter-spacing:-0.02em;color:var(--green)}
+.roi-range{width:100%;accent-color:var(--green);height:6px;cursor:pointer;margin-bottom:6px}
+.roi-range-ends{display:flex;justify-content:space-between;font-size:11px;color:var(--muted2);margin-bottom:26px}
+.roi-result{background:var(--charcoal);border-radius:16px;padding:26px 28px;margin-bottom:18px}
+.roi-result-label{font-size:12px;font-weight:600;letter-spacing:0.04em;text-transform:uppercase;color:#9e9a92;margin-bottom:6px}
+.roi-annual{font-size:46px;font-weight:700;letter-spacing:-0.04em;color:var(--cream2);line-height:1}
+.roi-vs{font-size:13.5px;color:var(--amber);font-weight:600;margin-top:8px}
+.roi-mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:8px}
+.roi-mini{border-radius:12px;padding:14px 16px}
+.roi-mini-label{font-size:11px;font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:5px}
+.roi-mini-val{font-size:20px;font-weight:700;letter-spacing:-0.02em}
+.roi-caveat{font-size:11.5px;color:var(--muted2);line-height:1.5;text-align:center;margin-top:14px}
+@media(max-width:880px){.roi-wrap{grid-template-columns:1fr;gap:24px}}
+
 </style>
 </head>
 <body>
@@ -157,6 +177,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
   <div class="nav-links">
     <a href="#how">How it works</a>
     <a href="#features">Features</a>
+    <a href="#roi">ROI</a>
     <a href="#pricing">Pricing</a>
     <a href="/app" class="btn btn-primary">Get your free audit</a>
   </div>
@@ -268,6 +289,53 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
   </div>
 </section>
 
+<!-- ROI -->
+<section class="section" id="roi">
+  <div class="eyebrow">Return on investment</div>
+  <h2>It only has to win you one extra job.</h2>
+  <p class="section-sub">Most local operators only need a job or two more a month for Locale to pay for itself many times over. Drag in your own numbers and see.</p>
+  <div class="roi-wrap">
+    <div>
+      <div style="font-size:15px;color:var(--muted);line-height:1.75;margin-bottom:18px">You're not paying for software — you're paying to get found by people who are already searching for what you do. The question that matters isn't "what does it cost?" It's "what's one more job a month worth to me?"</div>
+      <div style="font-size:15px;color:var(--muted);line-height:1.75">Set what an average job is worth to you on the right, and how many extra you'd need to win. The maths does the rest.</div>
+    </div>
+    <div class="roi-card">
+      <div class="roi-slider-row">
+        <label class="roi-slider-label" for="jobval">Average job value</label>
+        <span class="roi-slider-out" id="jobvalOut">$1,200</span>
+      </div>
+      <input id="jobval" class="roi-range" type="range" min="200" max="8000" step="100" value="1200">
+      <div class="roi-range-ends"><span>$200</span><span>$8,000+</span></div>
+
+      <div class="roi-slider-row">
+        <label class="roi-slider-label" for="extra">Extra jobs won per month</label>
+        <span class="roi-slider-out" id="extraOut">1</span>
+      </div>
+      <input id="extra" class="roi-range" type="range" min="1" max="10" step="1" value="1">
+      <div class="roi-range-ends"><span>just 1</span><span>10</span></div>
+
+      <div class="roi-result">
+        <div class="roi-result-label">Extra revenue per year</div>
+        <div class="roi-annual" id="annual">$14,400</div>
+        <div class="roi-vs" id="vsCost">That's 1.5× what Locale costs for the year</div>
+      </div>
+
+      <div class="roi-mini-grid">
+        <div class="roi-mini" style="background:var(--surface2)">
+          <div class="roi-mini-label" style="color:var(--muted2)">Locale Managed</div>
+          <div class="roi-mini-val" style="color:var(--charcoal)">$9,600<span style="font-size:12px;color:var(--muted2);font-weight:600">/yr</span></div>
+        </div>
+        <div class="roi-mini" id="netCard" style="background:rgba(46,125,89,0.1)">
+          <div class="roi-mini-label" id="netLabel" style="color:#3b6d11">Your net gain</div>
+          <div class="roi-mini-val" id="net" style="color:var(--green)">$4,800<span style="font-size:12px;color:#639922;font-weight:600">/yr</span></div>
+        </div>
+      </div>
+
+      <div class="roi-caveat">Your numbers, your math. Locale Managed is $800/mo. Results vary — this is an illustration, not a guarantee.</div>
+    </div>
+  </div>
+</section>
+
 <!-- PRICING -->
 <section class="section" id="pricing">
   <div class="eyebrow">Pricing</div>
@@ -297,7 +365,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
       <div class="price-amt">$800+</div>
       <div class="price-per">per month · tailored</div>
       <ul class="price-feats"><li>Everything in Toolkit</li><li>We optimise your Google profile</li><li>We run your content &amp; reviews</li><li>Monthly strategy call</li><li>Done-for-you reporting</li></ul>
-      <a href="mailto:ryno.newick1@gmail.com?subject=Locale%20Managed%20enquiry" class="btn btn-secondary">Book a call</a>
+      <a href="mailto:hello@yourdomain.com?subject=Locale%20Managed%20enquiry" class="btn btn-secondary">Book a call</a>
     </div>
   </div>
 </section>
@@ -320,5 +388,43 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 </footer>
 
 </div>
+<script>
+(function(){
+  var COST=9600;
+  var jobval=document.getElementById('jobval');
+  var extra=document.getElementById('extra');
+  if(!jobval) return;
+  var fmt=function(n){return '$'+Math.round(n).toLocaleString('en-AU');};
+  function update(){
+    var jv=parseInt(jobval.value,10);
+    var ex=parseInt(extra.value,10);
+    var annual=jv*ex*12;
+    var net=annual-COST;
+    document.getElementById('jobvalOut').textContent=fmt(jv);
+    document.getElementById('extraOut').textContent=ex;
+    document.getElementById('annual').textContent=fmt(annual);
+    var vs=document.getElementById('vsCost');
+    var card=document.getElementById('netCard');
+    var label=document.getElementById('netLabel');
+    var netEl=document.getElementById('net');
+    if(annual>=COST){
+      vs.textContent="That's "+(annual/COST).toFixed(1)+"\u00d7 what Locale costs for the year";
+      card.style.background='rgba(46,125,89,0.1)';
+      label.textContent='Your net gain'; label.style.color='#3b6d11';
+      netEl.style.color='#2e7d59';
+      netEl.innerHTML=fmt(net)+'<span style="font-size:12px;color:#639922;font-weight:600">/yr</span>';
+    } else {
+      vs.textContent="Just over half what Locale costs \u2014 nudge the jobs up";
+      card.style.background='var(--surface2)';
+      label.textContent='Still short by'; label.style.color='var(--muted2)';
+      netEl.style.color='var(--charcoal)';
+      netEl.innerHTML=fmt(Math.abs(net))+'<span style="font-size:12px;color:var(--muted2);font-weight:600">/yr</span>';
+    }
+  }
+  jobval.addEventListener('input',update);
+  extra.addEventListener('input',update);
+  update();
+})();
+</script>
 </body>
 </html>
