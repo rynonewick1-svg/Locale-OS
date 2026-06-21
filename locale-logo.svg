@@ -1,0 +1,19 @@
+<svg width="520" height="128" viewBox="0 0 520 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Locale Logo</title>
+  <desc id="desc">Locale wordmark with neighbourhood grid visibility mark.</desc>
+  <g transform="translate(0 0)">
+    <rect x="12" y="14" width="34" height="50" rx="7" fill="#1F2326"/>
+    <rect x="52" y="14" width="26" height="50" rx="3" fill="#2E7D59"/>
+    <rect x="12" y="72" width="36" height="42" rx="7" fill="#1F2326"/>
+    <rect x="54" y="72" width="26" height="42" rx="3" fill="#1F2326"/>
+    <rect x="84" y="60" width="32" height="54" rx="4" fill="#2E7D59"/>
+    <path d="M48 15L43 116" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
+    <path d="M82 15L76 116" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
+    <path d="M13 67C42 68 76 58 115 55" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
+    <path d="M13 91C43 91 76 84 115 83" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
+    <circle cx="86" cy="47" r="12" fill="#F5A623"/>
+    <path d="M101 37C108 40 113 45 116 52" stroke="#2E7D59" stroke-width="7" stroke-linecap="round"/>
+    <path d="M105 20C119 26 126 37 130 51" stroke="#2E7D59" stroke-width="7" stroke-linecap="round"/>
+  </g>
+  <text x="154" y="80" font-family="Inter, Manrope, Sora, system-ui, sans-serif" font-size="66" font-weight="800" letter-spacing="-2.6" fill="#1F2326">Locale</text>
+</svg>
