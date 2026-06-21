@@ -1,7 +1,7 @@
-<svg width="860" height="190" viewBox="0 0 860 190" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Locale logo</title>
-  <desc id="desc">Locale wordmark with the approved neighbourhood grid mark.</desc>
-  <g transform="translate(0 9) scale(0.72)">
+<svg width="960" height="230" viewBox="0 0 960 230" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Locale logo with tagline</title>
+  <desc id="desc">Locale wordmark with the approved neighbourhood grid mark and tagline.</desc>
+  <g transform="translate(0 10) scale(0.72)">
   <path d="M 10.0 3.0 L 5.0 7.0 L 3.0 11.0 L 3.0 143.0 L 74.0 152.0 L 75.0 3.0 Z" fill="#1F2326"/>
   <path d="M 3.0 160.0 L 3.0 202.0 L 5.0 210.0 L 13.0 223.0 L 22.0 230.0 L 31.0 234.0 L 74.0 235.0 L 75.0 168.0 Z" fill="#1F2326"/>
   <path d="M 168.0 178.0 L 168.0 235.0 L 241.0 235.0 L 249.0 229.0 L 250.0 186.0 Z" fill="#1F2326"/>
@@ -13,5 +13,7 @@
   <path d="M 185.0 28.0 L 185.0 37.0 L 192.0 37.0 L 203.0 42.0 L 212.0 52.0 L 216.0 66.0 L 225.0 66.0 L 223.0 54.0 L 217.0 43.0 L 210.0 36.0 L 194.0 28.0 Z" fill="#2E7D59"/>
   <path d="M 171.0 56.0 L 163.0 59.0 L 156.0 66.0 L 153.0 73.0 L 153.0 85.0 L 159.0 95.0 L 163.0 98.0 L 171.0 101.0 L 179.0 101.0 L 185.0 99.0 L 193.0 92.0 L 197.0 83.0 L 197.0 74.0 L 193.0 65.0 L 188.0 60.0 L 178.0 56.0 Z" fill="#F5A623"/>
   </g>
-  <text x="235" y="137" fill="#1F2326" font-family="Inter, Manrope, Sora, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="112" font-weight="800" letter-spacing="-5.5">Locale</text>
+  <text x="235" y="139" fill="#1F2326" font-family="Inter, Manrope, Sora, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="112" font-weight="800" letter-spacing="-5.5">Locale</text>
+  <text x="236" y="188" fill="#2E7D59" font-family="Inter, Manrope, Sora, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="800" letter-spacing="7">LOCAL VISIBILITY.</text>
+  <text x="555" y="188" fill="#F5A623" font-family="Inter, Manrope, Sora, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" font-size="20" font-weight="800" letter-spacing="7">REAL RESULTS.</text>
 </svg>

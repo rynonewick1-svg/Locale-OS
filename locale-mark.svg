@@ -1,16 +1,14 @@
-<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
-  <title id="title">Locale Neighbourhood Grid Mark</title>
-  <desc id="desc">A geometric local grid mark with a visibility point and signal arcs.</desc>
-  <rect x="12" y="14" width="34" height="50" rx="7" fill="#1F2326"/>
-  <rect x="52" y="14" width="26" height="50" rx="3" fill="#2E7D59"/>
-  <rect x="12" y="72" width="36" height="42" rx="7" fill="#1F2326"/>
-  <rect x="54" y="72" width="26" height="42" rx="3" fill="#1F2326"/>
-  <rect x="84" y="60" width="32" height="54" rx="4" fill="#2E7D59"/>
-  <path d="M48 15L43 116" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
-  <path d="M82 15L76 116" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
-  <path d="M13 67C42 68 76 58 115 55" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
-  <path d="M13 91C43 91 76 84 115 83" stroke="#F7F4EF" stroke-width="7" stroke-linecap="round"/>
-  <circle cx="86" cy="47" r="12" fill="#F5A623"/>
-  <path d="M101 37C108 40 113 45 116 52" stroke="#2E7D59" stroke-width="7" stroke-linecap="round"/>
-  <path d="M105 20C119 26 126 37 130 51" stroke="#2E7D59" stroke-width="7" stroke-linecap="round"/>
+<svg width="252" height="237" viewBox="0 0 252 237" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">Locale mockup matched grid mark</title>
+  <desc id="desc">Vectorized Locale neighbourhood grid mark matched to the approved third mockup.</desc>
+  <path d="M 10.0 3.0 L 5.0 7.0 L 3.0 11.0 L 3.0 143.0 L 74.0 152.0 L 75.0 3.0 Z" fill="#1F2326"/>
+  <path d="M 3.0 160.0 L 3.0 202.0 L 5.0 210.0 L 13.0 223.0 L 22.0 230.0 L 31.0 234.0 L 74.0 235.0 L 75.0 168.0 Z" fill="#1F2326"/>
+  <path d="M 168.0 178.0 L 168.0 235.0 L 241.0 235.0 L 249.0 229.0 L 250.0 186.0 Z" fill="#1F2326"/>
+  <path d="M 91.0 170.0 L 91.0 235.0 L 151.0 235.0 L 152.0 176.0 Z" fill="#1F2326"/>
+  <path d="M 250.0 118.0 L 178.0 118.0 L 169.0 161.0 L 249.0 169.0 Z" fill="#2E7D59"/>
+  <path d="M 91.0 3.0 L 91.0 88.0 L 134.0 78.0 L 134.0 3.0 Z" fill="#2E7D59"/>
+  <path d="M 162.0 118.0 L 136.0 118.0 L 134.0 116.0 L 134.0 94.0 L 91.0 105.0 L 91.0 153.0 L 152.0 160.0 L 155.0 152.0 Z" fill="#2E7D59"/>
+  <path d="M 185.0 3.0 L 185.0 12.0 L 192.0 12.0 L 206.0 16.0 L 219.0 24.0 L 233.0 40.0 L 238.0 51.0 L 240.0 66.0 L 249.0 66.0 L 249.0 57.0 L 245.0 43.0 L 236.0 27.0 L 226.0 17.0 L 209.0 7.0 L 195.0 3.0 Z" fill="#2E7D59"/>
+  <path d="M 185.0 28.0 L 185.0 37.0 L 192.0 37.0 L 203.0 42.0 L 212.0 52.0 L 216.0 66.0 L 225.0 66.0 L 223.0 54.0 L 217.0 43.0 L 210.0 36.0 L 194.0 28.0 Z" fill="#2E7D59"/>
+  <path d="M 171.0 56.0 L 163.0 59.0 L 156.0 66.0 L 153.0 73.0 L 153.0 85.0 L 159.0 95.0 L 163.0 98.0 L 171.0 101.0 L 179.0 101.0 L 185.0 99.0 L 193.0 92.0 L 197.0 83.0 L 197.0 74.0 L 193.0 65.0 L 188.0 60.0 L 178.0 56.0 Z" fill="#F5A623"/>
 </svg>
