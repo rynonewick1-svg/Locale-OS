@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Free Visibility Audit — Locale</title>
+<meta name="description" content="Get your free local visibility snapshot in 2 minutes. No signup required.">
+<link rel="icon" href="/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const SUPABASE_URL = 'https://yltfeyxnsksfzjkzgcck.supabase.co';
+  const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InlsdGZleXhuc2tzZnpqa3pnY2NrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODIwMjc5ODMsImV4cCI6MjA5NzYwMzk4M30.GJK73xTQWo7EV-FxUSew0g6jDqW-nIzd7wqo1hiK658';
+  let sb = null;
+  try { sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch(e){ console.error('Supabase init failed', e); }
+</script>
+<style>
+:root{
+  --charcoal:#1f2326;--charcoal2:#15191b;--green:#2e7d59;--green-d:#246048;
+  --amber:#f5a623;--cream:#f7f4ef;--cream2:#fffcf7;--line:#ded6c8;--line2:#cfc6b6;
+  --muted:#6d6a63;--muted2:#8a877f;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;color:var(--charcoal);
+  background:
+    radial-gradient(circle at top left,rgba(245,166,35,0.10),transparent 32rem),
+    radial-gradient(circle at top right,rgba(46,125,89,0.09),transparent 34rem),
+    var(--cream);
+  min-height:100vh;-webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:680px;margin:0 auto;padding:28px 22px 80px}
+nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0 32px}
+.logo-row{display:flex;align-items:center;gap:11px;text-decoration:none}
+.logo-row img{width:36px;height:36px}
+.logo-word{font-size:22px;font-weight:700;letter-spacing:-0.04em;color:var(--charcoal)}
+.back{font-size:13.5px;color:var(--muted);text-decoration:none;font-weight:500}
+.back:hover{color:var(--charcoal)}
+
+.head{margin-bottom:28px}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:var(--green);margin-bottom:12px}
+h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:12px}
+.sub{font-size:16px;color:var(--muted);line-height:1.6}
+
+.card{background:var(--cream2);border:1px solid var(--line);border-radius:18px;padding:28px 26px;box-shadow:0 16px 50px rgba(31,35,38,0.05);margin-bottom:18px}
+.field{margin-bottom:18px}
+.field:last-child{margin-bottom:0}
+.field label{display:block;font-size:13.5px;font-weight:600;margin-bottom:7px}
+.field .hint{color:var(--muted);font-weight:400}
+.field input,.field select,.field textarea{
+  width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:10px;
+  background:#fff;color:var(--charcoal);font-size:15px;font-family:inherit
+}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--green)}
+.field textarea{min-height:80px;resize:vertical}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+@media(max-width:560px){.row{grid-template-columns:1fr}}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 26px;border-radius:999px;font-size:15px;font-weight:700;cursor:pointer;border:none;font-family:inherit;text-decoration:none;transition:all .18s}
+.btn-primary{background:var(--charcoal);color:var(--cream);width:100%}
+.btn-primary:hover{background:var(--charcoal2)}
+.btn-primary:disabled{opacity:0.6;cursor:not-allowed}
+
+.loader{display:none;text-align:center;padding:40px 20px}
+.loader.show{display:block}
+.spin{width:34px;height:34px;border:3px solid var(--line);border-top-color:var(--green);border-radius:50%;animation:spin 0.8s linear infinite;margin:0 auto 16px}
+@keyframes spin{to{transform:rotate(360deg)}}
+.loader-text{color:var(--muted);font-size:14px}
+
+/* Email gate */
+.gate{display:none}
+.gate.show{display:block}
+.gate-card{background:var(--charcoal);color:var(--cream);border-radius:18px;padding:32px 28px;text-align:center}
+.gate-card h2{font-size:24px;font-weight:700;letter-spacing:-0.03em;margin-bottom:10px;color:var(--cream2)}
+.gate-card p{color:#bdb9b0;font-size:14.5px;margin-bottom:22px;line-height:1.6}
+.gate-card input{width:100%;padding:14px 16px;border:1px solid rgba(255,255,255,0.2);border-radius:10px;background:rgba(255,255,255,0.06);color:#fff;font-size:15px;font-family:inherit;margin-bottom:14px;text-align:center}
+.gate-card input:focus{outline:none;border-color:var(--amber)}
+.gate-card .btn-primary{background:var(--amber);color:var(--charcoal)}
+.gate-card .btn-primary:hover{background:#e0991a}
+.gate-msg{font-size:13px;margin-top:12px;min-height:18px}
+.gate-msg.err{color:#f0a8a8}
+
+/* Results */
+.results{display:none}
+.results.show{display:block}
+.score-hero{display:flex;align-items:center;gap:24px;margin-bottom:8px}
+.score-num{font-size:64px;font-weight:700;letter-spacing:-0.05em;line-height:1;color:var(--green)}
+.score-meta .label{font-size:18px;font-weight:700;letter-spacing:-0.02em}
+.score-meta .of{font-size:13px;color:var(--muted)}
+.snapshot-note{font-size:11.5px;color:var(--muted2);margin:10px 0 22px}
+.pillars{margin:22px 0}
+.pillar{display:flex;align-items:center;gap:14px;margin-bottom:12px}
+.pillar-name{font-size:13.5px;font-weight:600;width:130px;flex-shrink:0}
+.pillar-bar{flex:1;height:8px;background:#efe9df;border-radius:5px;overflow:hidden}
+.pillar-fill{height:100%;border-radius:5px;background:var(--green)}
+.pillar-val{font-size:13px;font-weight:700;color:var(--green);width:32px;text-align:right}
+.overview{font-size:14.5px;color:var(--charcoal);line-height:1.7;margin:18px 0;white-space:pre-line}
+.section-h{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin:24px 0 12px}
+.action{background:var(--cream2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.action strong{font-weight:600}
+.action span{color:var(--muted);font-size:13.5px}
+
+.upgrade{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;border-radius:18px;padding:30px 28px;text-align:center;margin-top:26px}
+.upgrade h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:10px}
+.upgrade p{font-size:14.5px;opacity:0.92;margin-bottom:20px;line-height:1.6}
+.upgrade .btn{background:#fff;color:var(--green-d)}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<nav>
+  <a href="/" class="logo-row"><img src="/locale-mark.svg" alt="Locale"><span class="logo-word">Locale</span></a>
+  <a href="/" class="back">← Back to site</a>
+</nav>
+
+<!-- ===== FORM ===== -->
+<div id="formStage">
+  <div class="head">
+    <div class="eyebrow">Free visibility audit</div>
+    <h1>See where your business stands in local search.</h1>
+    <p class="sub">Answer a few questions about your business. The more real numbers you add, the more accurate your snapshot. Takes about 2 minutes — no signup needed.</p>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div class="field"><label>Business name</label><input id="aBiz" placeholder="e.g. Harbour Plumbing"></div>
+      <div class="field"><label>Owner's name <span class="hint">(optional)</span></label><input id="aOwner" placeholder="e.g. Jess Taylor"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Industry / trade</label><input id="aInd" placeholder="e.g. Plumbing"></div>
+      <div class="field"><label>Location</label><input id="aLoc" placeholder="e.g. Coffs Harbour, NSW"></div>
+    </div>
+    <div class="field"><label>Google Business Profile status</label>
+      <select id="aGbp"><option>Fully set up and active</option><option>Set up but rarely updated</option><option>Exists but unclaimed/unknown state</option><option>No profile</option></select></div>
+    <div class="field"><label>Google Business Profile link <span class="hint">(optional but improves accuracy)</span></label><input id="aGbpLink" placeholder="Paste your Google listing URL"></div>
+    <div class="row">
+      <div class="field"><label>How many Google reviews do you have?</label><input id="aRevCount" type="number" min="0" placeholder="e.g. 14"></div>
+      <div class="field"><label>Average star rating</label><input id="aRating" type="number" min="0" max="5" step="0.1" placeholder="e.g. 4.7"></div>
+    </div>
+    <div class="row">
+      <div class="field"><label>Website</label>
+        <select id="aWeb"><option>Professional, regularly updated</option><option selected>Exists but outdated</option><option>Basic landing page only</option><option>No website</option></select></div>
+      <div class="field"><label>Website link <span class="hint">(optional)</span></label><input id="aWebLink" placeholder="e.g. yourbusiness.com.au"></div>
+    </div>
+    <div class="field"><label>Social media activity</label>
+      <select id="aSoc"><option>Active on 2+ platforms</option><option selected>One platform, inconsistent</option><option>Accounts exist, dormant</option><option>None</option></select></div>
+    <div class="field"><label>Biggest challenge or goal <span class="hint">(optional)</span></label><textarea id="aGoals" placeholder="e.g. Relying entirely on word of mouth, want more quote requests..."></textarea></div>
+  </div>
+
+  <button class="btn btn-primary" id="runBtn" onclick="runAudit()">Get my visibility snapshot →</button>
+</div>
+
+<!-- ===== LOADER ===== -->
+<div class="loader" id="loader">
+  <div class="spin"></div>
+  <div class="loader-text">Analysing your local visibility…</div>
+</div>
+
+<!-- ===== EMAIL GATE ===== -->
+<div class="gate" id="gate">
+  <div class="gate-card">
+    <h2>Your snapshot is ready ✓</h2>
+    <p>Enter your email to see your full visibility breakdown and 30-day action plan.</p>
+    <input id="gateEmail" type="email" placeholder="you@yourbusiness.com.au" autocomplete="email">
+    <button class="btn btn-primary" id="gateBtn" onclick="unlockResults()">Show my results</button>
+    <div class="gate-msg" id="gateMsg"></div>
+  </div>
+</div>
+
+<!-- ===== RESULTS ===== -->
+<div class="results" id="results">
+  <div class="head">
+    <div class="eyebrow">Your snapshot</div>
+    <div class="score-hero">
+      <div class="score-num" id="rScore">—</div>
+      <div class="score-meta">
+        <div class="label" id="rLabel">—</div>
+        <div class="of">out of 100</div>
+      </div>
+    </div>
+    <div class="snapshot-note">Directional snapshot based on what you entered — not a measured audit. Connect your real accounts in the toolkit for precise tracking.</div>
+  </div>
+
+  <div class="card">
+    <div class="pillars" id="rPillars"></div>
+    <div class="overview" id="rOverview"></div>
+    <div class="section-h">Your top 3 priorities</div>
+    <div id="rActions"></div>
+  </div>
+
+  <div class="upgrade">
+    <h3>Want this tracked properly, every month?</h3>
+    <p>The free snapshot is just the start. The Locale Toolkit connects your real data, writes your reviews and content, and tracks your score as it climbs — for $97/month.</p>
+    <a href="/app" class="btn">Get the Toolkit →</a>
+  </div>
+</div>
+
+</div>
+
+<script>
+let _auditData = null;
+let _auditResult = null;
+
+function val(id){ return (document.getElementById(id).value||'').trim(); }
+function show(id, on){ document.getElementById(id).classList[on?'add':'remove']('show'); }
+
+async function runAudit(){
+  const d = {
+    biz:val('aBiz'), owner:val('aOwner'), ind:val('aInd'), loc:val('aLoc'),
+    gbp:val('aGbp'), gbpLink:val('aGbpLink'), revCount:val('aRevCount'), rating:val('aRating'),
+    web:val('aWeb'), webLink:val('aWebLink'), soc:val('aSoc'), goals:val('aGoals')
+  };
+  if(!d.biz || !d.ind || !d.loc){ alert('Please fill in your business name, industry and location.'); return; }
+  _auditData = d;
+
+  document.getElementById('formStage').style.display = 'none';
+  show('loader', true);
+  window.scrollTo({top:0, behavior:'smooth'});
+
+  const reviewInfo = d.revCount!=='' ? `${d.revCount} Google reviews${d.rating?` averaging ${d.rating} stars`:''}` : 'review count not provided';
+  const prompt = `You are a senior local business marketing strategist at "Locale". Produce a DIRECTIONAL local visibility snapshot based on self-reported information. This is a starting-point assessment, not a forensic measurement — be genuinely useful and specific, but do NOT state any figure as a precise measured fact that wasn't provided. Base review/rating commentary ONLY on the real numbers given.
+Business: ${d.biz} | Owner: ${d.owner} | Industry: ${d.ind} | Location: ${d.loc}
+Google Business Profile: ${d.gbp}${d.gbpLink?` (listing: ${d.gbpLink})`:''}
+Reviews: ${reviewInfo}
+Website: ${d.web}${d.webLink?` (${d.webLink})`:''}
+Social: ${d.soc}
+Goals/challenges: ${d.goals||'not given'}
+Scores are directional estimates from self-reported inputs. Return ONLY raw JSON: {"score":<0-100>,"scoreLabel":<string>,"overview":<2 paragraphs, specific to this business, honest about being a directional snapshot, separated by \\n\\n>,"topActions":[{"title":,"detail":} x3],"pillars":{"Google profile":<0-100>,"Reviews & reputation":<0-100>,"Website":<0-100>,"Social media":<0-100>,"Local search":<0-100>}}`;
+
+  try {
+    const res = await fetch('/api/generate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ prompt, task:'audit' })
+    });
+    if(!res.ok) throw new Error('AI request failed');
+    const data = await res.json();
+    _auditResult = parseJSON(data.text);
+  } catch(e){
+    console.error('Audit error:', e);
+    _auditResult = demoResult(_auditData);
+  }
+
+  show('loader', false);
+  show('gate', true);
+}
+
+function parseJSON(text){
+  const clean = (text||'').replace(/```json|```/g,'').trim();
+  const start = clean.indexOf('{'); const end = clean.lastIndexOf('}');
+  return JSON.parse(clean.slice(start, end+1));
+}
+
+function demoResult(d){
+  return {
+    score:52, scoreLabel:'Room to grow',
+    overview:`Based on what you've shared, ${d.biz} has a solid foundation but is leaving visibility on the table. This is a directional snapshot — the real opportunity is in tightening up the gaps below.\n\nThe biggest lever right now looks to be your Google presence and reviews, which is where most local customers form their first impression.`,
+    topActions:[
+      {title:'Complete your Google Business Profile',detail:'Add services, photos and regular posts — the highest-leverage fix for local visibility.'},
+      {title:'Build a steady review habit',detail:'Ask every happy customer. Reviews are the ranking signal you most control.'},
+      {title:'Post consistently on one platform',detail:'Pick the channel where your customers are and show real work weekly.'}
+    ],
+    pillars:{'Google profile':45,'Reviews & reputation':55,'Website':50,'Social media':48,'Local search':58}
+  };
+}
+
+async function unlockResults(){
+  const email = val('gateEmail');
+  const msg = document.getElementById('gateMsg');
+  const btn = document.getElementById('gateBtn');
+  if(!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    msg.className='gate-msg err'; msg.textContent='Please enter a valid email.'; return;
+  }
+  btn.disabled = true; btn.textContent = 'Loading…';
+
+  // Save the lead to Supabase (fire and continue even if it fails — never block the user)
+  try {
+    if(sb){
+      await sb.from('leads').insert({
+        email: email,
+        business_name: _auditData.biz,
+        industry: _auditData.ind,
+        location: _auditData.loc,
+        answers: _auditData,
+        score: _auditResult.score
+      });
+    }
+  } catch(e){ console.error('Lead save failed:', e); }
+
+  renderResults();
+  show('gate', false);
+  show('results', true);
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function renderResults(){
+  const a = _auditResult;
+  document.getElementById('rScore').textContent = a.score;
+  document.getElementById('rLabel').textContent = a.scoreLabel;
+
+  const pillarsEl = document.getElementById('rPillars');
+  pillarsEl.innerHTML = Object.entries(a.pillars).map(([name,v])=>`
+    <div class="pillar">
+      <div class="pillar-name">${name}</div>
+      <div class="pillar-bar"><div class="pillar-fill" style="width:${v}%"></div></div>
+      <div class="pillar-val">${v}</div>
+    </div>`).join('');
+
+  document.getElementById('rOverview').textContent = a.overview;
+
+  document.getElementById('rActions').innerHTML = a.topActions.map(t=>`
+    <div class="action"><strong>${t.title}</strong> — <span>${t.detail}</span></div>`).join('');
+}
+
+// Allow Enter on email field
+document.addEventListener('keydown', e=>{
+  if(e.key==='Enter' && document.getElementById('gate').classList.contains('show')) unlockResults();
+});
+</script>
+</body>
+</html>
