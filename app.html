@@ -519,9 +519,13 @@ async function loadFromSupabase(){
       .eq('user_id', _currentUser.id)
       .maybeSingle();
     if(error){ console.error('Load failed:', error.message); return; }
+    console.log('[Locale] loadFromSupabase result:', data);
     if(data && data.data){
       _mem.clients = data.data.clients || [];
       _mem.activeId = data.data.activeId || (_mem.clients[0]?.id || null);
+      console.log('[Locale] Loaded', _mem.clients.length, 'clients into memory');
+    } else {
+      console.log('[Locale] No saved data found for this user');
     }
   } catch(e){ console.error('Load error:', e); }
 }
@@ -1024,7 +1028,10 @@ let _booted = false;
 function boot(){
   if(_booted) return;       // don't double-run if already started
   _booted = true;
-  seed(); refreshSidebar(); showView('dashboard'); refreshApiStatus();
+  console.log('[Locale] boot() — clients in memory before seed:', _mem.clients.length);
+  seed();
+  console.log('[Locale] after seed — clients:', _mem.clients.length, 'activeId:', _mem.activeId);
+  refreshSidebar(); showView('dashboard'); refreshApiStatus();
 }
 // Don't boot immediately — check login first. boot() runs only after successful auth.
 checkAuth();
