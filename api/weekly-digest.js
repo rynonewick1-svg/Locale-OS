@@ -70,7 +70,7 @@ Write ONLY the email body (no subject line, no signature). Acknowledge any progr
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${resendKey}` },
       body: JSON.stringify({
-        from: 'Locale <hello@yourdomain.com>', // change to your verified sending address
+        from: 'Locale <onboarding@resend.dev>', // Resend test sender — works with no domain. Swap to your verified address later.
         to: [email],
         subject: `${b.name}: your visibility this week`,
         html
