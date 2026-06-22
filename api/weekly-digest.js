@@ -1,4 +1,4 @@
-// Locale — weekly re-engagement email function (v2)
+// Locale — weekly re-engagement email function
 // Generates a personalised "here's your progress + your next step" digest and sends it.
 //
 // HOW IT WORKS:
@@ -17,6 +17,24 @@ export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
+
+  // DIAGNOSTIC: visit /api/weekly-digest in a browser (GET) to safely check env vars.
+  // Shows only whether keys EXIST and their length — never the actual values.
+  if (req.method === 'GET') {
+    const rk = process.env.RESEND_API_KEY || '';
+    const ak = process.env.ANTHROPIC_API_KEY || '';
+    return res.status(200).json({
+      diagnostic: true,
+      resend_key_present: !!rk,
+      resend_key_length: rk.length,
+      resend_key_starts_with: rk ? rk.slice(0, 3) : null,
+      anthropic_key_present: !!ak,
+      message: rk
+        ? (rk.startsWith('re_') ? 'Resend key looks present and correctly formatted.' : 'A Resend key is present but does NOT start with re_ — wrong value pasted.')
+        : 'No Resend key visible to the function — not saved, or deploy has not picked it up yet.'
+    });
+  }
+
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
   const anthropicKey = process.env.ANTHROPIC_API_KEY;
