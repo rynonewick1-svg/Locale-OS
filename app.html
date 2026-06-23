@@ -248,6 +248,16 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .admin-table th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted)}
 .admin-table td{padding:12px;border-bottom:1px solid var(--border)}
 .admin-table tbody tr:hover{background:var(--surface2)}
+
+/* Job to Post extras */
+.jp-extras{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.jp-extra{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px 15px}
+.jp-x-label{font-size:12px;font-weight:700;color:var(--green);margin-bottom:5px}
+.jp-x-body{font-size:13px;color:var(--charcoal,var(--text));line-height:1.5}
+@media(max-width:600px){.jp-extras{grid-template-columns:1fr}}
+
+/* Lead Rescue intro */
+.lr-intro{background:rgba(46,125,89,0.08);border:1px solid rgba(46,125,89,0.2);border-radius:12px;padding:13px 16px;font-size:13.5px;color:var(--green-d,var(--green));margin-bottom:14px;line-height:1.5}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -301,8 +311,8 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
     <div class="nav-item" data-view="score"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/></svg>Visibility Score</div>
     <div class="nav-item" data-view="audit"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg>Run Audit<span class="pip"></span></div>
     <div class="nav-section">AI Tools</div>
-    <div class="nav-item" data-view="reviews"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 5 .7-3.5 3.4.8 5L8 12l-4.3 2.1.8-5L1 5.7 6 5z"/></svg>Review Engine</div>
-    <div class="nav-item" data-view="content"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>Content Studio</div>
+    <div class="nav-item" data-view="reviews"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 5 .7-3.5 3.4.8 5L8 12l-4.3 2.1.8-5L1 5.7 6 5z"/></svg>Lead Rescue</div>
+    <div class="nav-item" data-view="content"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>Job to Post</div>
     <div class="nav-item" data-view="report"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12V4l5-2 5 2v8l-5 2-5-2z"/></svg>Monthly Report</div>
 
     <div class="nav-item" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M8 1v2.2M8 12.8V15M15 8h-2.2M3.2 8H1M12.9 3.1l-1.5 1.5M4.6 11.4l-1.5 1.5M12.9 12.9l-1.5-1.5M4.6 4.6L3.1 3.1"/></svg>Settings</div>
@@ -418,38 +428,33 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <!-- ========== REVIEW ENGINE ========== -->
   <div class="view" id="view-reviews">
     <div class="panel">
-      <div class="panel-title">Review Engine</div>
-      <div class="panel-sub">Turn a completed job into a Google review. Generates a personalised 3-message SMS sequence — send manually or wire into your SMS platform later.</div>
+      <div class="panel-title">Lead Rescue</div>
+      <div class="panel-sub">Most local businesses lose work not because they're too expensive — but because nobody followed up. Sent a quote or got an enquiry? Get a polite, professional follow-up sequence that wins the jobs you're already so close to landing.</div>
       <div class="field-row">
         <div class="field"><label>Customer first name</label><input id="rCust" placeholder="e.g. Sarah"></div>
-        <div class="field"><label>Job completed</label><input id="rJob" placeholder="e.g. hot water system replacement"></div>
+        <div class="field"><label>What did they want? <span style="color:var(--muted);font-weight:400">(enquiry or quote)</span></label><input id="rJob" placeholder="e.g. quote for a kitchen splashback, or asked about availability"></div>
       </div>
       <div class="field-row">
-        <div class="field"><label>Tone</label>
-          <select id="rTone"><option>Friendly and casual</option><option>Warm but professional</option><option>Short and direct</option></select></div>
-        <div class="field"><label>Google review link</label><input id="rLink" placeholder="https://g.page/r/... (paste your review link)"></div>
+        <div class="field"><label>Stage</label>
+          <select id="rStage"><option>I sent a quote, no reply yet</option><option>They enquired, I haven't replied yet</option><option>We spoke, waiting on their decision</option><option>Job's done — want a review</option></select></div>
+        <div class="field"><label>How to send</label>
+          <select id="rChannel"><option>SMS / text</option><option>Email</option></select></div>
       </div>
-      <button class="btn btn-primary" onclick="runReviews()">Generate SMS sequence ✦</button>
+      <button class="btn btn-primary" onclick="runReviews()">Build my follow-up sequence ✦</button>
     </div>
-    <div class="loader" id="revLoader"><div class="spin"></div><div class="loader-text">Writing your review request sequence…</div></div>
+    <div class="loader" id="revLoader"><div class="spin"></div><div class="loader-text">Writing your follow-up sequence…</div></div>
     <div id="revResult"></div>
   </div>
 
   <!-- ========== CONTENT STUDIO ========== -->
   <div class="view" id="view-content">
     <div class="panel">
-      <div class="panel-title">Content Studio</div>
-      <div class="panel-sub">Describe a job you just finished — get 3 platform-ready posts built around real work. Photos of real jobs outperform everything else for local businesses.</div>
-      <div class="field"><label>What did you do today?</label><textarea id="cJob" placeholder="e.g. Full bathroom renovation in Penrith — old 1980s bathroom, gutted it, new tiles, frameless shower screen, took 5 days, customer was stoked..."></textarea></div>
-      <div class="field-row">
-        <div class="field"><label>Platform</label>
-          <select id="cPlat"><option>Facebook</option><option>Instagram</option><option>Both (adapted for each)</option></select></div>
-        <div class="field"><label>Tone</label>
-          <select id="cTone"><option>Down to earth tradie</option><option>Professional but warm</option><option>Story-driven</option></select></div>
-      </div>
-      <button class="btn btn-primary" onclick="runContent()">Generate posts ✦</button>
+      <div class="panel-title">Job to Post</div>
+      <div class="panel-sub">Just finished a job? Describe it in a line or two and get ready-to-post content built around your real work — the kind that actually gets seen and brings in enquiries. Pair it with a photo of the job for best results.</div>
+      <div class="field"><label>What did you just do? <span style="color:var(--muted);font-weight:400">(a quick line is enough)</span></label><textarea id="cJob" placeholder="e.g. Re-tiled a leaking shower in Sawtell, customer thrilled — or — cut & colour transformation for a wedding, or — fixed a tricky no-hot-water callout same day"></textarea></div>
+      <button class="btn btn-primary" onclick="runContent()">Create my post ✦</button>
     </div>
-    <div class="loader" id="conLoader"><div class="spin"></div><div class="loader-text">Writing your posts…</div></div>
+    <div class="loader" id="conLoader"><div class="spin"></div><div class="loader-text">Turning your work into content…</div></div>
     <div id="conResult"></div>
   </div>
 
@@ -617,8 +622,8 @@ const titles={
   dashboard:['Dashboard',"Your visibility at a glance"],
   score:['Visibility Score','Detailed five-pillar breakdown'],
   audit:['Run Audit','AI-generated visibility audit'],
-  reviews:['Review Engine','Turn finished jobs into Google reviews'],
-  content:['Content Studio','Real work → platform-ready posts'],
+  reviews:['Lead Rescue','Win the jobs you\'re already quoting — smart follow-up that closes leads'],
+  content:['Job to Post','Turn real work into content that brings in enquiries'],
   report:['Monthly Report','Client-ready monthly summary'],
   clients:['My Business','Your business details'],
   settings:['Settings','API, branding and data'],
@@ -1020,25 +1025,41 @@ function saveAuditToClient(){
 /* ============ REVIEW ENGINE ============ */
 async function runReviews(){
   const c=activeClient();
-  const cust=val('rCust'),job=val('rJob'),tone=val('rTone'),link=val('rLink')||'[your Google review link]';
-  if(!cust||!job){toast('Customer name and job are required');return;}
+  const cust=val('rCust'),job=val('rJob'),stage=val('rStage'),channel=val('rChannel');
+  if(!cust||!job){toast('Customer name and what they wanted are required');return;}
   show('revLoader',true); document.getElementById('revResult').innerHTML='';
   const biz=c?c.name:'the business'; const owner=c?(c.owner||'').split(' ')[0]:'';
-  const prompt=`Write a 3-message SMS sequence asking a customer for a Google review. Business: ${biz}${owner?' (owner: '+owner+')':''}. Customer: ${cust}. Job completed: ${job}. Tone: ${tone}. Review link placeholder: ${link}.
-Message 1: same-day thank you + soft review ask. Message 2: 48-hour gentle follow-up (only if no review). Message 3: 7-day final friendly nudge. Each under 300 characters, personalised, never pushy, written like a real ${tone.toLowerCase()} text.
-Return ONLY raw JSON: {"messages":[{"label":"Same day","text":...},{"label":"48-hour follow-up","text":...},{"label":"7-day final nudge","text":...}]}`;
+  const lenRule = channel==='Email' ? 'Each message is a short email (2-4 sentences, with a subject line).' : 'Each message is an SMS under 300 characters.';
+  const prompt=`You are an expert at helping local businesses win more work through smart, human follow-up. Research shows most local businesses lose jobs simply because they never follow up on a quote or enquiry — this fixes that.
+
+Business: ${biz}${owner?' (owner: '+owner+')':''}
+Customer: ${cust}
+What they wanted: ${job}
+Current stage: ${stage}
+Channel: ${channel}
+
+Write a follow-up sequence tailored to the stage:
+- If "sent a quote, no reply": a 3-touch chase — (1) 24-hour friendly check-in, (2) 3-day value-add nudge that gently handles hesitation, (3) 7-day respectful final follow-up that leaves the door open.
+- If "they enquired, haven't replied": a fast, warm first reply that books the next step, then a 24-hour and 3-day nudge.
+- If "we spoke, waiting on decision": a reassuring check-in, a helpful nudge addressing common doubts, and a final gentle close.
+- If "job's done — want a review": a same-day thank-you + soft review ask, a 2-day gentle reminder, and a 7-day final nudge.
+
+Rules: ${lenRule} Sound like a real, warm, professional local business owner — never pushy, never robotic, never desperate. Persistence with politeness. Personalise to ${cust} and the specific job. Each message must feel genuinely helpful, not salesy.
+
+Return ONLY raw JSON: {"intro":<1 sentence on the strategy for this stage>,"messages":[{"label":<timing e.g. "24 hours">,"text":<message${channel==='Email'?' including a Subject: line':''}>} x3]}`;
   let out;
   try{ out=parseJSON(await callClaude(prompt,'reviews')); }
   catch(e){
     if(e.message==='RATE_LIMIT'){ show('revLoader',false); toast('Slow down a moment — too many requests.'); return; }
-    out={messages:[
-      {label:'Same day',text:`Hey ${cust}! ${owner||'We'} here from ${biz} — thanks again for having us out for the ${job}. Really glad we could sort it for you. If you were happy with the work, a quick Google review would mean a lot: ${link}`},
-      {label:'48-hour follow-up',text:`Hi ${cust}, hope everything's still running perfectly after the ${job}! No stress at all, but if you've got 60 seconds a review really helps a small local business like ours: ${link}`},
-      {label:'7-day final nudge',text:`Hey ${cust}, last one from me I promise 😄 If you've got a moment to share how the ${job} went, here's the link: ${link} — and thanks again for choosing ${biz}!`}]};
-    if(e.message!=='NO_KEY') toast('Showing demo sequence (live AI unavailable)');
+    out={intro:"A polite, persistent 3-touch follow-up so this lead doesn't go cold.",messages:[
+      {label:'24 hours',text:`Hi ${cust}, just checking you got the quote through okay for the ${job}? Happy to talk through any of it — no pressure at all. ${owner||'Cheers'}, ${biz}.`},
+      {label:'3 days',text:`Hey ${cust}, hope you're well! Just wanted to see if you had any questions about the ${job}. We've got a couple of spots opening up soon if the timing suits — happy to lock one in for you.`},
+      {label:'7 days',text:`Hi ${cust}, I won't keep chasing 😊 — just leaving the door open on the ${job} whenever you're ready. Happy to help if the time comes. All the best, ${owner||biz}.`}]};
+    if(e.message!=='NO_KEY') toast('Showing a demo sequence (live AI unavailable)');
   }
   show('revLoader',false);
-  document.getElementById('revResult').innerHTML=out.messages.map(m=>`
+  const introHtml = out.intro ? `<div class="lr-intro">${out.intro}</div>` : '';
+  document.getElementById('revResult').innerHTML = introHtml + out.messages.map(m=>`
     <div class="output-card"><div class="oc-head"><span class="oc-tag">${m.label}</span>
     <button class="btn btn-sm" onclick="copyText(this)">Copy</button></div>
     <div class="oc-body">${m.text}</div></div>`).join('');
@@ -1047,28 +1068,60 @@ Return ONLY raw JSON: {"messages":[{"label":"Same day","text":...},{"label":"48-
 /* ============ CONTENT STUDIO ============ */
 async function runContent(){
   const c=activeClient();
-  const job=val('cJob'),plat=val('cPlat'),tone=val('cTone');
+  const job=val('cJob');
   if(!job){toast('Describe the job first');return;}
   show('conLoader',true); document.getElementById('conResult').innerHTML='';
-  const biz=c?`${c.name}, a ${c.industry} business in ${c.location}`:'a local trade business';
-  const prompt=`You write social content for ${biz}. The owner describes a job: "${job}". Platform: ${plat}. Tone: ${tone}.
-Write 3 different post options. Each: a scroll-stopping first line (hook), then 2-4 short paragraphs in the owner's authentic voice, then 4-6 relevant local hashtags. No corporate speak, no emojis overload, sound like a real person proud of their work.
-Return ONLY raw JSON: {"posts":[{"angle":<2-4 word angle name>,"text":<full post>} x3]}`;
+  const biz=c?`${c.name}, a ${c.industry||'local'} business in ${c.location||'their town'}`:'a local business';
+  const seed=Math.random().toString(36).slice(2,7); // nudges uniqueness across runs
+  const prompt=`You are an elite social media copywriter who specialises in local small businesses (tradies, salons, cafes, gyms, photographers, service businesses). Your posts are known for actually driving enquiries and engagement — not generic filler.
+
+The owner of ${biz} just finished a job and described it: "${job}"
+
+Write social content that turns this real job into a post that gets seen and brings in customers. Rules for QUALITY (critical):
+- Open with a genuinely scroll-stopping first line — a hook that makes someone stop. Never start with "We recently..." or "Check out...". Use curiosity, a bold statement, a relatable problem, or a result.
+- Sound like a real, proud local business owner — warm, human, specific. Never corporate, never stiff, never stuffed with buzzwords.
+- Be SPECIFIC to this job. Reference the actual detail they gave. Generic could-be-anyone posts are a failure.
+- Make it easy to act: end with a natural, low-pressure nudge to get in touch / book / ask.
+- Keep it the right length for social (concise, scannable, short paragraphs or line breaks).
+- 4-6 relevant hashtags mixing local + niche (use their location if known).
+- Be genuinely UNIQUE — vary structure and angle each time (uniqueness seed: ${seed}).
+
+Also provide: a punchy alternative hook they could swap in, a one-line "why this works" coaching note, the best day/time to post it for a local audience, and a quick tip on what photo or video to pair with it (since real work imagery is what makes these perform).
+
+Return ONLY raw JSON:
+{
+ "post": <the full ready-to-post caption with hashtags>,
+ "altHook": <one alternative opening line>,
+ "whyItWorks": <one short sentence of coaching>,
+ "bestTime": <e.g. "Thursday 6-8pm — when locals scroll after work">,
+ "photoTip": <one line on the ideal photo/video to attach>
+}`;
   let out;
   try{ out=parseJSON(await callClaude(prompt,'content')); }
   catch(e){
     if(e.message==='RATE_LIMIT'){ show('conLoader',false); toast('Slow down a moment — too many requests.'); return; }
-    out={posts:[
-      {angle:'Before / after',text:`This one was a transformation.\n\n${job.slice(0,120)}...\n\nSwipe to see where it started. Proud of how this one came together.\n\n#localtrades #beforeandafter #qualitywork #supportlocal`},
-      {angle:'The story',text:`Every job has a story.\n\nThe owners had been putting this off for years — you know how it goes. We mapped it out, gave them a straight answer on cost and timing, and got it done.\n\nThat's the bit people remember: no surprises.\n\n#tradielife #honestwork #localbusiness`},
-      {angle:'Behind the craft',text:`The details nobody sees are the ones that matter most.\n\nWhat looks simple from the outside took proper planning — that's the difference between done and done right.\n\nIf you've been putting off a job like this, happy to take a look.\n\n#craftsmanship #localtrades #doneright`}]};
-    if(e.message!=='NO_KEY') toast('Showing demo posts (live AI unavailable)');
+    out={
+      post:`That feeling when a job just comes together.\n\n${job.slice(0,140)}${job.length>140?'…':''}\n\nLittle details make all the difference — and the right result keeps customers coming back (and telling their mates).\n\nThinking about something similar? Drop us a message, always happy to help.\n\n#supportlocal #qualitywork #localbusiness #${(c&&c.location?c.location.split(',')[0].replace(/\s/g,''):'local')}`,
+      altHook:"You don't notice good work — until you see the difference.",
+      whyItWorks:"It leads with feeling and ends with an easy, no-pressure invitation to enquire.",
+      bestTime:"Thursday or Sunday evening, 6–8pm — peak local scrolling.",
+      photoTip:"A clear before/after or a proud shot of the finished job — real work always outperforms stock."
+    };
+    if(e.message!=='NO_KEY') toast('Showing a demo post (live AI unavailable)');
   }
   show('conLoader',false);
-  document.getElementById('conResult').innerHTML=out.posts.map(p=>`
-    <div class="output-card"><div class="oc-head"><span class="oc-tag">${p.angle}</span>
-    <button class="btn btn-sm" onclick="copyText(this)">Copy</button></div>
-    <div class="oc-body">${p.text}</div></div>`).join('');
+  document.getElementById('conResult').innerHTML=`
+    <div class="output-card">
+      <div class="oc-head"><span class="oc-tag">Ready to post</span>
+      <button class="btn btn-sm" onclick="copyText(this)">Copy</button></div>
+      <div class="oc-body">${out.post}</div>
+    </div>
+    <div class="jp-extras">
+      <div class="jp-extra"><div class="jp-x-label">↪ Alternative hook</div><div class="jp-x-body">${out.altHook||''}</div></div>
+      <div class="jp-extra"><div class="jp-x-label">✦ Why this works</div><div class="jp-x-body">${out.whyItWorks||''}</div></div>
+      <div class="jp-extra"><div class="jp-x-label">🕑 Best time to post</div><div class="jp-x-body">${out.bestTime||''}</div></div>
+      <div class="jp-extra"><div class="jp-x-label">📸 Photo tip</div><div class="jp-x-body">${out.photoTip||''}</div></div>
+    </div>`;
 }
 
 /* ============ MONTHLY REPORT ============ */
