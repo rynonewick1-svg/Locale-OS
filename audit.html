@@ -84,22 +84,53 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
 /* Results */
 .results{display:none}
 .results.show{display:block}
-.score-hero{display:flex;align-items:center;gap:24px;margin-bottom:8px}
-.score-num{font-size:64px;font-weight:700;letter-spacing:-0.05em;line-height:1;color:var(--green)}
-.score-meta .label{font-size:18px;font-weight:700;letter-spacing:-0.02em}
-.score-meta .of{font-size:13px;color:var(--muted)}
-.snapshot-note{font-size:11.5px;color:var(--muted2);margin:10px 0 22px}
-.pillars{margin:22px 0}
-.pillar{display:flex;align-items:center;gap:14px;margin-bottom:12px}
-.pillar-name{font-size:13.5px;font-weight:600;width:130px;flex-shrink:0}
-.pillar-bar{flex:1;height:8px;background:#efe9df;border-radius:5px;overflow:hidden}
-.pillar-fill{height:100%;border-radius:5px;background:var(--green)}
-.pillar-val{font-size:13px;font-weight:700;color:var(--green);width:32px;text-align:right}
-.overview{font-size:14.5px;color:var(--charcoal);line-height:1.7;margin:18px 0;white-space:pre-line}
-.section-h{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--green);margin:24px 0 12px}
+
+/* Score-responsive theme variable defaults to green; set by JS */
+.results{--accent:var(--green);--accent-soft:rgba(46,125,89,0.12)}
+
+/* ===== ANIMATED SCORE GAUGE ===== */
+.score-stage{text-align:center;padding:14px 0 30px}
+.gauge-wrap{position:relative;width:230px;height:230px;margin:14px auto 6px}
+.gauge{width:230px;height:230px;transform:rotate(-90deg)}
+.gauge-track{fill:none;stroke:#ece5d9;stroke-width:14}
+.gauge-fill{fill:none;stroke:var(--accent);stroke-width:14;stroke-linecap:round;
+  stroke-dasharray:590.6;stroke-dashoffset:590.6;transition:stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1),stroke 0.6s ease}
+.gauge-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.gauge-num{font-size:68px;font-weight:700;letter-spacing:-0.05em;line-height:1;color:var(--accent);font-family:'DM Sans',sans-serif}
+.gauge-of{font-size:12px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:0.1em}
+.score-label{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-top:18px;color:var(--charcoal)}
+.snapshot-note{font-size:11.5px;color:var(--muted2);margin:12px auto 0;max-width:380px}
+
+/* ===== BENCHMARK SCALE ===== */
+.bench-scale{margin-top:20px}
+.bench-track{position:relative;height:46px;background:linear-gradient(90deg,#e8a0a0 0%,#f0c674 50%,#7cc49a 100%);border-radius:10px;opacity:0.32}
+.bench-peer,.bench-you{position:absolute;top:-6px;height:58px;width:3px;transition:left 1.2s cubic-bezier(.22,1,.36,1);left:50%}
+.bench-peer{background:var(--charcoal)}
+.bench-you{background:var(--accent);width:4px}
+.bench-peer span,.bench-you span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:700}
+.bench-peer span{color:var(--charcoal)}
+.bench-you span{color:var(--accent);top:auto;bottom:-24px}
+.bench-axis{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted2)}
+
+/* ===== REVEAL ANIMATION ===== */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s ease,transform .7s cubic-bezier(.22,1,.36,1)}
+.reveal.in{opacity:1;transform:none}
+
+.pillars{margin:4px 0}
+.pillar{display:flex;align-items:center;gap:14px;margin-bottom:14px}
+.pillar-name{font-size:13.5px;font-weight:600;width:140px;flex-shrink:0}
+.pillar-bar{flex:1;height:10px;background:#efe9df;border-radius:6px;overflow:hidden}
+.pillar-fill{height:100%;border-radius:6px;width:0;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
+.pillar-val{font-size:13px;font-weight:700;width:32px;text-align:right}
+.overview{font-size:14.5px;color:var(--charcoal);line-height:1.7;margin:4px 0 18px;white-space:pre-line}
+.section-h{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin:24px 0 12px}
 .action{background:var(--cream2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
 .action strong{font-weight:600}
 .action span{color:var(--muted);font-size:13.5px}
+.benchmark{font-size:15px;line-height:1.65;color:var(--charcoal);background:var(--accent-soft);border-left:3px solid var(--accent);padding:14px 16px;border-radius:0 10px 10px 0}
+.gap{background:var(--cream);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
+.gap-title{font-weight:700;font-size:14.5px;margin-bottom:4px;color:var(--charcoal)}
+.gap-cost{font-size:13px;color:var(--muted);line-height:1.5}
 
 .upgrade{background:linear-gradient(135deg,var(--green),var(--green-d));color:#fff;border-radius:18px;padding:30px 28px;text-align:center;margin-top:26px}
 .upgrade h3{font-size:22px;font-weight:700;letter-spacing:-0.02em;margin-bottom:10px}
@@ -119,8 +150,8 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
 <div id="formStage">
   <div class="head">
     <div class="eyebrow">Free visibility audit</div>
-    <h1>See where your business stands in local search.</h1>
-    <p class="sub">Answer a few questions about your business. The more real numbers you add, the more accurate your snapshot. Takes about 2 minutes — no signup needed.</p>
+    <h1>See how findable your business really is.</h1>
+    <p class="sub">Answer a few quick questions and we'll show you exactly where you stand against businesses like yours — and the gaps costing you customers right now. About 2 minutes, no signup needed.</p>
   </div>
 
   <div class="card">
@@ -129,7 +160,7 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
       <div class="field"><label>Owner's name <span class="hint">(optional)</span></label><input id="aOwner" placeholder="e.g. Jess Taylor"></div>
     </div>
     <div class="row">
-      <div class="field"><label>Industry / trade</label><input id="aInd" placeholder="e.g. Plumbing"></div>
+      <div class="field"><label>Business type</label><input id="aInd" placeholder="e.g. plumber, hair salon, cafe, photographer"></div>
       <div class="field"><label>Location</label><input id="aLoc" placeholder="e.g. Coffs Harbour, NSW"></div>
     </div>
     <div class="field"><label>Google Business Profile status</label>
@@ -145,8 +176,14 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
       <div class="field"><label>Website link <span class="hint">(optional)</span></label><input id="aWebLink" placeholder="e.g. yourbusiness.com.au"></div>
     </div>
     <div class="field"><label>Social media activity</label>
-      <select id="aSoc"><option>Active on 2+ platforms</option><option selected>One platform, inconsistent</option><option>Accounts exist, dormant</option><option>None</option></select></div>
-    <div class="field"><label>Biggest challenge or goal <span class="hint">(optional)</span></label><textarea id="aGoals" placeholder="e.g. Relying entirely on word of mouth, want more quote requests..."></textarea></div>
+      <select id="aSoc"><option>Active and consistent on 2+ platforms</option><option>One platform, posting now and then</option><option selected>Accounts exist but barely used</option><option>No social presence</option></select></div>
+    <div class="row">
+      <div class="field"><label>How often do you post?</label>
+        <select id="aPostFreq"><option>A few times a week</option><option>About once a week</option><option selected>Once or twice a month</option><option>Rarely or never</option></select></div>
+      <div class="field"><label>Do you share photos/videos of your actual work?</label>
+        <select id="aProof"><option>Yes — regularly, good quality</option><option selected>Sometimes, when I remember</option><option>Rarely</option><option>Never / not sure how</option></select></div>
+    </div>
+    <div class="field"><label>What's getting in the way? <span class="hint">(optional)</span></label><textarea id="aGoals" placeholder="e.g. No time, don't know what to post, rely on word of mouth, want more enquiries..."></textarea></div>
   </div>
 
   <button class="btn btn-primary" id="runBtn" onclick="runAudit()">Get my visibility snapshot →</button>
@@ -171,28 +208,50 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
 
 <!-- ===== RESULTS ===== -->
 <div class="results" id="results">
-  <div class="head">
-    <div class="eyebrow">Your snapshot</div>
-    <div class="score-hero">
-      <div class="score-num" id="rScore">—</div>
-      <div class="score-meta">
-        <div class="label" id="rLabel">—</div>
-        <div class="of">out of 100</div>
+  <div class="score-stage" id="scoreStage">
+    <div class="eyebrow" style="text-align:center">Your visibility snapshot</div>
+    <div class="gauge-wrap">
+      <svg class="gauge" viewBox="0 0 220 220">
+        <circle class="gauge-track" cx="110" cy="110" r="94"/>
+        <circle class="gauge-fill" id="gaugeFill" cx="110" cy="110" r="94"/>
+      </svg>
+      <div class="gauge-center">
+        <div class="gauge-num" id="rScore">0</div>
+        <div class="gauge-of">out of 100</div>
       </div>
     </div>
-    <div class="snapshot-note">Directional snapshot based on what you entered — not a measured audit. Connect your real accounts in the toolkit for precise tracking.</div>
+    <div class="score-label" id="rLabel">—</div>
+    <div class="snapshot-note">Based on what you entered, compared against typical businesses like yours.</div>
   </div>
 
-  <div class="card">
+  <div class="card reveal" id="benchmarkCard">
+    <div class="section-h">How you compare</div>
+    <div class="benchmark" id="rBenchmark"></div>
+    <div class="bench-scale">
+      <div class="bench-track">
+        <div class="bench-peer" id="benchPeer"><span>Businesses like yours</span></div>
+        <div class="bench-you" id="benchYou"><span>You</span></div>
+      </div>
+      <div class="bench-axis"><span>0</span><span>50</span><span>100</span></div>
+    </div>
+  </div>
+
+  <div class="card reveal">
+    <div class="section-h">Your five pillars</div>
     <div class="pillars" id="rPillars"></div>
+  </div>
+
+  <div class="card reveal">
     <div class="overview" id="rOverview"></div>
-    <div class="section-h">Your top 3 priorities</div>
+    <div class="section-h">What's costing you customers</div>
+    <div id="rGaps"></div>
+    <div class="section-h">Where to start</div>
     <div id="rActions"></div>
   </div>
 
-  <div class="upgrade">
-    <h3>Want this tracked properly, every month?</h3>
-    <p>The free snapshot is just the start. The Locale Toolkit connects your real data, writes your reviews and content, and tracks your score as it climbs — for $97/month.</p>
+  <div class="upgrade reveal">
+    <h3>You don't have to do this yourself.</h3>
+    <p>Closing these gaps means showing your work, posting consistently, and chasing reviews — every single week. The Locale Toolkit does the heavy lifting: it turns your jobs into content, keeps your posting steady, and tracks your visibility climbing. For $97/month — about one extra job a year to pay for itself.</p>
     <a href="/app" class="btn">Get the Toolkit →</a>
   </div>
 </div>
@@ -210,9 +269,10 @@ async function runAudit(){
   const d = {
     biz:val('aBiz'), owner:val('aOwner'), ind:val('aInd'), loc:val('aLoc'),
     gbp:val('aGbp'), gbpLink:val('aGbpLink'), revCount:val('aRevCount'), rating:val('aRating'),
-    web:val('aWeb'), webLink:val('aWebLink'), soc:val('aSoc'), goals:val('aGoals')
+    web:val('aWeb'), webLink:val('aWebLink'), soc:val('aSoc'),
+    postFreq:val('aPostFreq'), proof:val('aProof'), goals:val('aGoals')
   };
-  if(!d.biz || !d.ind || !d.loc){ alert('Please fill in your business name, industry and location.'); return; }
+  if(!d.biz || !d.ind || !d.loc){ alert('Please fill in your business name, business type and location.'); return; }
   _auditData = d;
 
   document.getElementById('formStage').style.display = 'none';
@@ -220,14 +280,39 @@ async function runAudit(){
   window.scrollTo({top:0, behavior:'smooth'});
 
   const reviewInfo = d.revCount!=='' ? `${d.revCount} Google reviews${d.rating?` averaging ${d.rating} stars`:''}` : 'review count not provided';
-  const prompt = `You are a senior local business marketing strategist at "Locale". Produce a DIRECTIONAL local visibility snapshot based on self-reported information. This is a starting-point assessment, not a forensic measurement — be genuinely useful and specific, but do NOT state any figure as a precise measured fact that wasn't provided. Base review/rating commentary ONLY on the real numbers given.
-Business: ${d.biz} | Owner: ${d.owner} | Industry: ${d.ind} | Location: ${d.loc}
-Google Business Profile: ${d.gbp}${d.gbpLink?` (listing: ${d.gbpLink})`:''}
+  const prompt = `You are a sharp, experienced local-business marketing strategist at "Locale". A local business owner just completed a visibility audit. Your job is to make them genuinely FEEL where they stand compared to similar businesses in their area, name the specific gaps that are costing them customers right now, and make them realise that fixing this properly takes time and consistency they probably don't have spare — which is exactly what Locale's Toolkit is built to handle for them.
+
+This works for ANY local business — tradies, salons, cafes, photographers, gyms, clinics, creatives, service businesses. Keep language broad and human, never trade-specific jargon. Talk like a knowledgeable mate who runs the numbers, not a corporate report.
+
+TONE: Honest and a little confronting, but encouraging. Make them feel the gap without being harsh or salesy. The goal is "wow, I'm further behind than I thought, and I don't have time to fix all this myself."
+
+BUSINESS DETAILS (self-reported):
+Name: ${d.biz} | Owner: ${d.owner||'not given'} | Type: ${d.ind} | Location: ${d.loc}
+Google Business Profile: ${d.gbp}${d.gbpLink?` (${d.gbpLink})`:''}
 Reviews: ${reviewInfo}
 Website: ${d.web}${d.webLink?` (${d.webLink})`:''}
-Social: ${d.soc}
-Goals/challenges: ${d.goals||'not given'}
-Scores are directional estimates from self-reported inputs. Return ONLY raw JSON: {"score":<0-100>,"scoreLabel":<string>,"overview":<2 paragraphs, specific to this business, honest about being a directional snapshot, separated by \\n\\n>,"topActions":[{"title":,"detail":} x3],"pillars":{"Google profile":<0-100>,"Reviews & reputation":<0-100>,"Website":<0-100>,"Social media":<0-100>,"Local search":<0-100>}}`;
+Social presence: ${d.soc}
+Posting frequency: ${d.postFreq||'not given'}
+Shares photos/videos of real work: ${d.proof||'not given'}
+What's getting in the way: ${d.goals||'not given'}
+
+SCORING RULES (must feel earned, not arbitrary):
+- Score 0-100 reflecting overall local visibility vs. typical businesses of this type in this kind of area.
+- Weight the things that matter most for being found and chosen: Google presence, reviews & rating, consistency of posting, and whether they show real proof of their work.
+- "benchmark" must compare them to similar local businesses honestly (e.g. "Most established [type] in your area sit around 60-70. You're below that, mainly because..."). Make the comparison feel specific and real.
+- "biggestGaps" = the 2-3 things dragging them down most, in plain language, each with WHY it costs them customers.
+- Do NOT show math or formulas. Do NOT invent precise figures they didn't provide.
+
+Return ONLY raw JSON:
+{
+ "score":<0-100>,
+ "scoreLabel":<short honest label e.g. "Losing customers you can't see">,
+ "benchmark":<1-2 sentences comparing them to similar local businesses, naming why they sit where they do>,
+ "overview":<2 punchy paragraphs separated by \\n\\n. First: where they stand and what it's quietly costing them. Second: what consistent visibility would change, and an honest acknowledgement that doing it properly every week takes time most owners don't have spare>,
+ "biggestGaps":[{"title":<the gap>,"cost":<why it loses them customers, 1 sentence>} x3],
+ "topActions":[{"title":,"detail":} x3],
+ "pillars":{"Google profile":<0-100>,"Reviews & reputation":<0-100>,"Website":<0-100>,"Social & content":<0-100>,"Local search":<0-100>}
+}`;
 
   try {
     const res = await fetch('/api/generate', {
@@ -254,14 +339,20 @@ function parseJSON(text){
 
 function demoResult(d){
   return {
-    score:52, scoreLabel:'Room to grow',
-    overview:`Based on what you've shared, ${d.biz} has a solid foundation but is leaving visibility on the table. This is a directional snapshot — the real opportunity is in tightening up the gaps below.\n\nThe biggest lever right now looks to be your Google presence and reviews, which is where most local customers form their first impression.`,
-    topActions:[
-      {title:'Complete your Google Business Profile',detail:'Add services, photos and regular posts — the highest-leverage fix for local visibility.'},
-      {title:'Build a steady review habit',detail:'Ask every happy customer. Reviews are the ranking signal you most control.'},
-      {title:'Post consistently on one platform',detail:'Pick the channel where your customers are and show real work weekly.'}
+    score:48, scoreLabel:"Harder to find than you'd think",
+    benchmark:`Most established ${d.ind||'local businesses'} around ${d.loc||'your area'} sit around 60-70 for visibility. You're sitting below that — mainly because your presence isn't showing up consistently where customers are looking.`,
+    overview:`Right now, ${d.biz} is doing real work that most potential customers never see. When someone nearby searches for what you do, the businesses that show up first, with recent photos and a steady stream of reviews, win the call — even when your work is better. That's the quiet cost of being hard to find.\n\nThe good news: this is fixable, and you don't need to be everywhere. Consistent posting, real proof of your work, and a steady review habit would move you up fast. The catch is that doing it properly every single week takes time most owners simply don't have spare — which is exactly the gap the Toolkit is built to close.`,
+    biggestGaps:[
+      {title:"You're not showing your work consistently",cost:"Customers can't see proof you're good, so they pick whoever looks more active."},
+      {title:"Posting is too irregular to build momentum",cost:"Sporadic activity means the algorithms and customers both forget you exist."},
+      {title:"Reviews aren't being collected systematically",cost:"Fewer reviews than competitors makes you the riskier choice at the moment of decision."}
     ],
-    pillars:{'Google profile':45,'Reviews & reputation':55,'Website':50,'Social media':48,'Local search':58}
+    topActions:[
+      {title:'Show real proof of your work, every week',detail:'Photos and short videos of actual jobs build trust faster than anything else — and most owners just don\'t have time to do it consistently.'},
+      {title:'Get your Google presence working hard',detail:'A complete, active profile is the single biggest lever for being found locally.'},
+      {title:'Turn happy customers into reviews, on autopilot',detail:'A steady review habit is the ranking signal you most control — when you actually keep it up.'}
+    ],
+    pillars:{'Google profile':45,'Reviews & reputation':50,'Website':52,'Social & content':38,'Local search':48}
   };
 }
 
@@ -286,7 +377,9 @@ async function unlockResults(){
         score: _auditResult.score,
         snapshot: {
           scoreLabel: _auditResult.scoreLabel,
+          benchmark: _auditResult.benchmark,
           overview: _auditResult.overview,
+          biggestGaps: _auditResult.biggestGaps,
           topActions: _auditResult.topActions,
           pillars: _auditResult.pillars
         }
@@ -302,21 +395,97 @@ async function unlockResults(){
 
 function renderResults(){
   const a = _auditResult;
-  document.getElementById('rScore').textContent = a.score;
-  document.getElementById('rLabel').textContent = a.scoreLabel;
 
-  const pillarsEl = document.getElementById('rPillars');
-  pillarsEl.innerHTML = Object.entries(a.pillars).map(([name,v])=>`
-    <div class="pillar">
-      <div class="pillar-name">${name}</div>
-      <div class="pillar-bar"><div class="pillar-fill" style="width:${v}%"></div></div>
-      <div class="pillar-val">${v}</div>
-    </div>`).join('');
+  // 1) Score-responsive colour theme
+  const score = a.score;
+  const theme = scoreTheme(score);
+  const root = document.getElementById('results');
+  root.style.setProperty('--accent', theme.accent);
+  root.style.setProperty('--accent-soft', theme.soft);
 
+  // 2) Benchmark text
+  if(a.benchmark){ document.getElementById('rBenchmark').textContent = a.benchmark; }
+  else { document.getElementById('benchmarkCard').style.display='none'; }
+
+  // 3) Overview, gaps, actions
   document.getElementById('rOverview').textContent = a.overview;
-
+  const gaps = a.biggestGaps || [];
+  document.getElementById('rGaps').innerHTML = gaps.map(g=>`
+    <div class="gap"><div class="gap-title">${g.title}</div><div class="gap-cost">${g.cost}</div></div>`).join('');
   document.getElementById('rActions').innerHTML = a.topActions.map(t=>`
     <div class="action"><strong>${t.title}</strong> — <span>${t.detail}</span></div>`).join('');
+
+  // 4) Build pillar rows (fills animate later)
+  const pillarsEl = document.getElementById('rPillars');
+  pillarsEl.innerHTML = Object.entries(a.pillars).map(([name,v])=>{
+    const pc = pillarColor(v);
+    return `<div class="pillar">
+      <div class="pillar-name">${name}</div>
+      <div class="pillar-bar"><div class="pillar-fill" data-w="${v}" style="background:${pc}"></div></div>
+      <div class="pillar-val" style="color:${pc}">${v}</div>
+    </div>`;
+  }).join('');
+
+  // 5) Kick off the animation sequence
+  requestAnimationFrame(()=>animateResults(a, theme));
+}
+
+function scoreTheme(s){
+  if(s>=70) return {accent:'#2e7d59', soft:'rgba(46,125,89,0.12)'};      // green — doing well
+  if(s>=50) return {accent:'#c8860f', soft:'rgba(245,166,35,0.14)'};     // amber — room to grow
+  return {accent:'#cc5f5f', soft:'rgba(204,95,95,0.12)'};                // red — losing customers
+}
+function pillarColor(v){
+  if(v>=70) return '#2e7d59';
+  if(v>=50) return '#c8860f';
+  return '#cc5f5f';
+}
+
+function animateResults(a, theme){
+  // --- Animated count-up + gauge fill ---
+  const circumference = 590.6; // 2*pi*94
+  const gaugeFill = document.getElementById('gaugeFill');
+  const numEl = document.getElementById('rScore');
+  const target = a.score;
+  // gauge ring
+  const offset = circumference - (target/100)*circumference;
+  setTimeout(()=>{ gaugeFill.style.strokeDashoffset = offset; }, 200);
+  // count up
+  const dur = 1500; const start = performance.now();
+  function tick(now){
+    const p = Math.min((now-start)/dur, 1);
+    const eased = 1-Math.pow(1-p,3);
+    numEl.textContent = Math.round(eased*target);
+    if(p<1) requestAnimationFrame(tick);
+    else numEl.textContent = target;
+  }
+  setTimeout(()=>requestAnimationFrame(tick), 200);
+
+  // label appears after the count
+  setTimeout(()=>{ document.getElementById('rLabel').textContent = a.scoreLabel; }, 1100);
+
+  // --- Benchmark slider: peer sits ~mid-high, "you" slides to your score ---
+  setTimeout(()=>{
+    const peer = document.getElementById('benchPeer');
+    const you = document.getElementById('benchYou');
+    if(peer && you){
+      peer.style.left = '65%';          // typical "businesses like yours"
+      you.style.left = a.score + '%';   // their actual score
+    }
+  }, 500);
+
+  // --- Staggered card reveals ---
+  const reveals = document.querySelectorAll('.results .reveal');
+  reveals.forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('in'), 700 + i*220);
+  });
+
+  // --- Pillar fills animate after their card reveals ---
+  setTimeout(()=>{
+    document.querySelectorAll('.pillar-fill').forEach((f,i)=>{
+      setTimeout(()=>{ f.style.width = f.dataset.w + '%'; }, i*120);
+    });
+  }, 1100);
 }
 
 // Allow Enter on email field

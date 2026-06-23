@@ -243,6 +243,11 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .sh-chart{width:100%;height:170px;display:block}
 .sh-xlabels{display:flex;justify-content:space-between;padding:6px 22px 0;font-size:10.5px;color:var(--muted)}
 @media(max-width:560px){.sh-stats{grid-template-columns:repeat(2,1fr)}}
+
+.admin-table{width:100%;border-collapse:collapse;font-size:13.5px}
+.admin-table th{text-align:left;padding:10px 12px;border-bottom:2px solid var(--border);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--muted)}
+.admin-table td{padding:12px;border-bottom:1px solid var(--border)}
+.admin-table tbody tr:hover{background:var(--surface2)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -299,12 +304,11 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
     <div class="nav-item" data-view="reviews"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 5 .7-3.5 3.4.8 5L8 12l-4.3 2.1.8-5L1 5.7 6 5z"/></svg>Review Engine</div>
     <div class="nav-item" data-view="content"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>Content Studio</div>
     <div class="nav-item" data-view="report"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12V4l5-2 5 2v8l-5 2-5-2z"/></svg>Monthly Report</div>
-    <div class="nav-section">Agency</div>
-    <div class="nav-item" data-view="clients"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="6" cy="5" r="2.5"/><path d="M1 13c0-3 2-4.5 5-4.5s5 1.5 5 4.5"/><circle cx="12" cy="6" r="2"/><path d="M12 10c2 0 3.5 1 3.5 3"/></svg>Clients</div>
+
     <div class="nav-item" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M8 1v2.2M8 12.8V15M15 8h-2.2M3.2 8H1M12.9 3.1l-1.5 1.5M4.6 11.4l-1.5 1.5M12.9 12.9l-1.5-1.5M4.6 4.6L3.1 3.1"/></svg>Settings</div>
   </nav>
   <div class="sidebar-foot">
-    <div class="client-pill" onclick="showView('clients')">
+    <div class="client-pill" style="display:none" onclick="showView('clients')">
       <div class="client-av" id="sbAv">—</div>
       <div style="flex:1;min-width:0"><div class="client-nm" id="sbName">No client</div><div class="client-tp" id="sbType">Select a client</div></div>
       <svg width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="var(--muted)" stroke-width="1.5"><path d="M3 5l3-3 3 3M3 7l3 3 3-3"/></svg>
@@ -319,7 +323,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <button class="menu-btn no-print" id="menuBtn" aria-label="Open menu" onclick="toggleSidebar()">
         <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 5h14M3 10h14M3 15h14" stroke-linecap="round"/></svg>
       </button>
-      <div style="min-width:0"><h1 id="tbTitle">Dashboard</h1><p id="tbSub">Your client's visibility at a glance</p></div>
+      <div style="min-width:0"><h1 id="tbTitle">Dashboard</h1><p id="tbSub">Your visibility at a glance</p></div>
     </div>
     <div class="topbar-right no-print" style="display:flex;align-items:center;gap:10px">
       <span class="badge badge-amber" id="apiStatus">API: not connected</span>
@@ -337,8 +341,8 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="view" id="view-dashboard">
     <div id="dashEmpty" class="empty-state" style="display:none">
       <div class="big">No client selected</div>
-      <p>Add or select a client to see their dashboard.</p>
-      <button class="btn btn-primary" style="margin-top:16px" onclick="showView('clients')">Go to Clients →</button>
+      <p>Run your first audit to see your visibility dashboard.</p>
+      <button class="btn btn-primary" style="margin-top:16px" onclick="showView('audit')">Run my audit →</button>
     </div>
     <div id="dashBody">
       <div id="thisWeekPanel"></div>
@@ -453,7 +457,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="view" id="view-report">
     <div class="panel no-print">
       <div class="panel-title">Monthly Report Generator</div>
-      <div class="panel-sub">Enter this month's numbers — Claude writes the plain-English narrative. Print or save as PDF and send to your client.</div>
+      <div class="panel-sub">Enter this month's numbers — Claude writes the plain-English narrative. Print or save it as a PDF for your records.</div>
       <div class="field-row">
         <div class="field"><label>Report month</label><input id="mMonth" placeholder="e.g. June 2026"></div>
         <div class="field"><label>Score this month</label><input id="mScore" type="number" placeholder="72"></div>
@@ -504,15 +508,15 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <span id="testResult" style="margin-left:12px;font-size:12.5px"></span>
     </div>
     <div class="panel">
-      <div class="panel-title">Agency branding</div>
-      <div class="field"><label>Agency name (appears on reports)</label><input id="setAgency" placeholder="e.g. New Arc"></div>
+      <div class="panel-title">Your business</div>
+      <div class="field"><label>Business name (appears on your reports)</label><input id="setAgency" placeholder="e.g. Harbour Plumbing"></div>
       <button class="btn btn-primary" onclick="saveSettings()">Save</button>
     </div>
     <div class="panel">
       <div class="panel-title">Data</div>
       <div class="panel-sub">All client data lives in this browser. Export regularly as a backup.</div>
       <button class="btn" onclick="exportData()">Export all data (JSON)</button>
-      <button class="btn btn-danger" onclick="if(confirm('Delete ALL clients and settings? This cannot be undone.')){localStorage.clear();location.reload()}" style="margin-left:8px">Reset everything</button>
+      <button class="btn btn-danger" onclick="if(confirm('Reset all your data? This cannot be undone.')){localStorage.clear();location.reload()}" style="margin-left:8px">Reset everything</button>
     </div>
   </div>
 
@@ -528,6 +532,10 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 // while data is persisted to Supabase per logged-in user.
 let _mem = { clients: [], activeId: null, settings: {} };
 let _currentUser = null;
+const ADMIN_EMAIL = 'ryno.newick1@gmail.com';
+let _isAdmin = false;
+function checkIsAdmin(){ _isAdmin = !!(_currentUser && _currentUser.email && _currentUser.email.toLowerCase() === ADMIN_EMAIL.toLowerCase()); return _isAdmin; }
+let _adminClients = []; // all clients, admin-only
 let _saveTimer = null;
 
 const S = {
@@ -606,13 +614,13 @@ function toast(msg){
 
 /* ============ ROUTER ============ */
 const titles={
-  dashboard:['Dashboard',"Your client's visibility at a glance"],
+  dashboard:['Dashboard',"Your visibility at a glance"],
   score:['Visibility Score','Detailed five-pillar breakdown'],
   audit:['Run Audit','AI-generated visibility audit'],
   reviews:['Review Engine','Turn finished jobs into Google reviews'],
   content:['Content Studio','Real work → platform-ready posts'],
   report:['Monthly Report','Client-ready monthly summary'],
-  clients:['Clients','Manage your agency client list'],
+  clients:['My Business','Your business details'],
   settings:['Settings','API, branding and data'],
 };
 function showView(v){
@@ -1237,6 +1245,12 @@ async function onLoggedIn(){
     const { data } = await sb.auth.getUser();
     _currentUser = data.user;
   } catch(e){ console.error('getUser failed', e); }
+  checkIsAdmin();
+  if(_isAdmin){
+    await loadAllClientsForAdmin();
+    bootAdmin();
+    return;
+  }
   await loadFromSupabase();
   boot(); // start the app (will seed only if they have no data yet)
 }
@@ -1253,6 +1267,79 @@ async function checkAuth(){
 document.addEventListener('keydown', function(e){
   if(e.key==='Enter' && document.getElementById('authScreen').style.display!=='none'){ doAuth(); }
 });
+
+
+/* ============ ADMIN OVERSIGHT (only for ADMIN_EMAIL) ============ */
+async function loadAllClientsForAdmin(){
+  if(!sb || !_isAdmin) return;
+  try {
+    // Reads ALL businesses rows. Requires the admin RLS policy in Supabase.
+    const { data, error } = await sb.from('businesses').select('user_id, name, data, updated_at');
+    if(error){ console.error('Admin load failed:', error.message); _adminClients=[]; return; }
+    // Flatten: each row's data.clients holds that user's businesses
+    const all=[];
+    (data||[]).forEach(row=>{
+      const clients=(row.data && row.data.clients) ? row.data.clients : [];
+      clients.forEach(c=> all.push({...c, _ownerUserId: row.user_id, _updated: row.updated_at}));
+    });
+    _adminClients=all;
+  } catch(e){ console.error('Admin load error:', e); _adminClients=[]; }
+}
+
+function bootAdmin(){
+  if(_booted) return; _booted=true;
+  // Build a dedicated admin view and show it
+  renderAdminView();
+  refreshApiStatus && refreshApiStatus();
+}
+
+function renderAdminView(){
+  // Replace the whole app main area with an admin dashboard
+  const main=document.querySelector('.main') || document.querySelector('main');
+  // Update topbar title
+  const tt=document.getElementById('tbTitle'); if(tt) tt.textContent='Admin — all clients';
+  const ts=document.getElementById('tbSub'); if(ts) ts.textContent='Oversight across every Locale account';
+
+  const rows=_adminClients.map((c,i)=>{
+    const score=c.score||0;
+    const scoreColor=score>=70?'var(--green)':score>=50?'var(--amber)':'var(--red)';
+    return `<tr>
+      <td style="font-weight:600">${c.name||'(unnamed)'}</td>
+      <td>${c.industry||'—'}</td>
+      <td>${c.location||'—'}</td>
+      <td><span style="font-family:'Geist Mono',monospace;font-weight:600;color:${scoreColor}">${score}</span></td>
+      <td>${c.reviews||0} · ${c.rating||0}★</td>
+      <td style="color:var(--muted);font-size:12px">${c._updated?new Date(c._updated).toLocaleDateString('en-AU'):'—'}</td>
+    </tr>`;
+  }).join('');
+
+  const html=`
+    <div class="view" style="display:block">
+      <div class="panel">
+        <div class="panel-title">All clients (${_adminClients.length})</div>
+        <div class="panel-sub">Every business across all accounts. Read-only overview.</div>
+        ${_adminClients.length? `
+        <div style="overflow-x:auto;margin-top:16px">
+        <table class="admin-table">
+          <thead><tr><th>Business</th><th>Industry</th><th>Location</th><th>Score</th><th>Reviews</th><th>Updated</th></tr></thead>
+          <tbody>${rows}</tbody>
+        </table></div>` : '<div class="empty-state" style="margin-top:16px">No client data yet. Clients will appear here once they run their audits.</div>'}
+      </div>
+    </div>`;
+
+  // Find content region after topbar
+  const content=document.querySelector('.content') || main;
+  if(content){
+    // hide all normal views, inject admin
+    document.querySelectorAll('.view').forEach(v=>v.style.display='none');
+    let adminWrap=document.getElementById('adminWrap');
+    if(!adminWrap){ adminWrap=document.createElement('div'); adminWrap.id='adminWrap'; content.appendChild(adminWrap); }
+    adminWrap.innerHTML=html;
+    adminWrap.style.display='block';
+  }
+  // Hide nav items that don't apply to admin (keep it clean)
+  document.querySelectorAll('.nav-item').forEach(n=>{ if(n.dataset.view!=='dashboard') n.style.display='none'; });
+}
 
 /* ============ INIT ============ */
 let _booted = false;
