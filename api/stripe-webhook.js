@@ -43,9 +43,7 @@ function verify(raw, sig, secret) {
 
 // Update (or insert) the subscription status for a user in Supabase.
 async function setStatus(userId, email, status) {
-  if (!userId && !email) return;
-  // We store status on the businesses row's `data` jsonb via a dedicated column-free
-  // approach: a small "subscriptions" table keyed by user_id is cleanest.
+  if (!userId && !email) { console.error('setStatus: no userId and no email — nothing to write'); return; }
   const url = `${SUPABASE_URL}/rest/v1/subscriptions`;
   const row = {
     user_id: userId || null,
@@ -53,7 +51,8 @@ async function setStatus(userId, email, status) {
     status: status,            // 'active' | 'canceled' | 'past_due'
     updated_at: new Date().toISOString()
   };
-  await fetch(url, {
+  console.log('setStatus writing:', JSON.stringify(row));
+  const resp = await fetch(url, {
     method: 'POST',
     headers: {
       'apikey': SERVICE_ROLE,
@@ -63,6 +62,12 @@ async function setStatus(userId, email, status) {
     },
     body: JSON.stringify(row)
   });
+  if (!resp.ok) {
+    const txt = await resp.text();
+    console.error('Supabase write FAILED:', resp.status, txt);
+  } else {
+    console.log('Supabase write OK:', resp.status);
+  }
 }
 
 module.exports = async (req, res) => {
@@ -88,6 +93,7 @@ module.exports = async (req, res) => {
       case 'checkout.session.completed': {
         const userId = obj.client_reference_id || (obj.metadata && obj.metadata.supabase_user_id) || '';
         const email  = obj.customer_email || (obj.customer_details && obj.customer_details.email) || '';
+        console.log('checkout.session.completed — userId:', userId || '(none)', 'email:', email || '(none)');
         await setStatus(userId, email, 'active');
         break;
       }
