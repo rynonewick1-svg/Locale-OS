@@ -258,6 +258,25 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 
 /* Lead Rescue intro */
 .lr-intro{background:rgba(46,125,89,0.08);border:1px solid rgba(46,125,89,0.2);border-radius:12px;padding:13px 16px;font-size:13.5px;color:var(--green-d,var(--green));margin-bottom:14px;line-height:1.5}
+
+/* One-tap-to-act buttons */
+.oc-actions{display:flex;gap:8px;align-items:center}
+.btn-act{background:var(--green)!important;color:#fff!important;border-color:var(--green)!important;font-weight:600}
+.btn-act:hover{background:var(--green-d)!important}
+/* Connections / accounts shell */
+.conn-card{display:flex;align-items:center;gap:16px;padding:18px 20px;background:var(--surface);border:1px solid var(--border);border-radius:14px;margin-bottom:12px}
+.conn-ic{width:44px;height:44px;border-radius:11px;background:var(--surface2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0}
+.conn-meta{flex:1}
+.conn-name{font-weight:600;font-size:15px;margin-bottom:2px}
+.conn-desc{font-size:13px;color:var(--muted);line-height:1.45}
+.conn-status{font-size:12px;font-weight:600;padding:6px 13px;border-radius:20px;white-space:nowrap}
+.conn-soon{background:var(--surface2);color:var(--muted)}
+.conn-ready{background:var(--green-soft,rgba(46,125,89,0.1));color:var(--green)}
+.sec-box{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px 20px;margin-top:18px}
+.sec-title{font-size:13px;font-weight:700;color:var(--green);margin-bottom:12px;text-transform:uppercase;letter-spacing:0.06em}
+.sec-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:13.5px;line-height:1.5;color:var(--text)}
+.sec-item:last-child{margin-bottom:0}
+.sec-check{color:var(--green);flex-shrink:0;font-weight:700}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -314,6 +333,9 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
     <div class="nav-item" data-view="reviews"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 5 .7-3.5 3.4.8 5L8 12l-4.3 2.1.8-5L1 5.7 6 5z"/></svg>Lead Rescue</div>
     <div class="nav-item" data-view="content"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>Job to Post</div>
     <div class="nav-item" data-view="report"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12V4l5-2 5 2v8l-5 2-5-2z"/></svg>Monthly Report</div>
+
+    <div class="nav-section">Automation</div>
+    <div class="nav-item" data-view="connect"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 10l4-4M5.5 8.5L4 10a2.1 2.1 0 003 3l1.5-1.5M10.5 7.5L12 6a2.1 2.1 0 00-3-3L7.5 4.5"/></svg>Connect accounts</div>
 
     <div class="nav-item" data-view="settings"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M8 1v2.2M8 12.8V15M15 8h-2.2M3.2 8H1M12.9 3.1l-1.5 1.5M4.6 11.4l-1.5 1.5M12.9 12.9l-1.5-1.5M4.6 4.6L3.1 3.1"/></svg>Settings</div>
   </nav>
@@ -502,6 +524,53 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   </div>
 
   <!-- ========== SETTINGS ========== -->
+  <div class="view" id="view-connect">
+    <div class="panel">
+      <div class="panel-title">Connect your accounts</div>
+      <div class="panel-sub">This is where Locale goes from giving you words to copy → to doing the work with you. Connect the tools your business already runs on, and your AI assistant can draft replies to real enquiries, chase real quotes, and request reviews — with you approving every send.</div>
+
+      <div class="conn-card">
+        <div class="conn-ic">📧</div>
+        <div class="conn-meta">
+          <div class="conn-name">Gmail / Google Workspace</div>
+          <div class="conn-desc">Let your assistant see new customer enquiries and draft replies for you to approve and send.</div>
+        </div>
+        <div class="conn-status conn-soon">Coming soon</div>
+      </div>
+
+      <div class="conn-card">
+        <div class="conn-ic">📊</div>
+        <div class="conn-meta">
+          <div class="conn-name">Google Business Profile</div>
+          <div class="conn-desc">Pull in your real reviews, views and search data — so your score reflects live numbers, not estimates.</div>
+        </div>
+        <div class="conn-status conn-soon">Coming soon</div>
+      </div>
+
+      <div class="conn-card">
+        <div class="conn-ic">💬</div>
+        <div class="conn-meta">
+          <div class="conn-name">SMS / messaging</div>
+          <div class="conn-desc">Send quote follow-ups and review requests straight from Locale, with your approval on each one.</div>
+        </div>
+        <div class="conn-status conn-soon">Coming soon</div>
+      </div>
+
+      <div class="sec-box">
+        <div class="sec-title">🔒 Your security, built in from day one</div>
+        <div class="sec-item"><span class="sec-check">✓</span><span><strong>You're always in control.</strong> Your assistant drafts and stages messages — nothing is sent to a customer without your one-tap approval.</span></div>
+        <div class="sec-item"><span class="sec-check">✓</span><span><strong>Bank-level connection.</strong> Accounts connect through Google's official secure sign-in (OAuth). Locale never sees or stores your password.</span></div>
+        <div class="sec-item"><span class="sec-check">✓</span><span><strong>Only what's needed.</strong> Your assistant is given specific, limited permissions — like a trusted employee with a defined role, not the keys to everything.</span></div>
+        <div class="sec-item"><span class="sec-check">✓</span><span><strong>Revoke anytime.</strong> Disconnect any account in one click, instantly cutting off all access.</span></div>
+        <div class="sec-item"><span class="sec-check">✓</span><span><strong>Full audit trail.</strong> Every action your assistant takes is logged, so you can always see exactly what happened.</span></div>
+      </div>
+
+      <div style="margin-top:18px;padding:16px 18px;background:var(--green-soft,rgba(46,125,89,0.08));border-radius:12px;font-size:13.5px;line-height:1.55;color:var(--text)">
+        <strong>Want the AI to run this for you completely?</strong> The connections above let you stay hands-on with AI assistance. When you'd rather not touch it at all, our <strong>Managed service</strong> takes over — we set up, run, and tune your autonomous assistant end-to-end. <a href="#" style="color:var(--green);font-weight:600;text-decoration:none">Ask about Managed →</a>
+      </div>
+    </div>
+  </div>
+
   <div class="view" id="view-settings">
     <div class="panel">
       <div class="panel-title">AI connection</div>
@@ -627,6 +696,7 @@ const titles={
   report:['Monthly Report','Client-ready monthly summary'],
   clients:['My Business','Your business details'],
   settings:['Settings','API, branding and data'],
+  connect:['Connect your accounts','Let AI assist you directly — securely, with you in control'],
 };
 function showView(v){
   document.querySelectorAll('.view').forEach(el=>el.classList.remove('active'));
@@ -1059,9 +1129,13 @@ Return ONLY raw JSON: {"intro":<1 sentence on the strategy for this stage>,"mess
   }
   show('revLoader',false);
   const introHtml = out.intro ? `<div class="lr-intro">${out.intro}</div>` : '';
+  const isEmail = channel==='Email';
+  const actBtn = isEmail
+    ? `<button class="btn btn-sm btn-act" onclick="actEmail(this)">✉ Open in email</button>`
+    : `<button class="btn btn-sm btn-act" onclick="actSMS(this)">💬 Open in messages</button>`;
   document.getElementById('revResult').innerHTML = introHtml + out.messages.map(m=>`
     <div class="output-card"><div class="oc-head"><span class="oc-tag">${m.label}</span>
-    <button class="btn btn-sm" onclick="copyText(this)">Copy</button></div>
+    <div class="oc-actions">${actBtn}<button class="btn btn-sm" onclick="copyText(this)">Copy</button></div></div>
     <div class="oc-body">${m.text}</div></div>`).join('');
 }
 
@@ -1113,7 +1187,8 @@ Return ONLY raw JSON:
   document.getElementById('conResult').innerHTML=`
     <div class="output-card">
       <div class="oc-head"><span class="oc-tag">Ready to post</span>
-      <button class="btn btn-sm" onclick="copyText(this)">Copy</button></div>
+      <div class="oc-actions"><button class="btn btn-sm btn-act" onclick="actShare(this)">📲 Share</button>
+      <button class="btn btn-sm" onclick="copyText(this)">Copy</button></div></div>
       <div class="oc-body">${out.post}</div>
     </div>
     <div class="jp-extras">
@@ -1223,6 +1298,42 @@ function show(id,on){document.getElementById(id).classList.toggle('on',on)}
 function copyText(btn){
   const text=btn.closest('.output-card').querySelector('.oc-body').innerText;
   navigator.clipboard.writeText(text).then(()=>{btn.textContent='Copied ✓';setTimeout(()=>btn.textContent='Copy',1500)});
+}
+
+/* ===== STAGE 1: ONE-TAP-TO-ACT =====
+   Opens the generated message pre-filled in the user's own email or SMS app,
+   one tap from sending. No account access required — uses the device's native
+   mailto:/sms: handlers. This is the bridge to full autonomy (Stages 2-4). */
+function actSMS(btn){
+  const text=btn.closest('.output-card').querySelector('.oc-body').innerText;
+  // sms: with body — works on mobile; prompts to pick a contact
+  const url='sms:?&body='+encodeURIComponent(text);
+  window.location.href=url;
+  flashBtn(btn,'Opening…');
+}
+function actEmail(btn){
+  const card=btn.closest('.output-card');
+  const text=card.querySelector('.oc-body').innerText;
+  // pull a subject if the message has a "Subject:" line (emails do)
+  let subject='', body=text;
+  const m=text.match(/^\s*Subject:\s*(.+)\n?/i);
+  if(m){ subject=m[1].trim(); body=text.replace(m[0],'').trim(); }
+  else { subject='Following up'; }
+  const url='mailto:?subject='+encodeURIComponent(subject)+'&body='+encodeURIComponent(body);
+  window.location.href=url;
+  flashBtn(btn,'Opening…');
+}
+function actShare(btn){
+  const text=btn.closest('.output-card').querySelector('.oc-body').innerText;
+  if(navigator.share){
+    navigator.share({text}).then(()=>flashBtn(btn,'Shared ✓')).catch(()=>{});
+  } else {
+    navigator.clipboard.writeText(text).then(()=>flashBtn(btn,'Copied — paste into your app ✓'));
+  }
+}
+function flashBtn(btn,msg){
+  const orig=btn.textContent; btn.textContent=msg;
+  setTimeout(()=>btn.textContent=orig,1800);
 }
 
 
