@@ -277,6 +277,16 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .sec-item{display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;font-size:13.5px;line-height:1.5;color:var(--text)}
 .sec-item:last-child{margin-bottom:0}
 .sec-check{color:var(--green);flex-shrink:0;font-weight:700}
+
+/* Paywall */
+#paywallScreen{display:none;position:fixed;inset:0;background:var(--bg);align-items:center;justify-content:center;z-index:2000;padding:20px}
+.pw-card{background:var(--surface);border:1px solid var(--border);border-radius:20px;padding:40px 36px;max-width:420px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.08)}
+.pw-logo{font-weight:700;font-size:24px;letter-spacing:-0.02em;color:var(--green);margin-bottom:18px}
+.pw-card h2{font-size:26px;font-weight:700;letter-spacing:-0.02em;margin-bottom:10px}
+.pw-card p{font-size:15px;color:var(--muted);line-height:1.6;margin-bottom:24px}
+.pw-card p strong{color:var(--text)}
+.pw-btn{width:100%;padding:14px;font-size:16px;margin-bottom:14px}
+.pw-logout{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -1415,13 +1425,71 @@ async function onLoggedIn(){
     bootAdmin();
     return;
   }
+  // Paywall: check subscription status before granting Toolkit access.
+  const active = await checkSubscription();
+  if(!active){
+    showPaywall();
+    return;
+  }
   await loadFromSupabase();
   boot(); // start the app (will seed only if they have no data yet)
+}
+
+// Returns true if the logged-in user has an active subscription.
+async function checkSubscription(){
+  if(!sb || !_currentUser) return false;
+  try {
+    const { data, error } = await sb.from('subscriptions')
+      .select('status').eq('user_id', _currentUser.id).maybeSingle();
+    if(error){ console.warn('sub check error', error.message); return false; }
+    return !!(data && data.status === 'active');
+  } catch(e){ console.warn('sub check failed', e); return false; }
+}
+
+// Show the subscribe screen (when no active subscription).
+function showPaywall(){
+  document.querySelector('.app').style.display = 'none';
+  let pw = document.getElementById('paywallScreen');
+  if(!pw){
+    pw = document.createElement('div');
+    pw.id = 'paywallScreen';
+    pw.innerHTML = `
+      <div class="pw-card">
+        <div class="pw-logo">Locale</div>
+        <h2>Start your Toolkit</h2>
+        <p>Get your visibility score, AI tools, and everything you need to get found — for <strong>$97/month</strong>. Cancel anytime.</p>
+        <button class="btn btn-primary pw-btn" onclick="startCheckout(this)">Subscribe — $97/month</button>
+        <button class="pw-logout" onclick="sb.auth.signOut().then(()=>location.reload())">Log out</button>
+      </div>`;
+    document.body.appendChild(pw);
+  }
+  pw.style.display = 'flex';
+}
+
+// Kick off Stripe Checkout.
+async function startCheckout(btn){
+  btn.disabled = true; btn.textContent = 'Loading…';
+  try {
+    const r = await fetch('/api/checkout', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({ email: _currentUser.email, userId: _currentUser.id })
+    });
+    const data = await r.json();
+    if(data.url){ window.location.href = data.url; }
+    else { alert(data.error || 'Could not start checkout'); btn.disabled=false; btn.textContent='Subscribe — $97/month'; }
+  } catch(e){
+    alert('Checkout error — try again'); btn.disabled=false; btn.textContent='Subscribe — $97/month';
+  }
 }
 
 // On load, check if already logged in
 async function checkAuth(){
   if(!sb){ document.getElementById('authScreen').style.display='flex'; return; }
+  // Returning from Stripe checkout? Give the webhook a moment, then proceed.
+  if(location.search.includes('paid=success')){
+    history.replaceState({}, '', '/app');
+    await new Promise(r=>setTimeout(r, 2500));
+  }
   const { data } = await sb.auth.getSession();
   if(data.session){ onLoggedIn(); }
   else { document.getElementById('authScreen').style.display='flex'; }
