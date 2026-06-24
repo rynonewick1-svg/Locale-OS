@@ -175,6 +175,19 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 .roi-caveat{font-size:11.5px;color:var(--muted2);line-height:1.5;text-align:center;margin-top:14px}
 @media(max-width:880px){.roi-wrap{grid-template-columns:1fr;gap:24px}}
 
+
+/* ===== TOOLKIT VALUE SECTION ===== */
+.toolkit-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:36px}
+.toolkit-card{background:var(--cream2);border:1px solid var(--line);border-radius:16px;padding:26px 24px;text-align:left;transition:transform .18s,box-shadow .18s}
+.toolkit-card:hover{transform:translateY(-3px);box-shadow:0 16px 40px rgba(31,35,38,0.07)}
+.toolkit-ic{font-size:30px;margin-bottom:14px;line-height:1}
+.toolkit-card h3{font-size:17px;font-weight:700;letter-spacing:-0.02em;margin-bottom:8px;color:var(--charcoal)}
+.toolkit-card p{font-size:14px;line-height:1.6;color:var(--muted);margin:0}
+.toolkit-value{margin-top:30px;background:var(--charcoal);border-radius:18px;padding:30px 34px;text-align:center}
+.toolkit-value p{font-size:17px;line-height:1.6;color:var(--cream);margin:0;max-width:640px;margin:0 auto}
+.toolkit-value strong{color:var(--amber);font-weight:700}
+@media(max-width:880px){.toolkit-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.toolkit-grid{grid-template-columns:1fr}.toolkit-value p{font-size:15.5px}}
 </style>
 </head>
 <body>
@@ -189,6 +202,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     <a href="#how">How it works</a>
     <a href="#features">Features</a>
     <a href="#roi">ROI</a>
+    <a href="#toolkit">Toolkit</a>
     <a href="#pricing">Pricing</a>
     <a href="/audit" class="btn btn-primary">Get your free audit</a>
   </div>
@@ -198,13 +212,13 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 <section class="hero">
   <div>
     <span class="badge"><span class="accent-dot"></span>Built for tradies &amp; local businesses</span>
-    <h1>Get found before your competitors do.</h1>
-    <p class="lead">Locale gives tradies one clear visibility score, a simple fix list, and the tools to turn local searches into booked jobs.</p>
+    <h1>The simplest way to stop losing customers.</h1>
+    <p class="lead">Most local businesses do great work — their online presence just doesn't show it. Locale is one simple system to keep you visible, follow up every lead, and turn your everyday work into the proof that wins customers.</p>
     <div class="hero-ctas">
-      <a href="/audit" class="btn btn-primary btn-lg">Get your free visibility audit</a>
+      <a href="/audit" class="btn btn-primary btn-lg">Get your free visibility score</a>
       <a href="#how" class="btn btn-secondary btn-lg">See how it works</a>
     </div>
-    <p class="hero-note">Free audit · No credit card · 2 minutes</p>
+    <p class="hero-note">Free 2-minute score · No credit card · See where you stand</p>
   </div>
 
   <div class="score-card">
@@ -217,11 +231,11 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
       <div class="sc-ring"><div class="sc-ring-inner"><img src="/locale-mark.svg" alt=""></div></div>
     </div>
     <div class="sc-bars">
-      <div class="sc-bar"><span class="sc-bar-name">Google Profile</span><span class="sc-bar-val">81</span></div>
-      <div class="sc-bar"><span class="sc-bar-name">Reviews</span><span class="sc-bar-val">64</span></div>
-      <div class="sc-bar"><span class="sc-bar-name">Website</span><span class="sc-bar-val">58</span></div>
-      <div class="sc-bar"><span class="sc-bar-name">Social Proof</span><span class="sc-bar-val">70</span></div>
-      <div class="sc-bar"><span class="sc-bar-name">Local Search</span><span class="sc-bar-val">49</span></div>
+      <div class="sc-bar"><span class="sc-bar-name">Get Found</span><span class="sc-bar-val">81</span></div>
+      <div class="sc-bar"><span class="sc-bar-name">Get Trusted</span><span class="sc-bar-val">64</span></div>
+      <div class="sc-bar"><span class="sc-bar-name">Get Chosen</span><span class="sc-bar-val">58</span></div>
+      <div class="sc-bar"><span class="sc-bar-name">Stay Visible</span><span class="sc-bar-val">70</span></div>
+      <div class="sc-bar"><span class="sc-bar-name">Win the Lead</span><span class="sc-bar-val">49</span></div>
     </div>
   </div>
 </section>
@@ -229,33 +243,33 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 <!-- PROBLEM -->
 <section class="section" id="how">
   <div class="eyebrow">The problem</div>
-  <h2>You're great at the work. The internet doesn't know it yet.</h2>
-  <p class="section-sub">Every week, people in your area search for exactly what you do. Most never see your name. Here's what that costs:</p>
+  <h2>You're great at the work. The internet doesn't show it yet.</h2>
+  <p class="section-sub">Every week, people nearby search for exactly what you do — and quietly choose someone else, because that business looked more active, more trusted, or simply replied first. Here's what that costs:</p>
   <div class="problem-grid">
-    <div class="problem-card"><div class="problem-num">76%</div><h3>Search before they call</h3><p>Most local customers check Google before contacting any business — even ones a friend recommended. A thin profile sends them to the next name.</p></div>
-    <div class="problem-card"><div class="problem-num">Top 3</div><h3>Take nearly all the clicks</h3><p>The map pack — the top three local results — captures the overwhelming majority of attention. Ranked 8th may as well be invisible.</p></div>
-    <div class="problem-card"><div class="problem-num">0 hrs</div><h3>Spare time you have for this</h3><p>You're on the tools all day. Marketing keeps sliding to the bottom of the list — exactly the problem Locale is built to solve.</p></div>
+    <div class="problem-card"><div class="problem-num">76%</div><h3>Check you online first</h3><p>Most local customers look you up before they call — even when a friend recommended you. A quiet, outdated presence sends them to the next name.</p></div>
+    <div class="problem-card"><div class="problem-num">Quotes</div><h3>Go cold without follow-up</h3><p>The biggest money-leak isn't price — it's the quote you sent and never followed up on. Most jobs are won on the second or third nudge.</p></div>
+    <div class="problem-card"><div class="problem-num">0 hrs</div><h3>Spare time for any of it</h3><p>You're on the tools all day. Posting, reviews, follow-ups keep sliding to the bottom of the list — exactly what Locale is built to handle simply.</p></div>
   </div>
 </section>
 
-<!-- PILLARS -->
+<!-- FRAMEWORK -->
 <section class="section">
-  <div class="eyebrow">The method</div>
-  <h2>Five pillars. One score. Zero guesswork.</h2>
-  <p class="section-sub">Locale measures the five things that decide whether local customers find and choose you — and turns them into a score you can move.</p>
+  <div class="eyebrow">How Locale works</div>
+  <h2>One simple system. Five things that win customers.</h2>
+  <p class="section-sub">Locale keeps the whole journey covered — from a customer finding you, to trusting you, to choosing you, to actually getting in touch. No jargon, no guesswork.</p>
   <div class="pillars">
-    <div class="pillar"><div class="ico">📍</div><h4>Google Profile</h4><p>Completeness, photos &amp; posts</p></div>
-    <div class="pillar"><div class="ico">⭐</div><h4>Reviews</h4><p>Volume, rating &amp; recency</p></div>
-    <div class="pillar"><div class="ico">🌐</div><h4>Website</h4><p>Speed &amp; local SEO</p></div>
-    <div class="pillar"><div class="ico">📣</div><h4>Social Proof</h4><p>Consistency &amp; real work</p></div>
-    <div class="pillar"><div class="ico">🔍</div><h4>Local Search</h4><p>Where you rank that matters</p></div>
+    <div class="pillar"><div class="ico">📍</div><h4>Get Found</h4><p>Show up on Google &amp; local search</p></div>
+    <div class="pillar"><div class="ico">⭐</div><h4>Get Trusted</h4><p>Reviews &amp; proof of real work</p></div>
+    <div class="pillar"><div class="ico">🎯</div><h4>Get Chosen</h4><p>A clear message that stands out</p></div>
+    <div class="pillar"><div class="ico">📣</div><h4>Stay Visible</h4><p>Consistent posting, made simple</p></div>
+    <div class="pillar"><div class="ico">💬</div><h4>Win the Lead</h4><p>Follow up every enquiry &amp; quote</p></div>
   </div>
 </section>
 
 <!-- FEATURES -->
 <section class="section" id="features">
-  <div class="eyebrow">The platform</div>
-  <h2>Everything you need to get found — nothing you don't.</h2>
+  <div class="eyebrow">What's inside</div>
+  <h2>A simple system — not another thing to figure out.</h2>
 
   <div class="feature">
     <div class="feature-visual">
@@ -276,26 +290,26 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 
   <div class="feature rev">
     <div class="feature-visual">
-      <div class="fv-tag">Review Engine</div>
-      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:10px">Hey Sarah! Thanks again for having us out for the hot water system. If you were happy with the work, a quick review would mean a lot 🙏</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(46,125,89,0.12);color:var(--green);font-weight:600">Same day</span><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:#efe9df;color:var(--muted)">48hr follow-up</span><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:#efe9df;color:var(--muted)">7-day nudge</span></div>
+      <div class="fv-tag">Job Tracker</div>
+      <div style="background:#fff;border:1px solid var(--line);border-radius:12px;padding:14px 16px;font-size:12.5px;color:var(--muted);line-height:1.6;margin-bottom:10px"><strong style="color:var(--charcoal)">Sarah — bathroom reno quote</strong><br>Quote sent · follow up Friday 🔔</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap"><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(46,125,89,0.12);color:var(--green);font-weight:600">Enquiry</span><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:rgba(46,125,89,0.12);color:var(--green);font-weight:600">Quoted</span><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:#efe9df;color:var(--muted)">Booked</span><span style="font-size:11px;padding:4px 10px;border-radius:999px;background:#efe9df;color:var(--muted)">Review</span></div>
     </div>
     <div>
-      <h3>Turn happy customers into 5-star reviews</h3>
-      <p>Finish a job, type the customer's name, get a perfectly-worded review request — personal, never pushy, timed right.</p>
-      <ul><li>Written for each customer and each job</li><li>Reviews are the #1 local ranking signal you control</li><li>Copy and send in under 30 seconds</li></ul>
+      <h3>Never lose a customer to a forgotten follow-up</h3>
+      <p>Just speak or type a quick note about a job — Locale tracks it from enquiry to review and reminds you to follow up, so quotes don't go cold.</p>
+      <ul><li>Log a job by voice or text in seconds</li><li>Gentle reminders so nothing slips through</li><li>The follow-up is where most jobs are won</li></ul>
     </div>
   </div>
 
   <div class="feature">
     <div class="feature-visual">
       <div class="fv-tag">Content Studio</div>
-      <div style="font-size:13px;color:var(--muted);line-height:1.7"><strong style="color:var(--charcoal)">This one was a transformation.</strong><br><br>1980s bathroom, gutted in a day. New tiles, frameless screen, five days door to door…<br><br><span style="color:var(--green);font-weight:600">#localtrades #beforeandafter</span></div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.7"><strong style="color:var(--charcoal)">Your month, planned.</strong><br><br>📸 Proof · finished job<br>💡 Tip · common mistake<br>👋 Behind the scenes<br>📣 This week's offer<br><br><span style="color:var(--green);font-weight:600">A simple rhythm that keeps you visible</span></div>
     </div>
     <div>
-      <h3>Today's job becomes tomorrow's content</h3>
-      <p>Describe what you did today in one sentence. Get three ready-to-post options in your voice — because real work beats stock photos every time.</p>
-      <ul><li>Hooks that stop the scroll</li><li>Sounds like you, not a marketing department</li><li>Facebook and Instagram ready</li></ul>
+      <h3>Always know what to post next</h3>
+      <p>A simple monthly content calendar lays out a balanced rhythm — proof, tips, behind-the-scenes, offers — so staying visible never means staring at a blank screen.</p>
+      <ul><li>Plan your month across every platform</li><li>Built around your real work, in your voice</li><li>Tick posts off as you go</li></ul>
     </div>
   </div>
 </section>
@@ -348,6 +362,48 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 </section>
 
 <!-- PRICING -->
+<!-- WHAT YOU GET (Toolkit value) -->
+<section class="section" id="toolkit">
+  <div class="eyebrow">What you get</div>
+  <h2>One simple system, working for you every month.</h2>
+  <p class="section-sub">Locale isn't a one-off report. It's an ongoing system that keeps you visible, makes sure no lead slips through, and shows you it's working — for less than the cost of one extra job a month.</p>
+  <div class="toolkit-grid">
+    <div class="toolkit-card">
+      <div class="toolkit-ic">📈</div>
+      <h3>Your visibility score</h3>
+      <p>See exactly where you stand and watch it climb. Clear proof the work is paying off — not guesswork.</p>
+    </div>
+    <div class="toolkit-card">
+      <div class="toolkit-ic">💬</div>
+      <h3>Job Tracker</h3>
+      <p>Log every job by voice or text, track it from enquiry to review, and get reminded to follow up — so you never lose a customer to silence.</p>
+    </div>
+    <div class="toolkit-card">
+      <div class="toolkit-ic">🗓️</div>
+      <h3>Content Studio</h3>
+      <p>A simple monthly content calendar so you always know what to post. A balanced rhythm that keeps you visible, in your own voice.</p>
+    </div>
+    <div class="toolkit-card">
+      <div class="toolkit-ic">⭐</div>
+      <h3>Reviews &amp; proof</h3>
+      <p>Turn happy customers into the reviews and proof-of-work that make new customers choose you with confidence.</p>
+    </div>
+    <div class="toolkit-card">
+      <div class="toolkit-ic">🎯</div>
+      <h3>Clear positioning</h3>
+      <p>Get clear on what you do, who you serve, and why customers choose you — one clear message that shows up everywhere they look.</p>
+    </div>
+    <div class="toolkit-card">
+      <div class="toolkit-ic">📄</div>
+      <h3>Your progress, tracked</h3>
+      <p>A clean monthly picture of where you stand and what changed — so you can feel the momentum building.</p>
+    </div>
+  </div>
+  <div class="toolkit-value">
+    <p>One simple system that keeps you visible and stops you losing customers — <strong>for $97/month</strong>. Most local businesses only need one or two extra jobs a year for it to have paid for itself.</p>
+  </div>
+</section>
+
 <section class="section" id="pricing">
   <div class="eyebrow">Pricing</div>
   <h2>Start free. Grow when it's working.</h2>
@@ -367,7 +423,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
       <div class="price-desc">The self-serve platform — with AI doing the heavy lifting.</div>
       <div class="price-amt">$97</div>
       <div class="price-per">per month</div>
-      <ul class="price-feats"><li>Everything in Audit</li><li>Review Engine — unlimited</li><li>Content Studio — unlimited</li><li>Monthly score tracking</li><li>Monthly report for your records</li></ul>
+      <ul class="price-feats"><li>Everything in Audit</li><li>Job Tracker — never lose a lead</li><li>Content Studio — your content calendar</li><li>Reviews &amp; proof tools</li><li>Monthly score tracking</li></ul>
       <a href="/app" class="btn btn-primary">Start with Toolkit</a>
     </div>
     <div class="price">
