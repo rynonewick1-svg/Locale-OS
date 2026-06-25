@@ -287,6 +287,56 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .pw-card p strong{color:var(--text)}
 .pw-btn{width:100%;padding:14px;font-size:16px;margin-bottom:14px}
 .pw-logout{background:none;border:none;color:var(--muted);font-size:13px;cursor:pointer;text-decoration:underline}
+
+/* ===== JOB TRACKER ===== */
+.jt-stats{display:grid;grid-template-columns:repeat(3,1fr) auto;gap:14px;margin-bottom:22px;align-items:stretch}
+.jt-stat{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:18px 20px}
+.jt-stat-alert{border-color:var(--border)}
+.jt-stat-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px}
+.jt-stat-val{font-size:28px;font-weight:700;letter-spacing:-0.02em;color:var(--text);line-height:1}
+.jt-stat-val.jt-green{color:#2e7d59}
+.jt-stat-val.jt-amber{color:#c8860f}
+.jt-stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
+.jt-add-wrap{display:flex;align-items:center}
+.jt-add-btn{white-space:nowrap;height:fit-content}
+.jt-board{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;align-items:start}
+.jt-col{background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:10px;min-height:120px}
+.jt-col-head{display:flex;align-items:center;justify-content:space-between;padding:6px 8px 10px}
+.jt-col-name{font-size:12.5px;font-weight:700;color:var(--text);letter-spacing:0.02em}
+.jt-col-count{font-size:11px;font-weight:600;color:var(--muted);background:var(--surface);border-radius:999px;padding:2px 8px}
+.jt-card{background:var(--surface);border:1px solid var(--border);border-radius:11px;padding:12px 13px;margin-bottom:9px;cursor:pointer;transition:transform .12s,box-shadow .12s;position:relative}
+.jt-card:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.08)}
+.jt-card.flag{border-color:#e0b15c}
+.jt-card-cust{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:3px;padding-right:16px}
+.jt-card-job{font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:8px}
+.jt-card-foot{display:flex;align-items:center;justify-content:space-between}
+.jt-card-val{font-size:13px;font-weight:700;color:#2e7d59}
+.jt-card-flag{position:absolute;top:10px;right:11px;font-size:12px}
+.jt-card-move{display:flex;gap:4px;margin-top:9px}
+.jt-move-btn{flex:1;font-size:10.5px;font-weight:600;padding:5px 4px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;transition:all .12s}
+.jt-move-btn:hover{border-color:#2e7d59;color:#2e7d59}
+.jt-empty{text-align:center;padding:60px 30px;background:var(--surface);border:1px dashed var(--border);border-radius:18px}
+.jt-empty-ic{font-size:40px;margin-bottom:14px}
+.jt-empty-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
+.jt-empty-sub{font-size:14px;color:var(--muted);max-width:400px;margin:0 auto 20px;line-height:1.6}
+/* modal */
+.jt-modal-backdrop{position:fixed;inset:0;background:rgba(20,18,15,0.5);display:flex;align-items:center;justify-content:center;z-index:1500;padding:20px;backdrop-filter:blur(2px)}
+.jt-modal{background:var(--surface);border-radius:20px;padding:26px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 30px 80px rgba(0,0,0,0.25)}
+.jt-modal-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:18px}
+.jt-modal-title{font-size:20px;font-weight:700;color:var(--text)}
+.jt-modal-x{background:none;border:none;font-size:26px;color:var(--muted);cursor:pointer;line-height:1;padding:0 4px}
+.jt-opt{color:var(--muted);font-weight:400;font-size:11px}
+.jt-check{display:flex;align-items:center;gap:9px;font-size:13.5px;color:var(--text);margin-top:6px;cursor:pointer;padding:10px 0}
+.jt-check input{width:17px;height:17px;accent-color:#c8860f}
+.jt-modal-actions{display:flex;align-items:center;gap:10px;margin-top:20px}
+.btn-ghost{background:none;border:1px solid var(--border);color:#c0392b}
+.btn-ghost:hover{border-color:#c0392b}
+@media(max-width:900px){
+  .jt-stats{grid-template-columns:1fr 1fr}
+  .jt-add-wrap{grid-column:1/-1}
+  .jt-add-btn{width:100%}
+  .jt-board{grid-template-columns:1fr;gap:16px}
+}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -338,11 +388,11 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <nav class="nav" id="nav">
     <div class="nav-item" data-view="dashboard"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="1" y="1" width="6" height="6" rx="1"/><rect x="9" y="1" width="6" height="6" rx="1"/><rect x="1" y="9" width="6" height="6" rx="1"/><rect x="9" y="9" width="6" height="6" rx="1"/></svg>Dashboard</div>
     <div class="nav-item" data-view="score"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="6"/><path d="M8 4v4l3 2"/></svg>Visibility Score</div>
-    <div class="nav-item" data-view="audit"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg>Run Audit<span class="pip"></span></div>
-    <div class="nav-section">AI Tools</div>
-    <div class="nav-item" data-view="reviews"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M8 1l2 4 5 .7-3.5 3.4.8 5L8 12l-4.3 2.1.8-5L1 5.7 6 5z"/></svg>Lead Rescue</div>
-    <div class="nav-item" data-view="content"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="12" height="12" rx="1.5"/><path d="M5 8h6M5 5h3M5 11h4"/></svg>Job to Post</div>
     <div class="nav-item" data-view="report"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 12V4l5-2 5 2v8l-5 2-5-2z"/></svg>Monthly Report</div>
+    <div class="nav-item" data-view="audit"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 8h3l2-5 2 10 2-5h3"/></svg>Run Audit<span class="pip"></span></div>
+    <div class="nav-section">Your Tools</div>
+    <div class="nav-item" data-view="reviews"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 3h12v8H8l-3 2v-2H2z"/></svg>Job Tracker</div>
+    <div class="nav-item" data-view="content"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="3" width="12" height="11" rx="1.5"/><path d="M2 6h12M5 1v3M11 1v3"/></svg>Content Studio</div>
 
     <div class="nav-section">Automation</div>
     <div class="nav-item" data-view="connect"><svg class="nav-icon" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M6 10l4-4M5.5 8.5L4 10a2.1 2.1 0 003 3l1.5-1.5M10.5 7.5L12 6a2.1 2.1 0 00-3-3L7.5 4.5"/></svg>Connect accounts</div>
@@ -459,30 +509,78 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 
   <!-- ========== REVIEW ENGINE ========== -->
   <div class="view" id="view-reviews">
-    <div class="panel">
-      <div class="panel-title">Lead Rescue</div>
-      <div class="panel-sub">Most local businesses lose work not because they're too expensive — but because nobody followed up. Sent a quote or got an enquiry? Get a polite, professional follow-up sequence that wins the jobs you're already so close to landing.</div>
-      <div class="field-row">
-        <div class="field"><label>Customer first name</label><input id="rCust" placeholder="e.g. Sarah"></div>
-        <div class="field"><label>What did they want? <span style="color:var(--muted);font-weight:400">(enquiry or quote)</span></label><input id="rJob" placeholder="e.g. quote for a kitchen splashback, or asked about availability"></div>
+    <!-- Money pipeline totals -->
+    <div class="jt-stats">
+      <div class="jt-stat">
+        <div class="jt-stat-label">Active quotes</div>
+        <div class="jt-stat-val" id="jtActiveVal">$0</div>
+        <div class="jt-stat-sub" id="jtActiveCount">0 jobs in the pipeline</div>
       </div>
-      <div class="field-row">
-        <div class="field"><label>Stage</label>
-          <select id="rStage"><option>I sent a quote, no reply yet</option><option>They enquired, I haven't replied yet</option><option>We spoke, waiting on their decision</option><option>Job's done — want a review</option></select></div>
-        <div class="field"><label>How to send</label>
-          <select id="rChannel"><option>SMS / text</option><option>Email</option></select></div>
+      <div class="jt-stat">
+        <div class="jt-stat-label">Won this month</div>
+        <div class="jt-stat-val jt-green" id="jtWonVal">$0</div>
+        <div class="jt-stat-sub" id="jtWonCount">0 jobs booked</div>
       </div>
-      <button class="btn btn-primary" onclick="runReviews()">Build my follow-up sequence ✦</button>
+      <div class="jt-stat jt-stat-alert" id="jtFollowStat">
+        <div class="jt-stat-label">Needs follow-up</div>
+        <div class="jt-stat-val jt-amber" id="jtFollowVal">0</div>
+        <div class="jt-stat-sub">don't let these go cold</div>
+      </div>
+      <div class="jt-add-wrap">
+        <button class="btn btn-primary jt-add-btn" onclick="openJobModal()">+ Add a job</button>
+      </div>
     </div>
-    <div class="loader" id="revLoader"><div class="spin"></div><div class="loader-text">Writing your follow-up sequence…</div></div>
-    <div id="revResult"></div>
+
+    <!-- Pipeline board -->
+    <div class="jt-board" id="jtBoard"></div>
+    <div class="jt-empty" id="jtEmpty" style="display:none">
+      <div class="jt-empty-ic">📋</div>
+      <div class="jt-empty-title">No jobs yet</div>
+      <div class="jt-empty-sub">Add your first job — an enquiry, a quote you've sent, anything on the go — and watch it move through to a won customer.</div>
+      <button class="btn btn-primary" onclick="openJobModal()">+ Add your first job</button>
+    </div>
+  </div>
+
+  <!-- Add/Edit Job modal -->
+  <div class="jt-modal-backdrop" id="jtModal" style="display:none">
+    <div class="jt-modal">
+      <div class="jt-modal-head">
+        <div class="jt-modal-title" id="jtModalTitle">Add a job</div>
+        <button class="jt-modal-x" onclick="closeJobModal()">&times;</button>
+      </div>
+      <div class="field"><label>Customer name</label><input id="jCustomer" placeholder="e.g. Sarah Thompson"></div>
+      <div class="field-row">
+        <div class="field"><label>Phone <span class="jt-opt">optional</span></label><input id="jPhone" placeholder="0400 000 000"></div>
+        <div class="field"><label>Email <span class="jt-opt">optional</span></label><input id="jEmail" placeholder="sarah@email.com"></div>
+      </div>
+      <div class="field"><label>The job</label><input id="jJob" placeholder="e.g. Bathroom renovation — full re-tile"></div>
+      <div class="field-row">
+        <div class="field"><label>Value <span class="jt-opt">$ estimate</span></label><input id="jValue" type="number" placeholder="4200"></div>
+        <div class="field"><label>Stage</label>
+          <select id="jStage">
+            <option value="enquiry">Enquiry</option>
+            <option value="quoted">Quoted</option>
+            <option value="booked">Booked</option>
+            <option value="done">Done</option>
+            <option value="review">Review</option>
+          </select></div>
+      </div>
+      <div class="field"><label>Notes <span class="jt-opt">optional</span></label><textarea id="jNotes" placeholder="e.g. Tricky access, quoted a bit higher. Keen to start before Christmas."></textarea></div>
+      <label class="jt-check"><input type="checkbox" id="jFollow"> <span>Needs follow-up — flag this so it doesn't go cold</span></label>
+      <div class="jt-modal-actions">
+        <button class="btn btn-ghost" id="jtDeleteBtn" onclick="deleteJob()" style="display:none">Delete</button>
+        <div style="flex:1"></div>
+        <button class="btn btn-secondary" onclick="closeJobModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveJob()">Save job</button>
+      </div>
+    </div>
   </div>
 
   <!-- ========== CONTENT STUDIO ========== -->
   <div class="view" id="view-content">
     <div class="panel">
-      <div class="panel-title">Job to Post</div>
-      <div class="panel-sub">Just finished a job? Describe it in a line or two and get ready-to-post content built around your real work — the kind that actually gets seen and brings in enquiries. Pair it with a photo of the job for best results.</div>
+      <div class="panel-title">Content Studio</div>
+      <div class="panel-sub">Just finished a job? Describe it in a line or two and get ready-to-post content built around your real work — the kind that actually gets seen and brings in enquiries. Pair it with a photo of the job for best results. <em style="color:var(--muted)">An interactive monthly content calendar is coming here soon.</em></div>
       <div class="field"><label>What did you just do? <span style="color:var(--muted);font-weight:400">(a quick line is enough)</span></label><textarea id="cJob" placeholder="e.g. Re-tiled a leaking shower in Sawtell, customer thrilled — or — cut & colour transformation for a wedding, or — fixed a tricky no-hot-water callout same day"></textarea></div>
       <button class="btn btn-primary" onclick="runContent()">Create my post ✦</button>
     </div>
@@ -711,6 +809,156 @@ function seed(){
 }
 
 function activeClient(){ return S.clients.find(c=>c.id===S.activeId) || null; }
+
+/* ============ JOB TRACKER ============ */
+const JT_STAGES=[
+  {key:'enquiry', name:'Enquiry'},
+  {key:'quoted',  name:'Quoted'},
+  {key:'booked',  name:'Booked'},
+  {key:'done',    name:'Done'},
+  {key:'review',  name:'Review'}
+];
+let _editingJobId=null;
+
+function jtJobs(){
+  const c=activeClient();
+  if(!c) return [];
+  if(!c.jobs) c.jobs=[];
+  return c.jobs;
+}
+function jtMoney(n){
+  n=Number(n)||0;
+  return '$'+n.toLocaleString('en-AU');
+}
+function renderJobTracker(){
+  const jobs=jtJobs();
+  const board=document.getElementById('jtBoard');
+  const empty=document.getElementById('jtEmpty');
+  if(!board) return;
+
+  // Totals
+  const activeStages=['enquiry','quoted'];
+  const activeVal=jobs.filter(j=>activeStages.includes(j.stage)).reduce((s,j)=>s+(Number(j.value)||0),0);
+  const activeCount=jobs.filter(j=>activeStages.includes(j.stage)).length;
+  const now=new Date(); const mStart=new Date(now.getFullYear(),now.getMonth(),1).getTime();
+  const wonJobs=jobs.filter(j=>['booked','done','review'].includes(j.stage) && (j.bookedAt||0)>=mStart);
+  const wonVal=wonJobs.reduce((s,j)=>s+(Number(j.value)||0),0);
+  const followCount=jobs.filter(j=>j.followUp).length;
+
+  document.getElementById('jtActiveVal').textContent=jtMoney(activeVal);
+  document.getElementById('jtActiveCount').textContent=activeCount+(activeCount===1?' job in the pipeline':' jobs in the pipeline');
+  document.getElementById('jtWonVal').textContent=jtMoney(wonVal);
+  document.getElementById('jtWonCount').textContent=wonJobs.length+(wonJobs.length===1?' job booked':' jobs booked');
+  document.getElementById('jtFollowVal').textContent=followCount;
+
+  if(!jobs.length){ board.style.display='none'; empty.style.display='block'; return; }
+  board.style.display='grid'; empty.style.display='none';
+
+  board.innerHTML=JT_STAGES.map(stage=>{
+    const inStage=jobs.filter(j=>j.stage===stage.key);
+    const cards=inStage.map(j=>jtCard(j,stage.key)).join('');
+    return `<div class="jt-col">
+      <div class="jt-col-head"><span class="jt-col-name">${stage.name}</span><span class="jt-col-count">${inStage.length}</span></div>
+      ${cards}
+    </div>`;
+  }).join('');
+}
+function jtCard(j, stageKey){
+  const idx=JT_STAGES.findIndex(s=>s.key===stageKey);
+  const prev=idx>0?JT_STAGES[idx-1]:null;
+  const next=idx<JT_STAGES.length-1?JT_STAGES[idx+1]:null;
+  const valHtml=Number(j.value)?`<span class="jt-card-val">${jtMoney(j.value)}</span>`:'<span></span>';
+  const flagHtml=j.followUp?'<span class="jt-card-flag" title="Needs follow-up">🔔</span>':'';
+  const moveBtns=`<div class="jt-card-move">
+    ${prev?`<button class="jt-move-btn" onclick="event.stopPropagation();moveJob('${j.id}','${prev.key}')">← ${prev.name}</button>`:''}
+    ${next?`<button class="jt-move-btn" onclick="event.stopPropagation();moveJob('${j.id}','${next.key}')">${next.name} →</button>`:''}
+  </div>`;
+  return `<div class="jt-card${j.followUp?' flag':''}" onclick="openJobModal('${j.id}')">
+    ${flagHtml}
+    <div class="jt-card-cust">${esc(j.customer||'—')}</div>
+    <div class="jt-card-job">${esc(j.job||'')}</div>
+    <div class="jt-card-foot">${valHtml}</div>
+    ${moveBtns}
+  </div>`;
+}
+function esc(s){ return String(s||'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+
+function moveJob(id, toStage){
+  const c=activeClient(); if(!c) return;
+  const j=(c.jobs||[]).find(x=>x.id===id); if(!j) return;
+  j.stage=toStage;
+  // stamp when it first becomes "won" (booked or beyond) for monthly totals
+  if(['booked','done','review'].includes(toStage) && !j.bookedAt) j.bookedAt=Date.now();
+  scheduleSave();
+  renderJobTracker();
+}
+
+function openJobModal(id){
+  _editingJobId=id||null;
+  const modal=document.getElementById('jtModal');
+  const title=document.getElementById('jtModalTitle');
+  const delBtn=document.getElementById('jtDeleteBtn');
+  if(id){
+    const j=(jtJobs()).find(x=>x.id===id);
+    if(!j) return;
+    title.textContent='Edit job';
+    document.getElementById('jCustomer').value=j.customer||'';
+    document.getElementById('jPhone').value=j.phone||'';
+    document.getElementById('jEmail').value=j.email||'';
+    document.getElementById('jJob').value=j.job||'';
+    document.getElementById('jValue').value=j.value||'';
+    document.getElementById('jStage').value=j.stage||'enquiry';
+    document.getElementById('jNotes').value=j.notes||'';
+    document.getElementById('jFollow').checked=!!j.followUp;
+    delBtn.style.display='inline-flex';
+  } else {
+    title.textContent='Add a job';
+    ['jCustomer','jPhone','jEmail','jJob','jValue','jNotes'].forEach(f=>document.getElementById(f).value='');
+    document.getElementById('jStage').value='enquiry';
+    document.getElementById('jFollow').checked=false;
+    delBtn.style.display='none';
+  }
+  modal.style.display='flex';
+}
+function closeJobModal(){ document.getElementById('jtModal').style.display='none'; _editingJobId=null; }
+
+function saveJob(){
+  const c=activeClient(); if(!c) return;
+  if(!c.jobs) c.jobs=[];
+  const customer=document.getElementById('jCustomer').value.trim();
+  if(!customer){ document.getElementById('jCustomer').focus(); return; }
+  const data={
+    customer,
+    phone:document.getElementById('jPhone').value.trim(),
+    email:document.getElementById('jEmail').value.trim(),
+    job:document.getElementById('jJob').value.trim(),
+    value:document.getElementById('jValue').value.trim(),
+    stage:document.getElementById('jStage').value,
+    notes:document.getElementById('jNotes').value.trim(),
+    followUp:document.getElementById('jFollow').checked
+  };
+  if(_editingJobId){
+    const j=c.jobs.find(x=>x.id===_editingJobId);
+    if(j){
+      Object.assign(j,data);
+      if(['booked','done','review'].includes(j.stage) && !j.bookedAt) j.bookedAt=Date.now();
+    }
+  } else {
+    const job={id:'j'+Date.now(), createdAt:Date.now(), bookedAt:null, ...data};
+    if(['booked','done','review'].includes(job.stage)) job.bookedAt=Date.now();
+    c.jobs.unshift(job);
+  }
+  scheduleSave();
+  closeJobModal();
+  renderJobTracker();
+}
+function deleteJob(){
+  const c=activeClient(); if(!c||!_editingJobId) return;
+  c.jobs=(c.jobs||[]).filter(x=>x.id!==_editingJobId);
+  scheduleSave();
+  closeJobModal();
+  renderJobTracker();
+}
 function updateClient(id, patch){
   const list=S.clients; const i=list.findIndex(c=>c.id===id);
   if(i>-1){ list[i]={...list[i],...patch}; S.clients=list; }
@@ -728,8 +976,8 @@ const titles={
   dashboard:['Dashboard',"Your visibility at a glance"],
   score:['Visibility Score','Detailed five-pillar breakdown'],
   audit:['Run Audit','AI-generated visibility audit'],
-  reviews:['Lead Rescue','Win the jobs you\'re already quoting — smart follow-up that closes leads'],
-  content:['Job to Post','Turn real work into content that brings in enquiries'],
+  reviews:['Job Tracker','Never lose a customer to a forgotten follow-up'],
+  content:['Content Studio','Plan a simple, consistent month of content'],
   report:['Monthly Report','Client-ready monthly summary'],
   clients:['My Business','Your business details'],
   settings:['Settings','API, branding and data'],
@@ -744,6 +992,7 @@ function showView(v){
   if(v==='dashboard') renderDashboard();
   if(v==='score') renderScore();
   if(v==='clients') renderClients();
+  if(v==='reviews') renderJobTracker();
   if(v==='settings') loadSettings();
   window.scrollTo({top:0});
 }
