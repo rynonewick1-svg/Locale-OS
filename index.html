@@ -266,6 +266,25 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 
 .proof-shot{margin-top:38px;border:1px solid var(--line);border-radius:20px;overflow:hidden;box-shadow:0 30px 80px var(--shadow);background:#0c0b09;max-width:760px;margin-left:auto;margin-right:auto;padding:0}
 .proof-shot img{width:100%;display:block}
+
+/* Framework journey (visible centrepiece) */
+.fw-journey{display:flex;align-items:stretch;gap:6px;margin-top:42px;flex-wrap:nowrap}
+.fw-step{flex:1;border:1px solid var(--line);background:var(--surface);border-radius:16px;padding:22px 18px;display:flex;flex-direction:column;min-width:0}
+.fw-num{font-size:13px;font-weight:700;letter-spacing:0.08em;color:var(--accent);margin-bottom:12px}
+.fw-step-name{font-size:16px;font-weight:700;letter-spacing:-0.02em;color:var(--charcoal);margin-bottom:8px}
+.fw-step-desc{font-size:12.5px;color:var(--muted);line-height:1.55}
+.fw-conn{display:flex;align-items:center;color:var(--accent);font-weight:700;font-size:18px;opacity:.5;flex-shrink:0}
+/* Escalation ladder strip */
+.ladder{display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:34px;margin-bottom:8px;padding:16px 22px;background:var(--surface2);border:1px solid var(--line);border-radius:16px}
+.ladder-step{display:flex;align-items:center;gap:9px;font-size:13.5px;font-weight:600;color:var(--charcoal)}
+.ladder-dot{width:9px;height:9px;border-radius:50%;background:var(--accent)}
+.ladder-arrow{color:var(--accent);font-weight:700;opacity:.55}
+@media(max-width:880px){
+  .fw-journey{flex-direction:column}
+  .fw-conn{transform:rotate(90deg);justify-content:center;padding:2px 0}
+  .ladder{flex-direction:column;align-items:flex-start;gap:10px}
+  .ladder-arrow{transform:rotate(90deg)}
+}
 </style>
 </head>
 <body>
@@ -277,6 +296,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
   </a>
   <div class="nav-links">
     <a href="#how">How it works</a>
+    <a href="#framework">The journey</a>
     <a href="#features">Toolkit</a>
     <a href="#managed">Done for you</a>
     <a href="#pricing">Pricing</a>
@@ -294,9 +314,9 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     <p class="lead">Locale helps tradies and local businesses get found on Google, win more reviews, and follow up every lead — one simple system to stay visible and turn your everyday work into the proof that wins customers.</p>
     <div class="hero-ctas">
       <a href="/audit" class="btn btn-primary btn-lg">Get your free visibility score</a>
-      <a href="#how" class="btn btn-secondary btn-lg">See how it works</a>
+      <a href="#managed" class="btn btn-secondary btn-lg">Talk to the founder</a>
     </div>
-    <p class="hero-note">Free 2-minute score · No credit card · See where you stand</p>
+    <p class="hero-note">Free 2-minute score · No credit card · Or book a call to have it done for you</p>
   </div>
   <div class="score-card">
     <div class="sc-top">
@@ -350,6 +370,43 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     <span class="journey-step">Get chosen</span><span class="journey-sep">→</span>
     <span class="journey-step">Stay visible</span><span class="journey-sep">→</span>
     <span class="journey-step">Win the lead</span>
+  </div>
+</section>
+<!-- THE FRAMEWORK (visible journey) -->
+<section class="section" id="framework">
+  <div class="eyebrow">The whole journey</div>
+  <h2>We cover every step between a search and a booked job.</h2>
+  <p class="section-sub">Most tools fix one piece. Locale follows the whole path a customer takes — from finding you, to trusting you, to picking up the phone — so nothing falls through the cracks.</p>
+  <div class="fw-journey">
+    <div class="fw-step">
+      <div class="fw-num">01</div>
+      <div class="fw-step-name">Get Found</div>
+      <div class="fw-step-desc">Show up when locals search — on Google, maps, and social.</div>
+    </div>
+    <div class="fw-conn">→</div>
+    <div class="fw-step">
+      <div class="fw-num">02</div>
+      <div class="fw-step-name">Get Trusted</div>
+      <div class="fw-step-desc">Reviews and real proof of your work that build instant confidence.</div>
+    </div>
+    <div class="fw-conn">→</div>
+    <div class="fw-step">
+      <div class="fw-num">03</div>
+      <div class="fw-step-name">Get Chosen</div>
+      <div class="fw-step-desc">A clear message that makes you the obvious pick over the next name.</div>
+    </div>
+    <div class="fw-conn">→</div>
+    <div class="fw-step">
+      <div class="fw-num">04</div>
+      <div class="fw-step-name">Stay Visible</div>
+      <div class="fw-step-desc">A simple posting rhythm that keeps you active and front of mind.</div>
+    </div>
+    <div class="fw-conn">→</div>
+    <div class="fw-step">
+      <div class="fw-num">05</div>
+      <div class="fw-step-name">Win the Lead</div>
+      <div class="fw-step-desc">Follow up every enquiry and quote so no job goes cold.</div>
+    </div>
   </div>
 </section>
 <!-- PROOF: real audit screenshot -->
@@ -500,7 +557,14 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 <section class="section" id="pricing">
   <div class="eyebrow">Pricing</div>
   <h2>Start free. Grow when it's working.</h2>
-  <p class="section-sub">Every plan starts with a free visibility score — see exactly where you stand before spending a dollar.</p>
+  <p class="section-sub">A natural path — see where you stand for free, run the simple system yourself, and step up to fully done-for-you whenever you're ready.</p>
+  <div class="ladder">
+    <div class="ladder-step"><span class="ladder-dot"></span>Start free — get your score</div>
+    <div class="ladder-arrow">→</div>
+    <div class="ladder-step"><span class="ladder-dot"></span>Run it yourself — the Toolkit</div>
+    <div class="ladder-arrow">→</div>
+    <div class="ladder-step"><span class="ladder-dot"></span>Have it done for you — Managed</div>
+  </div>
   <div class="pricing">
     <div class="price">
       <div class="price-name">Free Score</div>

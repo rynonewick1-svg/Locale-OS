@@ -250,14 +250,14 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .admin-table td{padding:12px;border-bottom:1px solid var(--border)}
 .admin-table tbody tr:hover{background:var(--surface2)}
 
-/* Job to Post extras */
+/* Content Studio extras */
 .jp-extras{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
 .jp-extra{background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:13px 15px}
 .jp-x-label{font-size:12px;font-weight:700;color:var(--green);margin-bottom:5px}
 .jp-x-body{font-size:13px;color:var(--charcoal,var(--text));line-height:1.5}
 @media(max-width:600px){.jp-extras{grid-template-columns:1fr}}
 
-/* Lead Rescue intro */
+/* Job Tracker intro */
 .lr-intro{background:rgba(46,125,89,0.08);border:1px solid rgba(46,125,89,0.2);border-radius:12px;padding:13px 16px;font-size:13.5px;color:var(--green-d,var(--green));margin-bottom:14px;line-height:1.5}
 
 /* One-tap-to-act buttons */
@@ -337,6 +337,42 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   .jt-add-wrap{grid-column:1/-1}
   .jt-add-btn{width:100%}
   .jt-board{grid-template-columns:1fr;gap:16px}
+}
+
+/* ===== CONTENT STUDIO ===== */
+.cs-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;flex-wrap:wrap;gap:14px}
+.cs-month-nav{display:flex;align-items:center;gap:14px}
+.cs-month-label{font-size:19px;font-weight:700;color:var(--text);min-width:160px;text-align:center}
+.cs-nav-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:18px;cursor:pointer;line-height:1}
+.cs-nav-btn:hover{border-color:#2e7d59;color:#2e7d59}
+.cs-legend{display:flex;gap:14px;flex-wrap:wrap}
+.cs-leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:500}
+.cs-dot{width:9px;height:9px;border-radius:50%}
+.cs-proof{background:#2e7d59}.cs-edu{background:#3b82c4}.cs-human{background:#c8860f}.cs-offer{background:#b8546b}
+.cs-balance{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
+.cs-bal-item{font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
+.cs-bal-item b{color:var(--text)}
+.cs-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
+.cs-dow{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;text-align:center;padding:4px 0}
+.cs-cell{min-height:92px;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:6px;cursor:pointer;transition:border-color .12s;display:flex;flex-direction:column;gap:4px}
+.cs-cell:hover{border-color:#2e7d59}
+.cs-cell.cs-empty{background:transparent;border:none;cursor:default}
+.cs-cell.cs-today{border-color:#2e7d59;box-shadow:0 0 0 1px #2e7d59}
+.cs-date{font-size:11px;font-weight:600;color:var(--muted);padding:1px 3px}
+.cs-post{font-size:10.5px;font-weight:600;color:#fff;border-radius:5px;padding:3px 5px;line-height:1.25;overflow:hidden;display:flex;align-items:center;gap:3px}
+.cs-post.done{opacity:0.5;text-decoration:line-through}
+.cs-post.proof{background:#2e7d59}.cs-post.edu{background:#3b82c4}.cs-post.human{background:#c8860f}.cs-post.offer{background:#b8546b}
+.cs-modal-date{font-size:13px;color:var(--muted);margin-bottom:14px;font-weight:600}
+.cs-caption-field{position:relative}
+.cs-help-btn{margin-top:8px;font-size:12.5px;font-weight:600;color:#2e7d59;background:var(--green-soft,rgba(46,125,89,0.08));border:1px solid var(--green-line,rgba(46,125,89,0.2));border-radius:8px;padding:7px 12px;cursor:pointer}
+.cs-help-btn:hover{background:rgba(46,125,89,0.14)}
+.cs-help-btn:disabled{opacity:0.6;cursor:default}
+.cs-help-note{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.45}
+@media(max-width:760px){
+  .cs-grid{gap:3px}
+  .cs-cell{min-height:64px;padding:3px}
+  .cs-post{font-size:9px}
+  .cs-dow{font-size:9px}
 }
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -453,7 +489,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
         </div>
         <div class="panel" style="margin-bottom:0">
           <div class="panel-title">Score breakdown</div>
-          <div class="panel-sub">Five pillars of local visibility</div>
+          <div class="panel-sub">Your five steps to winning customers</div>
           <div class="pillar-bars" id="dashPillars"></div>
         </div>
       </div>
@@ -579,14 +615,59 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 
   <!-- ========== CONTENT STUDIO ========== -->
   <div class="view" id="view-content">
-    <div class="panel">
-      <div class="panel-title">Content Studio</div>
-      <div class="panel-sub">Just finished a job? Describe it in a line or two and get ready-to-post content built around your real work — the kind that actually gets seen and brings in enquiries. Pair it with a photo of the job for best results. <em style="color:var(--muted)">An interactive monthly content calendar is coming here soon.</em></div>
-      <div class="field"><label>What did you just do? <span style="color:var(--muted);font-weight:400">(a quick line is enough)</span></label><textarea id="cJob" placeholder="e.g. Re-tiled a leaking shower in Sawtell, customer thrilled — or — cut & colour transformation for a wedding, or — fixed a tricky no-hot-water callout same day"></textarea></div>
-      <button class="btn btn-primary" onclick="runContent()">Create my post ✦</button>
+    <div class="cs-head">
+      <div class="cs-month-nav">
+        <button class="cs-nav-btn" onclick="csMonth(-1)" aria-label="Previous month">‹</button>
+        <div class="cs-month-label" id="csMonthLabel">Month</div>
+        <button class="cs-nav-btn" onclick="csMonth(1)" aria-label="Next month">›</button>
+      </div>
+      <div class="cs-legend">
+        <span class="cs-leg"><span class="cs-dot cs-proof"></span>Proof</span>
+        <span class="cs-leg"><span class="cs-dot cs-edu"></span>Educational</span>
+        <span class="cs-leg"><span class="cs-dot cs-human"></span>Human</span>
+        <span class="cs-leg"><span class="cs-dot cs-offer"></span>Offer</span>
+      </div>
     </div>
-    <div class="loader" id="conLoader"><div class="spin"></div><div class="loader-text">Turning your work into content…</div></div>
-    <div id="conResult"></div>
+    <div class="cs-balance" id="csBalance"></div>
+    <div class="cs-grid" id="csGrid"></div>
+  </div>
+
+  <!-- Content post modal -->
+  <div class="jt-modal-backdrop" id="csModal" style="display:none">
+    <div class="jt-modal">
+      <div class="jt-modal-head">
+        <div class="jt-modal-title" id="csModalTitle">Plan a post</div>
+        <button class="jt-modal-x" onclick="closeCsModal()">&times;</button>
+      </div>
+      <div class="cs-modal-date" id="csModalDate"></div>
+      <div class="field"><label for="csType">Content type</label>
+        <select id="csType">
+          <option value="proof">📸 Proof — show your work</option>
+          <option value="edu">💡 Educational — a tip or how-to</option>
+          <option value="human">👋 Human — behind the scenes / your story</option>
+          <option value="offer">📣 Offer — a service, promo or reminder</option>
+        </select></div>
+      <div class="field"><label for="csPlatform">Platform</label>
+        <select id="csPlatform">
+          <option>Instagram</option><option>Facebook</option><option>Google</option>
+          <option>TikTok</option><option>Multiple</option>
+        </select></div>
+      <div class="field"><label for="csIdea">What's the post about?</label>
+        <textarea id="csIdea" placeholder="e.g. The bathroom reno we just finished in Sawtell — before & after shots"></textarea></div>
+      <div class="field cs-caption-field">
+        <label for="csCaption">Caption <span class="jt-opt">your words</span></label>
+        <textarea id="csCaption" placeholder="Write your caption here, or use the helper below to get a starting point."></textarea>
+        <button class="cs-help-btn" onclick="csHelpCaption()" id="csHelpBtn" type="button">✦ Help me word this</button>
+        <div class="cs-help-note">Optional — gives you a draft in your voice to edit. You're always in control of what gets posted.</div>
+      </div>
+      <label class="jt-check"><input type="checkbox" id="csDone"> <span>Posted — mark this done</span></label>
+      <div class="jt-modal-actions">
+        <button class="btn btn-ghost" id="csDeleteBtn" onclick="deleteCsPost()" style="display:none">Delete</button>
+        <div style="flex:1"></div>
+        <button class="btn btn-secondary" onclick="closeCsModal()">Cancel</button>
+        <button class="btn btn-primary" onclick="saveCsPost()">Save</button>
+      </div>
+    </div>
   </div>
 
   <!-- ========== MONTHLY REPORT ========== -->
@@ -636,7 +717,8 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="view" id="view-connect">
     <div class="panel">
       <div class="panel-title">Connect your accounts</div>
-      <div class="panel-sub">This is where Locale goes from being a system you manage → to one that works alongside you. Connect the tools your business already runs on, and Locale can keep your content consistent, surface real enquiries, track your visibility with live data, and help you follow up — with you in control of every action.</div>
+      <div class="panel-sub">This is where Locale goes from being a system you manage → to one that works alongside you. Connect the tools your business already runs on, and Locale can pull your real reviews, profile views and search data straight into your dashboard — so your score reflects live numbers, not estimates — plus help you stay consistent and follow up, with you in control of every action.</div>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0 22px;font-size:13px;color:var(--muted);line-height:1.6"><strong style="color:var(--text)">Already live:</strong> your dashboard tracks your real activity inside Locale — active quotes, jobs won, and content posted — automatically. <strong style="color:var(--text)">Coming with the connections below:</strong> live data from Google &amp; social pulled straight in.</div>
 
       <div class="conn-card">
         <div class="conn-ic">📧</div>
@@ -960,6 +1042,141 @@ function deleteJob(){
   closeJobModal();
   renderJobTracker();
 }
+
+/* ============ CONTENT STUDIO ============ */
+const CS_TYPES={proof:{name:'Proof',cls:'proof',ic:'📸'},edu:{name:'Educational',cls:'edu',ic:'💡'},human:{name:'Human',cls:'human',ic:'👋'},offer:{name:'Offer',cls:'offer',ic:'📣'}};
+const CS_MONTHS=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let _csYear=null, _csMonth=null, _csEditingId=null, _csModalDateKey=null;
+
+function csPosts(){
+  const c=activeClient();
+  if(!c) return [];
+  if(!c.content) c.content=[];
+  return c.content;
+}
+function csKey(y,m,d){ return y+'-'+String(m+1).padStart(2,'0')+'-'+String(d).padStart(2,'0'); }
+function renderContentStudio(){
+  if(_csYear===null){ const n=new Date(); _csYear=n.getFullYear(); _csMonth=n.getMonth(); }
+  const grid=document.getElementById('csGrid');
+  const label=document.getElementById('csMonthLabel');
+  if(!grid) return;
+  label.textContent=CS_MONTHS[_csMonth]+' '+_csYear;
+
+  const posts=csPosts();
+  const monthPosts=posts.filter(p=>{const[py,pm]=p.date.split('-').map(Number);return py===_csYear&&pm===_csMonth+1;});
+
+  // balance tracker
+  const counts={proof:0,edu:0,human:0,offer:0};
+  monthPosts.forEach(p=>{if(counts[p.type]!==undefined)counts[p.type]++;});
+  document.getElementById('csBalance').innerHTML=
+    `<span class="cs-bal-item">This month: <b>${monthPosts.length}</b> posts planned</span>`+
+    Object.keys(CS_TYPES).map(t=>`<span class="cs-bal-item"><b>${counts[t]}</b> ${CS_TYPES[t].name}</span>`).join('');
+
+  const dow=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  let html=dow.map(d=>`<div class="cs-dow">${d}</div>`).join('');
+  const first=new Date(_csYear,_csMonth,1).getDay();
+  const days=new Date(_csYear,_csMonth+1,0).getDate();
+  const today=new Date();
+  for(let i=0;i<first;i++) html+=`<div class="cs-cell cs-empty"></div>`;
+  for(let d=1;d<=days;d++){
+    const key=csKey(_csYear,_csMonth,d);
+    const dayPosts=monthPosts.filter(p=>p.date===key);
+    const isToday=today.getFullYear()===_csYear&&today.getMonth()===_csMonth&&today.getDate()===d;
+    html+=`<div class="cs-cell${isToday?' cs-today':''}" onclick="openCsModal('${key}')">
+      <span class="cs-date">${d}</span>
+      ${dayPosts.map(p=>`<div class="cs-post ${CS_TYPES[p.type].cls}${p.done?' done':''}">${CS_TYPES[p.type].ic} ${esc((p.idea||CS_TYPES[p.type].name).slice(0,18))}</div>`).join('')}
+    </div>`;
+  }
+  grid.innerHTML=html;
+}
+function csMonth(dir){
+  _csMonth+=dir;
+  if(_csMonth<0){_csMonth=11;_csYear--;}
+  if(_csMonth>11){_csMonth=0;_csYear++;}
+  renderContentStudio();
+}
+function openCsModal(dateKey, postId){
+  _csModalDateKey=dateKey; _csEditingId=postId||null;
+  const modal=document.getElementById('csModal');
+  const [y,m,d]=dateKey.split('-').map(Number);
+  document.getElementById('csModalDate').textContent=`${CS_MONTHS[m-1]} ${d}, ${y}`;
+  const delBtn=document.getElementById('csDeleteBtn');
+  const existing=postId?csPosts().find(p=>p.id===postId):null;
+  if(existing){
+    document.getElementById('csModalTitle').textContent='Edit post';
+    document.getElementById('csType').value=existing.type;
+    document.getElementById('csPlatform').value=existing.platform||'Instagram';
+    document.getElementById('csIdea').value=existing.idea||'';
+    document.getElementById('csCaption').value=existing.caption||'';
+    document.getElementById('csDone').checked=!!existing.done;
+    delBtn.style.display='inline-flex';
+  } else {
+    document.getElementById('csModalTitle').textContent='Plan a post';
+    document.getElementById('csType').value='proof';
+    document.getElementById('csPlatform').value='Instagram';
+    document.getElementById('csIdea').value='';
+    document.getElementById('csCaption').value='';
+    document.getElementById('csDone').checked=false;
+    delBtn.style.display='none';
+  }
+  // if a day already has one post, clicking opens it for edit
+  if(!postId){
+    const dayPosts=csPosts().filter(p=>p.date===dateKey);
+    if(dayPosts.length===1){ return openCsModal(dateKey, dayPosts[0].id); }
+  }
+  modal.style.display='flex';
+}
+function closeCsModal(){ document.getElementById('csModal').style.display='none'; _csEditingId=null; }
+function saveCsPost(){
+  const c=activeClient(); if(!c) return;
+  if(!c.content) c.content=[];
+  const data={
+    date:_csModalDateKey,
+    type:document.getElementById('csType').value,
+    platform:document.getElementById('csPlatform').value,
+    idea:document.getElementById('csIdea').value.trim(),
+    caption:document.getElementById('csCaption').value.trim(),
+    done:document.getElementById('csDone').checked
+  };
+  if(_csEditingId){
+    const p=c.content.find(x=>x.id===_csEditingId);
+    if(p) Object.assign(p,data);
+  } else {
+    c.content.push({id:'cp'+Date.now(), ...data});
+  }
+  scheduleSave();
+  closeCsModal();
+  renderContentStudio();
+}
+function deleteCsPost(){
+  const c=activeClient(); if(!c||!_csEditingId) return;
+  c.content=(c.content||[]).filter(x=>x.id!==_csEditingId);
+  scheduleSave();
+  closeCsModal();
+  renderContentStudio();
+}
+async function csHelpCaption(){
+  const idea=document.getElementById('csIdea').value.trim();
+  const type=document.getElementById('csType').value;
+  const platform=document.getElementById('csPlatform').value;
+  if(!idea){ document.getElementById('csIdea').focus(); return; }
+  const btn=document.getElementById('csHelpBtn');
+  const c=activeClient();
+  btn.disabled=true; btn.textContent='✦ Writing…';
+  const ctx=c?`Business: ${c.name||c.biz||'a local business'}${c.ind?', a '+c.ind:''}${c.loc?' in '+c.loc:''}.`:'';
+  const typeDesc={proof:'showing proof of completed work',edu:'an educational tip',human:'a behind-the-scenes / personal story',offer:'a service offer or promotion'}[type];
+  const prompt=`${ctx} Write a short, natural ${platform} caption for a local business. The post is ${typeDesc}. The owner described it as: "${idea}". Write in a warm, genuine, down-to-earth voice (NOT corporate or salesy, no buzzwords). 1-3 short sentences plus 2-3 relevant local hashtags. Return ONLY the caption text, nothing else.`;
+  try{
+    const r=await fetch('/api/generate',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt})});
+    const out=await r.json();
+    let txt=(out.text||out.completion||out.content||'').trim();
+    if(typeof out==='string') txt=out;
+    if(out.content && Array.isArray(out.content)) txt=out.content.map(b=>b.text||'').join('').trim();
+    if(txt){ document.getElementById('csCaption').value=txt; }
+    else { document.getElementById('csCaption').value=''; alert('Could not generate — try again or write your own.'); }
+  }catch(e){ alert('Helper unavailable right now — write your caption directly.'); }
+  btn.disabled=false; btn.textContent='✦ Help me word this';
+}
 function updateClient(id, patch){
   const list=S.clients; const i=list.findIndex(c=>c.id===id);
   if(i>-1){ list[i]={...list[i],...patch}; S.clients=list; }
@@ -994,6 +1211,7 @@ function showView(v){
   if(v==='score') renderScore();
   if(v==='clients') renderClients();
   if(v==='reviews') renderJobTracker();
+  if(v==='content') renderContentStudio();
   if(v==='settings') loadSettings();
   window.scrollTo({top:0});
 }
@@ -1065,6 +1283,16 @@ function refreshSidebar(){
 }
 
 /* ============ DASHBOARD ============ */
+// Maps the underlying audit scoring keys to the customer-facing framework names.
+// (Display only — the scoring keys stay the same so the audit logic is untouched.)
+const PILLAR_TO_FRAMEWORK={
+  'Google profile':'Get Found',
+  'Reviews & reputation':'Get Trusted',
+  'Website':'Get Chosen',
+  'Social media':'Stay Visible',
+  'Local search':'Win the Lead'
+};
+
 function renderDashboard(){
   const c=activeClient();
   document.getElementById('dashEmpty').style.display=c?'none':'block';
@@ -1079,13 +1307,23 @@ function renderDashboard(){
   const pb=document.getElementById('dashPillars'); pb.innerHTML='';
   Object.entries(c.pillars).forEach(([k,v])=>{
     const cls=v<50?'low':v<70?'mid':'';
-    pb.innerHTML+=`<div class="pb-row"><div class="pb-label">${k}</div><div class="pb-track"><div class="pb-fill ${cls}" data-w="${v}"></div></div><div class="pb-val">${v}</div></div>`;
+    const label=PILLAR_TO_FRAMEWORK[k]||k;
+    pb.innerHTML+=`<div class="pb-row"><div class="pb-label">${label}</div><div class="pb-track"><div class="pb-fill ${cls}" data-w="${v}"></div></div><div class="pb-val">${v}</div></div>`;
   });
   setTimeout(()=>pb.querySelectorAll('.pb-fill').forEach(f=>f.style.width=f.dataset.w+'%'),200);
+  // Live metrics derived from the client's own activity in Locale (real data, no external API needed).
+  const jobs=c.jobs||[];
+  const now=new Date(); const mStart=new Date(now.getFullYear(),now.getMonth(),1).getTime();
+  const activeQuotes=jobs.filter(j=>['enquiry','quoted'].includes(j.stage)).reduce((s,j)=>s+(Number(j.value)||0),0);
+  const wonThisMonth=jobs.filter(j=>['booked','done','review'].includes(j.stage)&&(j.bookedAt||0)>=mStart).length;
+  const needFollow=jobs.filter(j=>j.followUp).length;
+  const content=c.content||[];
+  const postedThisMonth=content.filter(p=>{const[py,pm]=p.date.split('-').map(Number);return p.done&&py===now.getFullYear()&&pm===now.getMonth()+1;}).length;
+  const plannedThisMonth=content.filter(p=>{const[py,pm]=p.date.split('-').map(Number);return py===now.getFullYear()&&pm===now.getMonth()+1;}).length;
   document.getElementById('dashStats').innerHTML=`
-    <div class="stat-mini"><div class="stat-label">Google reviews</div><div class="stat-val">${c.reviews||'—'}</div><div class="stat-sub">${c.rating||'—'} avg rating</div></div>
-    <div class="stat-mini"><div class="stat-label">Profile views</div><div class="stat-val">${c.views||'—'}</div><div class="stat-sub up">last 30 days</div></div>
-    <div class="stat-mini"><div class="stat-label">Calls / enquiries</div><div class="stat-val">${c.calls||'—'}</div><div class="stat-sub">this month</div></div>`;
+    <div class="stat-mini"><div class="stat-label">Active quotes</div><div class="stat-val">$${activeQuotes.toLocaleString('en-AU')}</div><div class="stat-sub">${needFollow} need follow-up</div></div>
+    <div class="stat-mini"><div class="stat-label">Jobs won</div><div class="stat-val">${wonThisMonth}</div><div class="stat-sub up">this month</div></div>
+    <div class="stat-mini"><div class="stat-label">Content posted</div><div class="stat-val">${postedThisMonth}<span style="font-size:14px;color:var(--muted)">/${plannedThisMonth}</span></div><div class="stat-sub">planned this month</div></div>`;
   renderActions(c);
   renderThisWeek(c);
 }
@@ -1217,7 +1455,7 @@ function renderScore(){
       <div class="pillar-bars" style="margin-top:14px">
         ${Object.entries(c.pillars).map(([k,v])=>{
           const cls=v<50?'low':v<70?'mid':'';
-          return `<div class="pb-row"><div class="pb-label">${k}</div><div class="pb-track"><div class="pb-fill ${cls}" style="width:${v}%"></div></div><div class="pb-val">${v}</div></div>`;
+          return `<div class="pb-row"><div class="pb-label">${PILLAR_TO_FRAMEWORK[k]||k}</div><div class="pb-track"><div class="pb-fill ${cls}" style="width:${v}%"></div></div><div class="pb-val">${v}</div></div>`;
         }).join('')}
       </div>
     </div>
