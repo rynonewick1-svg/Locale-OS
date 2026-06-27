@@ -492,7 +492,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
         </div>
         <div class="panel" style="margin-bottom:0">
           <div class="panel-title">Score breakdown</div>
-          <div class="panel-sub">Your five steps to winning customers</div>
+          <div class="panel-sub">Your five visibility pillars</div>
           <div class="pillar-bars" id="dashPillars"></div>
         </div>
       </div>
@@ -677,7 +677,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="view" id="view-report">
     <div class="panel no-print">
       <div class="panel-title">Monthly Report Generator</div>
-      <div class="panel-sub">Enter this month's numbers — Claude writes the plain-English narrative. Print or save it as a PDF for your records.</div>
+      <div class="panel-sub">Enter this month's numbers and get a clean, plain-English summary of how you're tracking — ready to print or save as a PDF for your records.</div>
       <div class="field-row">
         <div class="field"><label>Report month</label><input id="mMonth" placeholder="e.g. June 2026"></div>
         <div class="field"><label>Score this month</label><input id="mScore" type="number" placeholder="72"></div>
@@ -1317,12 +1317,15 @@ function refreshSidebar(){
 /* ============ DASHBOARD ============ */
 // Maps the underlying audit scoring keys to the customer-facing framework names.
 // (Display only — the scoring keys stay the same so the audit logic is untouched.)
+// The audit scoring keys ARE the customer-facing pillar names now — clean and honest.
+// This map just tidies capitalisation/wording for display; the keys stay identical to
+// the scoring logic so nothing breaks.
 const PILLAR_TO_FRAMEWORK={
-  'Google profile':'Get Found',
-  'Reviews & reputation':'Get Trusted',
-  'Website':'Get Chosen',
-  'Social media':'Stay Visible',
-  'Local search':'Win the Lead'
+  'Google profile':'Google Profile',
+  'Reviews & reputation':'Reviews & Reputation',
+  'Website':'Website',
+  'Social media':'Social & Content',
+  'Local search':'Local Search'
 };
 
 function renderDashboard(){

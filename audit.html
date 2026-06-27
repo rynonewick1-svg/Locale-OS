@@ -253,7 +253,7 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
   </div>
 
   <div class="card reveal">
-    <div class="section-h">Your five pillars</div>
+    <div class="section-h">Your five visibility pillars</div>
     <div class="pillars" id="rPillars"></div>
   </div>
 
@@ -266,9 +266,9 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
   </div>
 
   <div class="upgrade reveal">
-    <h3>You don't have to do this yourself.</h3>
-    <p>Closing these gaps means showing your work, posting consistently, and chasing reviews — every single week. The Locale Toolkit does the heavy lifting: it turns your jobs into content, keeps your posting steady, and tracks your visibility climbing. For $97/month — about one extra job a year to pay for itself.</p>
-    <a href="/app" class="btn">Get the Toolkit →</a>
+    <h3>Want a simple system to fix this?</h3>
+    <p>Closing these gaps means staying visible and following up every lead — week after week. Locale is one simple system that makes that easy: track every job so none go cold, plan a consistent month of content, and watch your visibility climb. No jargon, no lock-in, cancel any time. For $97/month — about one extra job a year to pay for itself.</p>
+    <a href="/app" class="btn">See the Toolkit →</a>
   </div>
 </div>
 
@@ -432,11 +432,21 @@ function renderResults(){
     <div class="action"><strong>${t.title}</strong> — <span>${t.detail}</span></div>`).join('');
 
   // 4) Build pillar rows (fills animate later)
+  // Display-only mapping: the scoring keys stay the same (the AI prompt uses them),
+  // but we show the customer-facing framework names.
+  const FRAMEWORK_NAMES = {
+    'Google profile':'Google Profile',
+    'Reviews & reputation':'Reviews & Reputation',
+    'Website':'Website',
+    'Social & content':'Social & Content',
+    'Local search':'Local Search'
+  };
   const pillarsEl = document.getElementById('rPillars');
   pillarsEl.innerHTML = Object.entries(a.pillars).map(([name,v])=>{
     const pc = pillarColor(v);
+    const label = FRAMEWORK_NAMES[name] || name;
     return `<div class="pillar">
-      <div class="pillar-name">${name}</div>
+      <div class="pillar-name">${label}</div>
       <div class="pillar-bar"><div class="pillar-fill" data-w="${v}" style="background:${pc}"></div></div>
       <div class="pillar-val" style="color:${pc}">${v}</div>
     </div>`;
