@@ -18,7 +18,10 @@
 // POST { to, ownerName, count }  →  sends a text. (`to` = owner's mobile, E.164 format e.g. +61400000000)
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const _allowed = ['https://locale-os.vercel.app'];
+  const _origin = req.headers.origin || '';
+  const _ok = _allowed.includes(_origin) || /https:\/\/locale-[a-z0-9-]+\.vercel\.app$/.test(_origin);
+  if (_ok) res.setHeader('Access-Control-Allow-Origin', _origin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -70,6 +73,6 @@ export default async function handler(req, res) {
     }
     return res.status(200).json({ sent: true, sid: data.sid });
   } catch (e) {
-    return res.status(500).json({ error: String(e && e.message || e) });
+    console.error('api/send-sms.js error:', e); return res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
 }

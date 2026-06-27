@@ -50,13 +50,28 @@ export default async function handler(req, res) {
     const totalCount = (b.actions || []).length;
     const nextAction = (b.actions || []).find(a => !a.done);
 
+    // Pull real momentum from the user's own activity (the retention signals).
+    const now = Date.now();
+    const mStart = new Date(new Date().getFullYear(), new Date().getMonth(), 1).getTime();
+    const jobs = b.jobs || [];
+    const activeQuotes = jobs.filter(j => ['enquiry','quoted'].includes(j.stage)).length;
+    const needFollow = jobs.filter(j => j.followUp).length;
+    const wonThisMonth = jobs.filter(j => ['booked','done','review'].includes(j.stage) && (j.bookedAt || 0) >= mStart).length;
+    const postedThisMonth = (b.content || []).filter(p => {
+      if (!p.done || !p.date) return false;
+      const [py, pm] = p.date.split('-').map(Number);
+      return py === new Date().getFullYear() && pm === (new Date().getMonth() + 1);
+    }).length;
+
     // 1) Generate the email copy with Claude
-    const prompt = `You are writing a short, warm, encouraging weekly check-in email from "Locale" to a local business owner using our visibility toolkit. Keep it human, brief (90-130 words), and motivating — like a helpful mate, not a corporate newsletter. No emoji overload (one or two max).
+    const prompt = `You are writing a short, warm, encouraging weekly check-in email from "Locale" to a local business owner using our visibility toolkit. Keep it human, brief (90-130 words), and motivating — like a helpful mate, not a corporate newsletter. No emoji overload (one or two max). Do NOT overclaim or invent results — only reference the real numbers below.
 Business: ${b.name}
 Current visibility score: ${b.score}/100${b.prevScore ? ` (was ${b.prevScore})` : ''}
-Actions completed: ${doneCount} of ${totalCount}
+Jobs won this month: ${wonThisMonth}
+Active quotes in the pipeline: ${activeQuotes}${needFollow ? ` (${needFollow} flagged for follow-up — gently nudge them to chase these, since follow-up is where jobs are won)` : ''}
+Content posted this month: ${postedThisMonth}
 Their next recommended action: ${nextAction ? nextAction.t + ' — ' + nextAction.d : 'none — suggest running a fresh audit'}
-Write ONLY the email body (no subject line, no signature). Acknowledge any progress, then point them clearly at their one next step.`;
+Write ONLY the email body (no subject line, no signature). Acknowledge their real progress warmly, and if they have jobs flagged for follow-up, make that the clear one next step. Otherwise point them at their next action.`;
 
     const aRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',

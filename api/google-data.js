@@ -59,7 +59,10 @@ async function getValidToken(userId) {
 }
 
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const _allowed = ['https://locale-os.vercel.app'];
+  const _origin = req.headers.origin || '';
+  const _ok = _allowed.includes(_origin) || /https:\/\/locale-[a-z0-9-]+\.vercel\.app$/.test(_origin);
+  if (_ok) res.setHeader('Access-Control-Allow-Origin', _origin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
@@ -96,6 +99,6 @@ export default async function handler(req, res) {
       note: 'Connected. Map the Business Profile API response in api/google-data.js to populate these.'
     });
   } catch (e) {
-    return res.status(500).json({ error: String(e && e.message || e) });
+    console.error('api/google-data.js error:', e); return res.status(500).json({ error: 'Something went wrong. Please try again.' });
   }
 }

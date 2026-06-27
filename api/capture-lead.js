@@ -19,12 +19,34 @@
 // Fails gracefully: if Resend/Supabase aren't set, it still returns the lead so
 // nothing is lost, and notes what wasn't sent.
 
+// Simple in-memory rate limiter (per warm instance) — stops bot floods hammering
+// this public endpoint and running up your Resend bill.
+const _hits = new Map();
+function _rateLimited(ip, max = 5, windowMs = 60000) {
+  const now = Date.now();
+  const rec = _hits.get(ip) || { count: 0, start: now };
+  if (now - rec.start > windowMs) { rec.count = 0; rec.start = now; }
+  rec.count++;
+  _hits.set(ip, rec);
+  if (_hits.size > 5000) { for (const [k, v] of _hits) if (now - v.start > windowMs) _hits.delete(k); }
+  return rec.count > max;
+}
+function _validEmail(s) { return typeof s === 'string' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(s) && s.length <= 254; }
+function _clean(s, max = 2000) { return typeof s === 'string' ? s.slice(0, max) : ''; }
+
 export default async function handler(req, res) {
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Lock CORS to your own domains.
+  const allowed = ['https://locale-os.vercel.app'];
+  const origin = req.headers.origin || '';
+  const okOrigin = allowed.includes(origin) || /https:\/\/locale-[a-z0-9-]+\.vercel\.app$/.test(origin);
+  if (okOrigin) res.setHeader('Access-Control-Allow-Origin', origin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
+
+  const ip = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+  if (_rateLimited(ip)) return res.status(429).json({ error: 'Too many requests. Please wait a moment and try again.' });
 
   const RESEND = process.env.RESEND_API_KEY;
   const FROM = process.env.FROM_EMAIL || 'Locale <onboarding@resend.dev>';
@@ -32,9 +54,20 @@ export default async function handler(req, res) {
   const SERVICE = process.env.SUPABASE_SERVICE_ROLE;
 
   try {
-    const { businessOwnerEmail, businessName, ownerId, lead } = req.body || {};
-    if (!lead || (!lead.email && !lead.phone)) {
-      return res.status(400).json({ error: 'A lead needs at least an email or phone.' });
+    const body = req.body || {};
+    const businessName = _clean(body.businessName, 120);
+    const businessOwnerEmail = body.businessOwnerEmail;
+    const ownerId = _clean(body.ownerId, 80);
+    // Validate + sanitise the lead server-side (never trust the client).
+    const rawLead = body.lead || {};
+    const lead = {
+      name: _clean(rawLead.name, 120),
+      email: _validEmail(rawLead.email) ? rawLead.email : '',
+      phone: _clean(rawLead.phone, 40),
+      message: _clean(rawLead.message, 2000)
+    };
+    if (!lead.email && !lead.phone) {
+      return res.status(400).json({ error: 'Please provide a valid email or phone so we can reply.' });
     }
 
     const result = { stored: false, autoReplied: false, ownerNotified: false };
@@ -137,6 +170,7 @@ Open Locale: ${process.env.SITE_URL || 'https://locale-os.vercel.app'}/app`;
         : 'Lead captured, acknowledged, and owner notified.'
     });
   } catch (e) {
-    return res.status(500).json({ error: String(e && e.message || e) });
+    console.error('capture-lead error:', e); // full detail server-side only
+    return res.status(500).json({ error: 'Something went wrong on our end. Please try again in a moment.' });
   }
 }
