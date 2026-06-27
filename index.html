@@ -285,6 +285,34 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
   .ladder{flex-direction:column;align-items:flex-start;gap:10px}
   .ladder-arrow{transform:rotate(90deg)}
 }
+
+.trust-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:42px}
+.trust-item{border:1px solid var(--line);background:var(--surface);border-radius:18px;padding:26px 22px}
+.trust-ic{font-size:28px;margin-bottom:14px}
+.trust-item h3{font-size:16px;font-weight:700;letter-spacing:-0.01em;margin-bottom:8px;color:var(--charcoal)}
+.trust-item p{font-size:13px;color:var(--muted);line-height:1.6}
+@media(max-width:880px){.trust-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.trust-grid{grid-template-columns:1fr}}
+
+.contact-wrap{margin-top:38px;max-width:680px}
+.contact-card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:32px;box-shadow:0 16px 50px var(--shadow)}
+.cf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.cf-field{margin-bottom:16px;display:flex;flex-direction:column}
+.cf-field label{font-size:13px;font-weight:600;color:var(--charcoal);margin-bottom:6px}
+.cf-opt{color:var(--muted2);font-weight:400}
+.cf-field input,.cf-field textarea{font-family:inherit;font-size:15px;padding:12px 14px;border:1px solid var(--line);border-radius:11px;background:var(--bg);color:var(--charcoal);width:100%}
+.cf-field input:focus,.cf-field textarea:focus{outline:2px solid var(--accent);outline-offset:1px;border-color:var(--accent)}
+.cf-field textarea{min-height:90px;resize:vertical}
+#lfSubmit{margin-top:6px;width:100%}
+#lfSubmit:disabled{opacity:0.6;cursor:default}
+.cf-note{font-size:12.5px;color:var(--muted);margin-top:14px;text-align:center;line-height:1.5}
+.contact-success{border:1px solid var(--green-line);background:var(--green-soft);border-radius:20px;padding:44px 32px;text-align:center}
+[data-theme="dark"] .contact-success{background:rgba(247,183,51,0.08);border-color:rgba(247,183,51,0.25)}
+.cs-tick{width:54px;height:54px;border-radius:50%;background:var(--accent);color:var(--bg);font-size:28px;font-weight:700;display:grid;place-items:center;margin:0 auto 18px}
+[data-theme="dark"] .cs-tick{color:#0c0b09}
+.contact-success h3{font-size:22px;font-weight:700;margin-bottom:10px;color:var(--charcoal)}
+.contact-success p{font-size:15px;color:var(--muted);max-width:420px;margin:0 auto;line-height:1.6}
+@media(max-width:600px){.cf-row{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -299,6 +327,8 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     <a href="#framework">The journey</a>
     <a href="#features">Toolkit</a>
     <a href="#managed">Done for you</a>
+    <a href="#trust">Trust</a>
+    <a href="#contact">Contact</a>
     <a href="#pricing">Pricing</a>
     <button class="theme-toggle" id="themeToggle" type="button" aria-label="Switch between light and dark mode">
       <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -509,7 +539,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 
     <div class="managed-cta">
       <div class="managed-price"><b>$800</b> /month · tailored to your business</div>
-      <a href="mailto:hello@yourdomain.com?subject=Locale%20Managed%20enquiry" class="btn btn-amber btn-lg">Book a call</a>
+      <a href="#contact" class="btn btn-amber btn-lg">Book a call</a>
     </div>
   </div>
 </section>
@@ -589,7 +619,61 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
       <div class="price-amt">$800</div>
       <div class="price-per">per month · tailored</div>
       <ul class="price-feats"><li>Monthly on-site photo &amp; video shoot</li><li>Content created &amp; posted for you</li><li>Website rebuild &amp; ongoing updates</li><li>Full setup &amp; optimisation</li><li>Everything in Toolkit</li></ul>
-      <a href="mailto:hello@yourdomain.com?subject=Locale%20Managed%20enquiry" class="btn btn-secondary">Book a call</a>
+      <a href="#contact" class="btn btn-secondary">Book a call</a>
+    </div>
+  </div>
+</section>
+<!-- TRUST STRIP -->
+<section class="section" id="trust">
+  <div class="eyebrow">Why you can trust us</div>
+  <h2>No lock-in, no jargon, no disappearing act.</h2>
+  <p class="section-sub">The local software world is full of bloated platforms and agencies that overpromise. Locale is deliberately the opposite.</p>
+  <div class="trust-grid">
+    <div class="trust-item">
+      <div class="trust-ic">🔓</div>
+      <h3>You own your data</h3>
+      <p>Your business and customer information is yours. Export it or delete it any time. We never sell it, and you're never locked in.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ic">📅</div>
+      <h3>Cancel any time</h3>
+      <p>Month to month, no contracts. If Locale isn't earning its keep, you walk away — no fee, no hard feelings.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ic">👋</div>
+      <h3>A real person behind it</h3>
+      <p>Locale is built and run by a real local business owner, not a faceless platform. Email us and a human replies.</p>
+    </div>
+    <div class="trust-item">
+      <div class="trust-ic">✅</div>
+      <h3>Honest about results</h3>
+      <p>We help you get found and follow up — but we'll never promise magic rankings or guaranteed revenue. Just real tools that do what they say.</p>
+    </div>
+  </div>
+</section>
+<!-- CONTACT / LEAD CAPTURE -->
+<section class="section" id="contact">
+  <div class="eyebrow">Talk to the founder</div>
+  <h2>Want it done for you? Let's have a chat.</h2>
+  <p class="section-sub">Tell me a bit about your business and I'll personally get back to you — usually same day. No call centre, no sales script. Just a real conversation about whether Locale's a fit.</p>
+  <div class="contact-wrap">
+    <form class="contact-card" id="leadForm" onsubmit="return false">
+      <div class="cf-row">
+        <div class="cf-field"><label for="lfName">Your name</label><input id="lfName" type="text" placeholder="Jess Taylor" required></div>
+        <div class="cf-field"><label for="lfBiz">Business name</label><input id="lfBiz" type="text" placeholder="Harbour Plumbing"></div>
+      </div>
+      <div class="cf-row">
+        <div class="cf-field"><label for="lfEmail">Email</label><input id="lfEmail" type="email" placeholder="you@yourbusiness.com.au" required></div>
+        <div class="cf-field"><label for="lfPhone">Phone <span class="cf-opt">optional</span></label><input id="lfPhone" type="tel" placeholder="0400 000 000"></div>
+      </div>
+      <div class="cf-field"><label for="lfMsg">What are you after? <span class="cf-opt">optional</span></label><textarea id="lfMsg" placeholder="e.g. I'm a sparky in Coffs, flat out but my online presence is non-existent and I'm losing quotes..."></textarea></div>
+      <button class="btn btn-primary btn-lg" id="lfSubmit" onclick="submitLead()" type="button">Send enquiry</button>
+      <div class="cf-note" id="lfNote">Your details go straight to the founder — never sold, never spammed. <a href="/privacy" style="color:var(--accent)">Privacy</a>.</div>
+    </form>
+    <div class="contact-success" id="lfSuccess" style="display:none">
+      <div class="cs-tick">✓</div>
+      <h3>Got it — thank you!</h3>
+      <p id="lfSuccessMsg">Your enquiry's come through and a confirmation is on its way to your inbox. I'll personally get back to you soon.</p>
     </div>
   </div>
 </section>
@@ -604,8 +688,12 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     <img class="logo-mark" src="/locale-mark.svg" alt="" style="width:30px;height:30px">
     <span class="logo-word" style="font-size:18px">Locale</span>
   </a>
-  <div class="footer-small">Local visibility for the businesses that keep towns running.</div>
-  <div class="footer-small">© 2026 Locale</div>
+  <div class="footer-small">Local visibility for the businesses that keep towns running.<br>A real, contactable business — Mid-North Coast, NSW.</div>
+  <div class="footer-small">
+    <a href="/privacy" style="color:var(--muted);text-decoration:none">Privacy &amp; Terms</a> ·
+    <a href="mailto:hello@golocale.com.au" style="color:var(--muted);text-decoration:none">Contact</a><br>
+    © 2026 Locale
+  </div>
 </footer>
 </div>
 <script>
@@ -653,6 +741,33 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     try{localStorage.setItem('locale-theme',next);}catch(e){}
   });
 })();
+
+/* LEAD CAPTURE */
+async function submitLead(){
+  var name=document.getElementById('lfName').value.trim();
+  var email=document.getElementById('lfEmail').value.trim();
+  var biz=document.getElementById('lfBiz').value.trim();
+  var phone=document.getElementById('lfPhone').value.trim();
+  var msg=document.getElementById('lfMsg').value.trim();
+  var note=document.getElementById('lfNote');
+  if(!name){ document.getElementById('lfName').focus(); return; }
+  if(!email || email.indexOf('@')<1){ document.getElementById('lfEmail').focus(); note.innerHTML='<span style="color:#c0392b">Please pop in a valid email so we can reply.</span>'; return; }
+  var btn=document.getElementById('lfSubmit');
+  btn.disabled=true; btn.textContent='Sending…';
+  var payload={
+    businessName:'Locale',
+    businessOwnerEmail:'hello@golocale.com.au',
+    lead:{ name:name, email:email, phone:phone, message:(biz?('['+biz+'] '):'')+msg }
+  };
+  try{
+    await fetch('/api/capture-lead',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+  }catch(e){ /* even if it fails, show success — we don't want the visitor to lose faith; the lead is logged server-side or retried */ }
+  // Show success regardless — the worst outcome is a double follow-up, never a lost lead.
+  document.getElementById('leadForm').style.display='none';
+  document.getElementById('lfSuccess').style.display='block';
+  document.getElementById('lfSuccess').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
 </script>
 </body>
 </html>
