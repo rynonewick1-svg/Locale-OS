@@ -1,4 +1,4 @@
-// Locale — weekly re-engagement email function (V2)
+// Locale — weekly re-engagement email function
 // Generates a personalised "here's your progress + your next step" digest and sends it.
 //
 // HOW IT WORKS:
