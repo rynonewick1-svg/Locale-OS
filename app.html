@@ -374,6 +374,9 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   .cs-post{font-size:9px}
   .cs-dow{font-size:9px}
 }
+
+.conn-connect{background:#2e7d59;color:#fff;border:none;border-radius:999px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:filter .15s}
+.conn-connect:hover{filter:brightness(1.08)}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -735,7 +738,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="conn-name">Google Business Profile</div>
           <div class="conn-desc">Pull in your real reviews, views and search data — so your score reflects live numbers, not estimates.</div>
         </div>
-        <div class="conn-status conn-soon">Coming soon</div>
+        <button class="conn-status conn-connect" id="googleConnBtn" onclick="connectGoogle()">Connect</button>
       </div>
 
       <div class="conn-card">
@@ -890,6 +893,35 @@ function seed(){
   }];
   S.activeId = S.clients[0].id;
 }
+
+/* ============ GOOGLE CONNECTION ============ */
+function connectGoogle(){
+  if(!_currentUser || !_currentUser.id){
+    alert('Please sign in first.');
+    return;
+  }
+  // Hands off to the server OAuth start, passing the user id so the callback
+  // knows who connected. If Google isn't configured yet, the endpoint returns
+  // a friendly JSON note instead of redirecting.
+  window.location.href = '/api/google-auth?uid=' + encodeURIComponent(_currentUser.id);
+}
+// Handle the return from Google's consent screen.
+(function handleGoogleReturn(){
+  try{
+    const params = new URLSearchParams(window.location.search);
+    const g = params.get('google');
+    if(!g) return;
+    if(g === 'connected'){
+      // Clean the URL and let the user know.
+      setTimeout(()=>{ alert('Google connected! Your dashboard will start showing live data once syncing is set up.'); }, 300);
+    } else if(g === 'error'){
+      setTimeout(()=>{ alert('Google connection didn\'t complete. You can try again from Connect accounts.'); }, 300);
+    }
+    // strip the query param so it doesn't re-trigger
+    const clean = window.location.pathname;
+    window.history.replaceState({}, '', clean);
+  }catch(e){}
+})();
 
 function activeClient(){ return S.clients.find(c=>c.id===S.activeId) || null; }
 
