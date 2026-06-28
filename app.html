@@ -4,19 +4,20 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Locale OS — Local Visibility Platform</title>
+<meta name="theme-color" content="#0c0b09">
 <meta name="robots" content="noindex, nofollow">
 <link rel="icon" href="/favicon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600;9..40,700&family=Geist+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f7f4ef; --surface:#fffcf7; --surface2:#f2ede4; --surface3:#e9e2d5;
-  --border:rgba(31,35,38,0.09); --border2:rgba(31,35,38,0.15); --border3:rgba(31,35,38,0.28);
-  --text:#1f2326; --muted:#6d6a63; --muted2:#8a877f;
-  --accent:#2e7d59; --accent2:#246048; --accent-soft:rgba(46,125,89,0.08);
-  --amber:#f5a623;
-  --green:#2e7d59; --red:#cc6060; --blue:#3a7ca5;
-  --charcoal:#1f2326; --charcoal2:#15191b;
+  --bg:#0c0b09; --surface:#141210; --surface2:#1d1a15; --surface3:#262019;
+  --border:rgba(244,239,226,0.10); --border2:rgba(244,239,226,0.16); --border3:rgba(244,239,226,0.30);
+  --text:#f4efe2; --muted:#a9a092; --muted2:#7d7567;
+  --accent:#5cba90; --accent2:#46a47d; --accent-soft:rgba(70,164,125,0.12);
+  --amber:#f7c14b;
+  --green:#5cba90; --red:#e08a8a; --blue:#6aa9d4;
+  --charcoal:#f4efe2; --charcoal2:#ffffff;
   --r:14px; --rs:8px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -56,8 +57,8 @@ body::before{content:'';position:fixed;inset:0;background:radial-gradient(circle
 /* BUTTONS & FORMS */
 .btn{display:inline-flex;align-items:center;gap:7px;padding:9px 16px;border-radius:var(--rs);font-size:13px;font-weight:500;cursor:pointer;transition:all .15s;border:1px solid var(--border2);background:var(--surface2);color:var(--text);font-family:'DM Sans',sans-serif}
 .btn:hover{background:var(--surface3)}
-.btn-primary{background:var(--charcoal);color:var(--cream,#f7f4ef);border-color:var(--charcoal)}
-.btn-primary:hover{background:var(--charcoal2);border-color:var(--charcoal2)}
+.btn-primary{background:var(--amber);color:#0c0b09;border-color:var(--amber)}
+.btn-primary:hover{filter:brightness(1.08)}
 .btn-danger{color:var(--red);border-color:rgba(217,107,107,0.3)}
 .btn:disabled{opacity:.5;cursor:not-allowed}
 .btn-sm{padding:6px 12px;font-size:12px}
@@ -66,7 +67,7 @@ input,select,textarea{width:100%;padding:10px 13px;background:var(--surface2);bo
 input:focus,select:focus,textarea:focus{border-color:rgba(46,125,89,0.45);box-shadow:0 0 0 3px var(--accent-soft)}
 input::placeholder,textarea::placeholder{color:var(--muted)}
 select{cursor:pointer;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12' fill='none'%3E%3Cpath d='M3 4.5L6 7.5L9 4.5' stroke='%237a7870' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 12px center;padding-right:34px}
-select option{background:#fffcf7;color:#1f2326}
+select option{background:#1d1a15;color:#f4efe2}
 textarea{resize:vertical;line-height:1.6;min-height:80px}
 .field{margin-bottom:16px}
 .field-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -167,7 +168,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .sb-backdrop.open{display:block}
 @media(max-width:900px){
   .app{grid-template-columns:1fr}
-  .sidebar{position:fixed;left:0;top:0;height:100vh;width:264px;z-index:900;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 50px rgba(0,0,0,0.18);background:#fffcf7;overflow-y:auto}
+  .sidebar{position:fixed;left:0;top:0;height:100vh;width:264px;z-index:900;transform:translateX(-100%);transition:transform .25s ease;box-shadow:0 0 50px rgba(0,0,0,0.5);background:#141210;overflow-y:auto}
   .sidebar.open{transform:translateX(0)}
   .sidebar .nav-item{pointer-events:auto;cursor:pointer}
   .menu-btn{display:flex}
@@ -295,7 +296,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .jt-stat-alert{border-color:var(--border)}
 .jt-stat-label{font-size:12px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;margin-bottom:8px}
 .jt-stat-val{font-size:28px;font-weight:700;letter-spacing:-0.02em;color:var(--text);line-height:1}
-.jt-stat-val.jt-green{color:#2e7d59}
+.jt-stat-val.jt-green{color:#5cba90}
 .jt-stat-val.jt-amber{color:#c8860f}
 .jt-stat-sub{font-size:12px;color:var(--muted);margin-top:6px}
 .jt-add-wrap{display:flex;align-items:center}
@@ -311,11 +312,11 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .jt-card-cust{font-size:13.5px;font-weight:700;color:var(--text);margin-bottom:3px;padding-right:16px}
 .jt-card-job{font-size:12px;color:var(--muted);line-height:1.4;margin-bottom:8px}
 .jt-card-foot{display:flex;align-items:center;justify-content:space-between}
-.jt-card-val{font-size:13px;font-weight:700;color:#2e7d59}
+.jt-card-val{font-size:13px;font-weight:700;color:#5cba90}
 .jt-card-flag{position:absolute;top:10px;right:11px;font-size:12px}
 .jt-card-move{display:flex;gap:4px;margin-top:9px}
 .jt-move-btn{flex:1;font-size:10.5px;font-weight:600;padding:5px 4px;border-radius:7px;border:1px solid var(--border);background:var(--surface2);color:var(--muted);cursor:pointer;transition:all .12s}
-.jt-move-btn:hover{border-color:#2e7d59;color:#2e7d59}
+.jt-move-btn:hover{border-color:#5cba90;color:#5cba90}
 .jt-empty{text-align:center;padding:60px 30px;background:var(--surface);border:1px dashed var(--border);border-radius:18px}
 .jt-empty-ic{font-size:40px;margin-bottom:14px}
 .jt-empty-title{font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
@@ -344,27 +345,27 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 .cs-month-nav{display:flex;align-items:center;gap:14px}
 .cs-month-label{font-size:19px;font-weight:700;color:var(--text);min-width:160px;text-align:center}
 .cs-nav-btn{width:34px;height:34px;border-radius:9px;border:1px solid var(--border);background:var(--surface);color:var(--text);font-size:18px;cursor:pointer;line-height:1}
-.cs-nav-btn:hover{border-color:#2e7d59;color:#2e7d59}
+.cs-nav-btn:hover{border-color:#5cba90;color:#5cba90}
 .cs-legend{display:flex;gap:14px;flex-wrap:wrap}
 .cs-leg{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--muted);font-weight:500}
 .cs-dot{width:9px;height:9px;border-radius:50%}
-.cs-proof{background:#2e7d59}.cs-edu{background:#3b82c4}.cs-human{background:#c8860f}.cs-offer{background:#b8546b}
+.cs-proof{background:#5cba90}.cs-edu{background:#3b82c4}.cs-human{background:#c8860f}.cs-offer{background:#b8546b}
 .cs-balance{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:18px}
 .cs-bal-item{font-size:12px;font-weight:600;padding:6px 12px;border-radius:999px;background:var(--surface2);color:var(--muted);border:1px solid var(--border)}
 .cs-bal-item b{color:var(--text)}
 .cs-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:6px}
 .cs-dow{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.04em;text-align:center;padding:4px 0}
 .cs-cell{min-height:92px;border:1px solid var(--border);border-radius:10px;background:var(--surface);padding:6px;cursor:pointer;transition:border-color .12s;display:flex;flex-direction:column;gap:4px}
-.cs-cell:hover{border-color:#2e7d59}
+.cs-cell:hover{border-color:#5cba90}
 .cs-cell.cs-empty{background:transparent;border:none;cursor:default}
-.cs-cell.cs-today{border-color:#2e7d59;box-shadow:0 0 0 1px #2e7d59}
+.cs-cell.cs-today{border-color:#5cba90;box-shadow:0 0 0 1px #5cba90}
 .cs-date{font-size:11px;font-weight:600;color:var(--muted);padding:1px 3px}
 .cs-post{font-size:10.5px;font-weight:600;color:#fff;border-radius:5px;padding:3px 5px;line-height:1.25;overflow:hidden;display:flex;align-items:center;gap:3px}
 .cs-post.done{opacity:0.5;text-decoration:line-through}
-.cs-post.proof{background:#2e7d59}.cs-post.edu{background:#3b82c4}.cs-post.human{background:#c8860f}.cs-post.offer{background:#b8546b}
+.cs-post.proof{background:#5cba90}.cs-post.edu{background:#3b82c4}.cs-post.human{background:#c8860f}.cs-post.offer{background:#b8546b}
 .cs-modal-date{font-size:13px;color:var(--muted);margin-bottom:14px;font-weight:600}
 .cs-caption-field{position:relative}
-.cs-help-btn{margin-top:8px;font-size:12.5px;font-weight:600;color:#2e7d59;background:var(--green-soft,rgba(46,125,89,0.08));border:1px solid var(--green-line,rgba(46,125,89,0.2));border-radius:8px;padding:7px 12px;cursor:pointer}
+.cs-help-btn{margin-top:8px;font-size:12.5px;font-weight:600;color:#5cba90;background:var(--green-soft,rgba(46,125,89,0.08));border:1px solid var(--green-line,rgba(46,125,89,0.2));border-radius:8px;padding:7px 12px;cursor:pointer}
 .cs-help-btn:hover{background:rgba(46,125,89,0.14)}
 .cs-help-btn:disabled{opacity:0.6;cursor:default}
 .cs-help-note{font-size:11px;color:var(--muted);margin-top:7px;line-height:1.45}
@@ -375,13 +376,13 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   .cs-dow{font-size:9px}
 }
 
-.conn-connect{background:#2e7d59;color:#fff;border:none;border-radius:999px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:filter .15s}
+.conn-connect{background:#46a47d;color:#0c0b09;border:none;border-radius:999px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:filter .15s}
 .conn-connect:hover{filter:brightness(1.08)}
 
 /* ===== ONBOARDING ===== */
 .ob-backdrop{position:fixed;inset:0;background:rgba(20,18,15,0.55);display:flex;align-items:center;justify-content:center;z-index:2000;padding:20px;backdrop-filter:blur(3px)}
 .ob-card{background:var(--surface);border-radius:24px;padding:38px;max-width:540px;width:100%;box-shadow:0 30px 90px rgba(0,0,0,0.3);max-height:92vh;overflow-y:auto}
-.ob-badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#2e7d59;background:rgba(46,125,89,0.1);padding:6px 13px;border-radius:999px;margin-bottom:16px}
+.ob-badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#5cba90;background:rgba(46,125,89,0.1);padding:6px 13px;border-radius:999px;margin-bottom:16px}
 .ob-title{font-size:26px;font-weight:700;letter-spacing:-0.03em;line-height:1.15;color:var(--text);margin-bottom:12px}
 .ob-lead{font-size:15.5px;color:var(--muted);line-height:1.6;margin-bottom:24px}
 .ob-features{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
@@ -397,7 +398,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 
 /* ===== MOMENTUM STRIP (retention) ===== */
 .mo-strip{background:linear-gradient(135deg,rgba(46,125,89,0.08),rgba(200,134,15,0.06));border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:18px}
-.mo-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#2e7d59;margin-bottom:14px}
+.mo-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#5cba90;margin-bottom:14px}
 .mo-items{display:flex;gap:28px;flex-wrap:wrap}
 .mo-item{display:flex;align-items:center;gap:11px}
 .mo-ic{font-size:24px}
@@ -541,7 +542,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="ring-wrap">
             <svg width="120" height="120" viewBox="0 0 120 120">
               <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="8"/>
-              <circle id="dashRing" cx="60" cy="60" r="50" fill="none" stroke="#2e7d59" stroke-width="8" stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
+              <circle id="dashRing" cx="60" cy="60" r="50" fill="none" stroke="#5cba90" stroke-width="8" stroke-dasharray="314" stroke-dashoffset="314" stroke-linecap="round" style="transition:stroke-dashoffset 1.2s cubic-bezier(.4,0,.2,1)"/>
             </svg>
             <div class="ring-center"><div class="ring-num" id="dashScore">—</div><div class="ring-denom">of 100</div></div>
           </div>
@@ -1616,7 +1617,7 @@ function toggleAction(i){
 
 // Lightweight confetti burst for a small win (no library, pure DOM)
 function burst(){
-  const n=18; const colors=['#2e7d59','#f5a623','#5db88a','#246048'];
+  const n=18; const colors=['#5cba90','#f5a623','#5db88a','#46a47d'];
   for(let i=0;i<n;i++){
     const d=document.createElement('div');
     d.className='confetti';
@@ -1707,17 +1708,17 @@ function renderTrendChart(hist, cur){
     <svg viewBox="0 0 ${W} ${H}" class="sh-chart" preserveAspectRatio="xMidYMid meet">
       <defs>
         <linearGradient id="shFill" x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0%" stop-color="#2e7d59" stop-opacity="0.26"/>
-          <stop offset="100%" stop-color="#2e7d59" stop-opacity="0.01"/>
+          <stop offset="0%" stop-color="#5cba90" stop-opacity="0.26"/>
+          <stop offset="100%" stop-color="#5cba90" stop-opacity="0.01"/>
         </linearGradient>
       </defs>
       ${grid}
       <path d="${areaPath}" fill="url(#shFill)"/>
-      <path d="${linePath}" fill="none" stroke="#2e7d59" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="${linePath}" fill="none" stroke="#5cba90" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
       ${pts.map((p,i)=>{
         const isLast=i===pts.length-1;
-        return `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${isLast?6:4}" fill="${isLast?'#f5a623':'#2e7d59'}" stroke="#fffcf7" stroke-width="2.5"/>
-        <text x="${p[0].toFixed(1)}" y="${(p[1]-13).toFixed(1)}" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="13" font-weight="500" fill="${isLast?'#c8860f':'#2e7d59'}">${p[2]}</text>`;
+        return `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${isLast?6:4}" fill="${isLast?'#f5a623':'#5cba90'}" stroke="#fffcf7" stroke-width="2.5"/>
+        <text x="${p[0].toFixed(1)}" y="${(p[1]-13).toFixed(1)}" text-anchor="middle" font-family="'Geist Mono',monospace" font-size="13" font-weight="500" fill="${isLast?'#c8860f':'#5cba90'}">${p[2]}</text>`;
       }).join('')}
     </svg>
     <div class="sh-xlabels">${labels.map(l=>`<span>${l}</span>`).join('')}</div>
