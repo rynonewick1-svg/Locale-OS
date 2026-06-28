@@ -27,8 +27,8 @@
 body{
   font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;color:var(--charcoal);
   background:
-    radial-gradient(circle at top left,rgba(245,166,35,0.10),transparent 32rem),
-    radial-gradient(circle at top right,rgba(46,125,89,0.09),transparent 34rem),
+    radial-gradient(circle at top left,rgba(247,193,75,0.10),transparent 32rem),
+    radial-gradient(circle at top right,rgba(247,193,75,0.06),transparent 34rem),
     var(--cream);
   min-height:100vh;-webkit-font-smoothing:antialiased;
 }
@@ -41,7 +41,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:8px 0 
 .back:hover{color:var(--charcoal)}
 
 .head{margin-bottom:28px}
-.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:var(--green);margin-bottom:12px}
+.eyebrow{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.16em;color:var(--amber);margin-bottom:12px}
 h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-height:1.1;margin-bottom:12px}
 .sub{font-size:16px;color:var(--muted);line-height:1.6}
 
@@ -105,13 +105,14 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
 
 /* ===== BENCHMARK SCALE ===== */
 .bench-scale{margin-top:20px}
-.bench-track{position:relative;height:46px;background:linear-gradient(90deg,#e8a0a0 0%,#f0c674 50%,#7cc49a 100%);border-radius:10px;opacity:0.32}
-.bench-peer,.bench-you{position:absolute;top:-6px;height:58px;width:3px;transition:left 1.2s cubic-bezier(.22,1,.36,1);left:50%}
-.bench-peer{background:var(--charcoal)}
-.bench-you{background:var(--accent);width:4px}
+.bench-track{position:relative;height:46px;background:#1d1a15;border:1px solid var(--line);border-radius:10px;overflow:visible}
+.bench-track::before{content:'';position:absolute;inset:0;border-radius:10px;background:linear-gradient(90deg,rgba(247,193,75,0.04) 0%,rgba(247,193,75,0.16) 100%)}
+.bench-peer,.bench-you{position:absolute;top:-6px;height:58px;width:3px;transition:left 1.2s cubic-bezier(.22,1,.36,1);left:50%;z-index:2}
+.bench-peer{background:var(--muted)}
+.bench-you{background:var(--amber);width:4px;box-shadow:0 0 12px rgba(247,193,75,0.5)}
 .bench-peer span,.bench-you span{position:absolute;top:-22px;left:50%;transform:translateX(-50%);white-space:nowrap;font-size:11px;font-weight:700}
-.bench-peer span{color:var(--charcoal)}
-.bench-you span{color:var(--accent);top:auto;bottom:-24px}
+.bench-peer span{color:var(--muted)}
+.bench-you span{color:var(--amber);top:auto;bottom:-24px}
 .bench-axis{display:flex;justify-content:space-between;margin-top:8px;font-size:11px;color:var(--muted2)}
 
 /* ===== REVEAL ANIMATION ===== */
@@ -125,7 +126,7 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
 .pillar-fill{height:100%;border-radius:6px;width:0;transition:width 1.1s cubic-bezier(.22,1,.36,1)}
 .pillar-val{font-size:13px;font-weight:700;width:32px;text-align:right}
 .overview{font-size:14.5px;color:var(--charcoal);line-height:1.7;margin:4px 0 18px;white-space:pre-line}
-.section-h{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--accent);margin:24px 0 12px}
+.section-h{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--amber);margin:24px 0 12px}
 .action{background:var(--cream2);border:1px solid var(--line);border-radius:12px;padding:14px 16px;margin-bottom:10px}
 .action strong{font-weight:600}
 .action span{color:var(--muted);font-size:13.5px}
@@ -457,15 +458,18 @@ function renderResults(){
   requestAnimationFrame(()=>animateResults(a, theme));
 }
 
+// Gold-intensity system: all one hue (on-brand, colour-blind friendly).
+// Strong scores = bright full gold; weaker = dimmer, muted gold. Bar length + number
+// carry the "good vs bad" signal, so we stay cohesive and premium.
 function scoreTheme(s){
-  if(s>=70) return {accent:'#5cba90', soft:'rgba(46,125,89,0.12)'};      // green — doing well
-  if(s>=50) return {accent:'#c8860f', soft:'rgba(245,166,35,0.14)'};     // amber — room to grow
-  return {accent:'#cc5f5f', soft:'rgba(204,95,95,0.12)'};                // red — losing customers
+  if(s>=70) return {accent:'#f7c14b', soft:'rgba(247,193,75,0.12)'};   // bright gold — doing well
+  if(s>=50) return {accent:'#e0a838', soft:'rgba(224,168,56,0.12)'};   // gold — room to grow
+  return {accent:'#c89a4a', soft:'rgba(200,154,74,0.12)'};             // muted gold — needs work
 }
 function pillarColor(v){
-  if(v>=70) return '#5cba90';
-  if(v>=50) return '#c8860f';
-  return '#cc5f5f';
+  if(v>=70) return '#f7c14b';   // bright gold
+  if(v>=50) return '#e0a838';   // gold
+  return '#bf9043';             // muted/dim gold
 }
 
 function animateResults(a, theme){
