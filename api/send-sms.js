@@ -27,6 +27,11 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
 
   if (req.method === 'GET') {
+    const ready = !!(process.env.TWILIO_ACCOUNT_SID && process.env.TWILIO_AUTH_TOKEN && process.env.TWILIO_FROM_NUMBER);
+    // ?check=1 returns the simple {ready} shape the connect page expects.
+    if (req.query && req.query.check) {
+      return res.status(200).json({ ready });
+    }
     return res.status(200).json({
       diagnostic: true,
       twilio_sid_present: !!process.env.TWILIO_ACCOUNT_SID,

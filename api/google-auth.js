@@ -43,6 +43,12 @@ export default function handler(req, res) {
     });
   }
 
+  // Readiness check mode: ?check=1 reports whether it's configured WITHOUT redirecting,
+  // so the front-end can decide whether to start the OAuth flow or show "coming soon".
+  if (req.query && req.query.check) {
+    return res.status(200).json({ ready: true });
+  }
+
   // `state` carries the Locale user id so the callback knows who connected.
   // The app should pass ?uid=<supabaseUserId> when linking to this endpoint.
   const uid = (req.query && req.query.uid) ? String(req.query.uid) : '';
