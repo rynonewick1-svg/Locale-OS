@@ -377,6 +377,32 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
 
 .conn-connect{background:#2e7d59;color:#fff;border:none;border-radius:999px;padding:7px 18px;font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:filter .15s}
 .conn-connect:hover{filter:brightness(1.08)}
+
+/* ===== ONBOARDING ===== */
+.ob-backdrop{position:fixed;inset:0;background:rgba(20,18,15,0.55);display:flex;align-items:center;justify-content:center;z-index:2000;padding:20px;backdrop-filter:blur(3px)}
+.ob-card{background:var(--surface);border-radius:24px;padding:38px;max-width:540px;width:100%;box-shadow:0 30px 90px rgba(0,0,0,0.3);max-height:92vh;overflow-y:auto}
+.ob-badge{display:inline-block;font-size:12px;font-weight:700;letter-spacing:0.05em;text-transform:uppercase;color:#2e7d59;background:rgba(46,125,89,0.1);padding:6px 13px;border-radius:999px;margin-bottom:16px}
+.ob-title{font-size:26px;font-weight:700;letter-spacing:-0.03em;line-height:1.15;color:var(--text);margin-bottom:12px}
+.ob-lead{font-size:15.5px;color:var(--muted);line-height:1.6;margin-bottom:24px}
+.ob-features{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.ob-feature{display:flex;gap:14px;align-items:flex-start;text-align:left}
+.ob-fic{font-size:24px;flex-shrink:0;width:44px;height:44px;background:var(--surface2);border-radius:12px;display:grid;place-items:center}
+.ob-feature strong{display:block;font-size:15px;color:var(--text);margin-bottom:3px}
+.ob-feature span{font-size:13.5px;color:var(--muted);line-height:1.5}
+.ob-pointer{display:flex;gap:14px;align-items:flex-start;background:var(--surface2);border:1px solid var(--border);border-radius:14px;padding:18px;margin-bottom:26px;text-align:left;font-size:14px;color:var(--text);line-height:1.55}
+.ob-pointer-ic{font-size:20px;color:#c8860f;flex-shrink:0}
+.ob-actions{display:flex;gap:12px;justify-content:flex-end;flex-wrap:wrap}
+.ob-card .btn-lg{width:100%}
+@media(max-width:520px){.ob-card{padding:26px}.ob-title{font-size:22px}}
+
+/* ===== MOMENTUM STRIP (retention) ===== */
+.mo-strip{background:linear-gradient(135deg,rgba(46,125,89,0.08),rgba(200,134,15,0.06));border:1px solid var(--border);border-radius:16px;padding:18px 22px;margin-bottom:18px}
+.mo-head{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;color:#2e7d59;margin-bottom:14px}
+.mo-items{display:flex;gap:28px;flex-wrap:wrap}
+.mo-item{display:flex;align-items:center;gap:11px}
+.mo-ic{font-size:24px}
+.mo-big{font-size:22px;font-weight:700;letter-spacing:-0.02em;color:var(--text);line-height:1}
+.mo-label{font-size:12.5px;color:var(--muted);margin-top:3px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
@@ -470,6 +496,36 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   </div>
 
   <!-- ========== DASHBOARD ========== -->
+  <!-- ONBOARDING WELCOME (first run only) -->
+  <div class="ob-backdrop" id="obWelcome" style="display:none">
+    <div class="ob-card">
+      <div class="ob-step" id="obStep1">
+        <div class="ob-badge">Welcome to Locale</div>
+        <h2 class="ob-title">Let's get you set up in 2 minutes.</h2>
+        <p class="ob-lead">Locale is the simple system to stop losing customers — get found, stay visible, and follow up every lead. Here's the whole thing in three parts:</p>
+        <div class="ob-features">
+          <div class="ob-feature"><div class="ob-fic">📊</div><div><strong>Your Visibility Score</strong><span>See exactly where you stand across the five pillars, and what to fix first.</span></div></div>
+          <div class="ob-feature"><div class="ob-fic">📋</div><div><strong>Job Tracker</strong><span>Every enquiry and quote in one place, so none ever go cold.</span></div></div>
+          <div class="ob-feature"><div class="ob-fic">🗓️</div><div><strong>Content Studio</strong><span>A simple month of content planned, so you stay visible without the stress.</span></div></div>
+        </div>
+        <button class="btn btn-primary btn-lg" onclick="obNext()">Get started →</button>
+      </div>
+      <div class="ob-step" id="obStep2" style="display:none">
+        <div class="ob-badge">Step 1 of 1</div>
+        <h2 class="ob-title">First, let's get your visibility score.</h2>
+        <p class="ob-lead">It takes about two minutes and shows you exactly where you're losing customers — your starting point. Everything else builds from here.</p>
+        <div class="ob-pointer">
+          <div class="ob-pointer-ic">✦</div>
+          <div>We'll take you to <strong>Run Audit</strong>. Answer a few quick questions about your business, and you'll see your score and your biggest gaps.</div>
+        </div>
+        <div class="ob-actions">
+          <button class="btn btn-secondary" onclick="obFinish()">I'll explore first</button>
+          <button class="btn btn-primary" onclick="obStartAudit()">Run my audit →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div class="view" id="view-dashboard">
     <div id="dashEmpty" class="empty-state" style="display:none">
       <div class="big">No client selected</div>
@@ -477,6 +533,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <button class="btn btn-primary" style="margin-top:16px" onclick="showView('audit')">Run my audit →</button>
     </div>
     <div id="dashBody">
+      <div id="momentumStrip" style="display:none"></div>
       <div id="thisWeekPanel"></div>
       <div class="score-hero">
         <div class="score-card">
@@ -729,7 +786,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="conn-name">Gmail / Google Workspace</div>
           <div class="conn-desc">Let your assistant see new customer enquiries and draft replies for you to approve and send.</div>
         </div>
-        <div class="conn-status conn-soon">Coming soon</div>
+        <button class="conn-status conn-connect" onclick="connectPlatform('gmail','/api/google-auth','Gmail')">Connect</button>
       </div>
 
       <div class="conn-card">
@@ -747,7 +804,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="conn-name">SMS / messaging</div>
           <div class="conn-desc">Send quote follow-ups and review requests straight from Locale, with your approval on each one.</div>
         </div>
-        <div class="conn-status conn-soon">Coming soon</div>
+        <button class="conn-status conn-connect" onclick="connectPlatform('sms','/api/send-sms','SMS')">Connect</button>
       </div>
 
       <div class="conn-card">
@@ -756,7 +813,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="conn-name">Instagram</div>
           <div class="conn-desc">Connect your Instagram so your content plan and visibility insights reflect what you're actually posting.</div>
         </div>
-        <div class="conn-status conn-soon">Coming soon</div>
+        <button class="conn-status conn-connect" onclick="connectPlatform('instagram','/api/meta-auth','Instagram')">Connect</button>
       </div>
 
       <div class="conn-card">
@@ -765,7 +822,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="conn-name">Facebook</div>
           <div class="conn-desc">Link your Facebook Page to keep your posting consistent and your local presence active.</div>
         </div>
-        <div class="conn-status conn-soon">Coming soon</div>
+        <button class="conn-status conn-connect" onclick="connectPlatform('facebook','/api/meta-auth','Facebook')">Connect</button>
       </div>
 
       <div class="conn-card">
@@ -774,7 +831,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
           <div class="conn-name">YouTube</div>
           <div class="conn-desc">Connect YouTube for video content — great for showing your work and building trust over time.</div>
         </div>
-        <div class="conn-status conn-soon">Coming soon</div>
+        <button class="conn-status conn-connect" onclick="connectPlatform('youtube','/api/google-auth','YouTube')">Connect</button>
       </div>
 
       <div class="sec-box">
@@ -789,6 +846,21 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <div style="margin-top:18px;padding:16px 18px;background:var(--green-soft,rgba(46,125,89,0.08));border-radius:12px;font-size:13.5px;line-height:1.55;color:var(--text)">
         <strong>Want the AI to run this for you completely?</strong> The connections above let you stay hands-on with AI assistance. When you'd rather not touch it at all, our <strong>Managed service</strong> takes over — we set up, run, and tune your autonomous assistant end-to-end. <a href="#" style="color:var(--green);font-weight:600;text-decoration:none">Ask about Managed →</a>
       </div>
+    </div>
+  </div>
+
+  <!-- Generic "coming soon" friendly modal (shown instead of raw JSON when a platform isn't configured) -->
+  <div class="jt-modal-backdrop" id="connComingModal" style="display:none">
+    <div class="jt-modal" style="max-width:440px;text-align:center">
+      <div style="font-size:40px;margin-bottom:8px" id="connComingIc">🔌</div>
+      <div class="jt-modal-title" style="justify-content:center" id="connComingTitle">Connection coming soon</div>
+      <p style="font-size:14.5px;color:var(--muted);line-height:1.6;margin:12px 0 20px" id="connComingBody">
+        We're putting the finishing touches on this secure connection. It'll light up here soon.
+      </p>
+      <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;font-size:12.5px;color:var(--muted);line-height:1.5;margin-bottom:20px">
+        In the meantime, your dashboard already tracks everything you do <em>inside</em> Locale automatically — quotes, jobs won and content posted.
+      </div>
+      <button class="btn btn-primary" onclick="closeConnComing()" style="width:100%">Got it</button>
     </div>
   </div>
 
@@ -895,15 +967,75 @@ function seed(){
 }
 
 /* ============ GOOGLE CONNECTION ============ */
-function connectGoogle(){
+async function connectGoogle(){
   if(!_currentUser || !_currentUser.id){
     alert('Please sign in first.');
     return;
   }
-  // Hands off to the server OAuth start, passing the user id so the callback
-  // knows who connected. If Google isn't configured yet, the endpoint returns
-  // a friendly JSON note instead of redirecting.
-  window.location.href = '/api/google-auth?uid=' + encodeURIComponent(_currentUser.id);
+  const btn = document.getElementById('googleConnBtn');
+  if(btn){ btn.disabled = true; btn.textContent = 'Checking…'; }
+  try{
+    // Ask the server if Google is configured yet (without redirecting anywhere).
+    const r = await fetch('/api/google-auth?check=1&uid=' + encodeURIComponent(_currentUser.id), {
+      headers: { 'Accept': 'application/json' }
+    });
+    const data = await r.json().catch(()=>({ready:false}));
+    if(data && data.ready){
+      // Configured — start the real OAuth redirect.
+      window.location.href = '/api/google-auth?uid=' + encodeURIComponent(_currentUser.id);
+      return;
+    } else {
+      showGoogleComingSoon();
+    }
+  }catch(e){
+    showGoogleComingSoon();
+  }
+  if(btn){ btn.disabled = false; btn.textContent = 'Connect'; }
+}
+
+function showGoogleComingSoon(){
+  showComingSoon({
+    ic:'📊',
+    title:'Google connection is coming soon',
+    body:"Once connected, Locale will pull your real Google reviews, profile views and search data straight into your dashboard — so your score reflects live numbers, not estimates. We're putting the finishing touches on the secure Google sign-in now, and it'll light up here soon."
+  });
+}
+// Per-platform friendly "coming soon" copy.
+const PLATFORM_COPY = {
+  gmail:    {ic:'📧', title:'Gmail connection is coming soon', body:"Once connected, Locale will spot new customer enquiries in your inbox and draft replies for you to approve — so nothing slips through. We're finishing the secure Google sign-in now."},
+  sms:      {ic:'💬', title:'SMS is coming soon', body:"SMS reminders and review requests are nearly ready. They need a messaging account connected behind the scenes first — we'll switch this on soon. Until then, email reminders have you covered."},
+  instagram:{ic:'📸', title:'Instagram connection is coming soon', body:"Once connected, your content plan and visibility insights will reflect what you're actually posting on Instagram. This connection is going through Instagram's secure approval now."},
+  facebook: {ic:'👍', title:'Facebook connection is coming soon', body:"Linking your Facebook Page will help keep your posting consistent and your local presence active. This connection is going through Facebook's secure approval now."},
+  youtube:  {ic:'▶️', title:'YouTube connection is coming soon', body:"Connect YouTube to show your work and build trust over time. We're finishing the secure sign-in for this one — it'll be ready here soon."}
+};
+function showComingSoon(copy){
+  document.getElementById('connComingIc').textContent = copy.ic || '🔌';
+  document.getElementById('connComingTitle').textContent = copy.title || 'Connection coming soon';
+  document.getElementById('connComingBody').textContent = copy.body || "We're putting the finishing touches on this connection. It'll light up here soon.";
+  const modal = document.getElementById('connComingModal');
+  if(modal) modal.style.display = 'flex';
+}
+function closeConnComing(){
+  const modal = document.getElementById('connComingModal');
+  if(modal) modal.style.display = 'none';
+}
+
+// Generic platform connector — checks readiness, redirects if live, else shows friendly modal.
+// Self-healing: the moment the platform's credentials exist in Vercel, the same button
+// starts the real connection flow automatically. No code change needed.
+async function connectPlatform(key, endpoint, label){
+  if(!_currentUser || !_currentUser.id){ alert('Please sign in first.'); return; }
+  try{
+    const r = await fetch(endpoint + '?check=1&uid=' + encodeURIComponent(_currentUser.id), {
+      headers: { 'Accept': 'application/json' }
+    });
+    const data = await r.json().catch(()=>({ready:false}));
+    if(data && data.ready){
+      window.location.href = endpoint + '?uid=' + encodeURIComponent(_currentUser.id);
+      return;
+    }
+  }catch(e){ /* fall through to coming-soon */ }
+  showComingSoon(PLATFORM_COPY[key] || {ic:'🔌', title:(label||'This')+' connection is coming soon'});
 }
 // Handle the return from Google's consent screen.
 (function handleGoogleReturn(){
@@ -1361,6 +1493,49 @@ function renderDashboard(){
     <div class="stat-mini"><div class="stat-label">Content posted</div><div class="stat-val">${postedThisMonth}<span style="font-size:14px;color:var(--muted)">/${plannedThisMonth}</span></div><div class="stat-sub">planned this month</div></div>`;
   renderActions(c);
   renderThisWeek(c);
+  renderMomentum(c);
+}
+
+// RETENTION: momentum strip — show the user they're making progress, so the
+// subscription visibly earns its keep. Pure derived data from their own activity.
+function renderMomentum(c){
+  const panel=document.getElementById('momentumStrip');
+  if(!panel) return;
+  const now=new Date();
+  const mStart=new Date(now.getFullYear(),now.getMonth(),1).getTime();
+
+  // Score movement since last audit
+  const scoreNow=c.score||0, scorePrev=c.prevScore||0;
+  const scoreDelta=scoreNow-scorePrev;
+
+  // Jobs won this month
+  const jobs=c.jobs||[];
+  const wonThisMonth=jobs.filter(j=>['booked','done','review'].includes(j.stage)&&(j.bookedAt||0)>=mStart).length;
+
+  // Content posting streak: count consecutive recent weeks with at least one posted item
+  const content=(c.content||[]).filter(p=>p.done);
+  let streak=0;
+  for(let w=0; w<12; w++){
+    const wkEnd=new Date(now); wkEnd.setDate(now.getDate()-w*7);
+    const wkStart=new Date(wkEnd); wkStart.setDate(wkEnd.getDate()-7);
+    const has=content.some(p=>{const d=new Date(p.date); return d>wkStart && d<=wkEnd;});
+    if(has) streak++; else break;
+  }
+
+  // Only show momentum once there's something genuine to celebrate
+  const items=[];
+  if(scoreDelta>0) items.push({ic:'📈',big:'+'+scoreDelta,label:'visibility points since last check'});
+  if(wonThisMonth>0) items.push({ic:'🎯',big:String(wonThisMonth),label:wonThisMonth===1?'job won this month':'jobs won this month'});
+  if(streak>1) items.push({ic:'🔥',big:streak+' wk',label:'content posting streak'});
+
+  if(!items.length){ panel.innerHTML=''; panel.style.display='none'; return; }
+  panel.style.display='block';
+  panel.innerHTML=`<div class="mo-strip">
+    <div class="mo-head">Your momentum</div>
+    <div class="mo-items">
+      ${items.map(it=>`<div class="mo-item"><span class="mo-ic">${it.ic}</span><div><div class="mo-big">${it.big}</div><div class="mo-label">${it.label}</div></div></div>`).join('')}
+    </div>
+  </div>`;
 }
 
 // FEATURE 2: "This week" — one clear focus, not a wall of options.
@@ -2129,6 +2304,37 @@ function boot(){
   if(_booted) return;       // don't double-run if already started
   _booted = true;
   seed(); refreshSidebar(); showView('dashboard'); refreshApiStatus();
+  maybeShowOnboarding();
+}
+
+/* ============ ONBOARDING ============ */
+function maybeShowOnboarding(){
+  // Show the welcome only to a genuinely new user: one who hasn't completed onboarding
+  // and hasn't run an audit yet. The flag lives on the client so it syncs via Supabase.
+  const c = activeClient();
+  if(!c) return;
+  const isNew = !c.onboarded && !c.audit && (!c.history || !c.history.length);
+  if(isNew){
+    const ob = document.getElementById('obWelcome');
+    if(ob) ob.style.display = 'flex';
+  }
+}
+function obNext(){
+  document.getElementById('obStep1').style.display='none';
+  document.getElementById('obStep2').style.display='block';
+}
+function obMarkDone(){
+  const c = activeClient();
+  if(c){ c.onboarded = true; scheduleSave(); }
+}
+function obFinish(){
+  obMarkDone();
+  document.getElementById('obWelcome').style.display='none';
+}
+function obStartAudit(){
+  obMarkDone();
+  document.getElementById('obWelcome').style.display='none';
+  showView('audit');
 }
 // Don't boot immediately — check login first. boot() runs only after successful auth.
 checkAuth();
