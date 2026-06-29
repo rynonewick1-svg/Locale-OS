@@ -226,33 +226,6 @@ h1{font-size:clamp(28px,5vw,40px);font-weight:700;letter-spacing:-0.04em;line-he
 
 <!-- ===== RESULTS ===== -->
 <div class="results" id="results">
-  <div class="score-stage" id="scoreStage">
-    <div class="eyebrow" style="text-align:center">Your visibility snapshot</div>
-    <div class="gauge-wrap">
-      <svg class="gauge" viewBox="0 0 220 220">
-        <circle class="gauge-track" cx="110" cy="110" r="94"/>
-        <circle class="gauge-fill" id="gaugeFill" cx="110" cy="110" r="94"/>
-      </svg>
-      <div class="gauge-center">
-        <div class="gauge-num" id="rScore">0</div>
-        <div class="gauge-of">out of 100</div>
-      </div>
-    </div>
-    <div class="score-label" id="rLabel">—</div>
-    <div class="snapshot-note">Based on what you entered, compared against typical businesses like yours.</div>
-  </div>
-
-  <div class="card reveal" id="benchmarkCard">
-    <div class="section-h">How you compare</div>
-    <div class="benchmark" id="rBenchmark"></div>
-    <div class="bench-scale">
-      <div class="bench-track">
-        <div class="bench-peer" id="benchPeer"><span>Businesses like yours</span></div>
-        <div class="bench-you" id="benchYou"><span>You</span></div>
-      </div>
-      <div class="bench-axis"><span>0</span><span>50</span><span>100</span></div>
-    </div>
-  </div>
 
   <div class="card reveal">
     <div class="section-h">Your five visibility pillars</div>
@@ -414,18 +387,14 @@ async function unlockResults(){
 function renderResults(){
   const a = _auditResult;
 
-  // 1) Score-responsive colour theme
+  // 1) Score-responsive colour theme (still drives the pillar bar colours)
   const score = a.score;
   const theme = scoreTheme(score);
   const root = document.getElementById('results');
   root.style.setProperty('--accent', theme.accent);
   root.style.setProperty('--accent-soft', theme.soft);
 
-  // 2) Benchmark text
-  if(a.benchmark){ document.getElementById('rBenchmark').textContent = a.benchmark; }
-  else { document.getElementById('benchmarkCard').style.display='none'; }
-
-  // 3) Overview, gaps, actions
+  // 2) Overview, gaps, actions
   document.getElementById('rOverview').textContent = a.overview;
   const gaps = a.biggestGaps || [];
   document.getElementById('rGaps').innerHTML = gaps.map(g=>`
@@ -473,42 +442,10 @@ function pillarColor(v){
 }
 
 function animateResults(a, theme){
-  // --- Animated count-up + gauge fill ---
-  const circumference = 590.6; // 2*pi*94
-  const gaugeFill = document.getElementById('gaugeFill');
-  const numEl = document.getElementById('rScore');
-  const target = a.score;
-  // gauge ring
-  const offset = circumference - (target/100)*circumference;
-  setTimeout(()=>{ gaugeFill.style.strokeDashoffset = offset; }, 200);
-  // count up
-  const dur = 1500; const start = performance.now();
-  function tick(now){
-    const p = Math.min((now-start)/dur, 1);
-    const eased = 1-Math.pow(1-p,3);
-    numEl.textContent = Math.round(eased*target);
-    if(p<1) requestAnimationFrame(tick);
-    else numEl.textContent = target;
-  }
-  setTimeout(()=>requestAnimationFrame(tick), 200);
-
-  // label appears after the count
-  setTimeout(()=>{ document.getElementById('rLabel').textContent = a.scoreLabel; }, 1100);
-
-  // --- Benchmark slider: peer sits ~mid-high, "you" slides to your score ---
-  setTimeout(()=>{
-    const peer = document.getElementById('benchPeer');
-    const you = document.getElementById('benchYou');
-    if(peer && you){
-      peer.style.left = '65%';          // typical "businesses like yours"
-      you.style.left = a.score + '%';   // their actual score
-    }
-  }, 500);
-
   // --- Staggered card reveals ---
   const reveals = document.querySelectorAll('.results .reveal');
   reveals.forEach((el,i)=>{
-    setTimeout(()=>el.classList.add('in'), 700 + i*220);
+    setTimeout(()=>el.classList.add('in'), 200 + i*180);
   });
 
   // --- Pillar fills animate after their card reveals ---
@@ -516,7 +453,7 @@ function animateResults(a, theme){
     document.querySelectorAll('.pillar-fill').forEach((f,i)=>{
       setTimeout(()=>{ f.style.width = f.dataset.w + '%'; }, i*120);
     });
-  }, 1100);
+  }, 500);
 }
 
 // Allow Enter on email field
