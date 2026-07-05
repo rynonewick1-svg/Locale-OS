@@ -1078,6 +1078,59 @@ function jtMoney(n){
   n=Number(n)||0;
   return '$'+n.toLocaleString('en-AU');
 }
+
+// Pull in any web enquiries captured for this business (via /api/capture-lead) that
+// haven't been added to the Job Tracker yet, so an owner never has to manually
+// re-type an enquiry that already came through their site. Each imported lead
+// starts life as an "Enquiry" card flagged for follow-up, since it's brand new.
+async function syncLeadsIntoJobTracker(){
+  if(!sb || !_currentUser) return;
+  try {
+    const { data, error } = await sb.from('leads')
+      .select('id, name, email, phone, message, created_at')
+      .eq('owner_id', _currentUser.id)
+      .eq('status', 'new');
+    if(error){ console.error('Lead sync failed:', error.message); return; }
+    if(!data || !data.length) return;
+
+    const c = activeClient();
+    if(!c) return;
+    if(!c.jobs) c.jobs = [];
+
+    const newJobs = [];
+    data.forEach((lead, i)=>{
+      // Defensive de-dupe in case a lead was already imported into this client's board.
+      if(c.jobs.some(j=>j.leadId===lead.id)) return;
+      newJobs.push({
+        id:'j'+Date.now()+'_'+i,
+        leadId: lead.id,
+        createdAt: lead.created_at ? new Date(lead.created_at).getTime() : Date.now(),
+        bookedAt: null,
+        customer: lead.name || lead.email || lead.phone || 'New enquiry',
+        phone: lead.phone || '',
+        email: lead.email || '',
+        job: lead.message ? lead.message.slice(0,120) : 'Website enquiry',
+        value: '',
+        stage: 'enquiry',
+        notes: lead.message || '',
+        followUp: true
+      });
+    });
+    if(!newJobs.length) return;
+
+    c.jobs.unshift(...newJobs);
+    scheduleSave();
+    if(document.getElementById('view-reviews') && document.getElementById('view-reviews').classList.contains('active')){
+      renderJobTracker();
+    }
+    toast(newJobs.length===1 ? '1 new enquiry added to your Job Tracker' : newJobs.length+' new enquiries added to your Job Tracker');
+
+    // Mark these leads as imported so the next sync doesn't pull them in again.
+    const ids = data.map(l=>l.id);
+    const { error: updErr } = await sb.from('leads').update({ status:'imported' }).in('id', ids);
+    if(updErr) console.error('Lead status update failed:', updErr.message);
+  } catch(e){ console.error('Lead sync error:', e); }
+}
 function renderJobTracker(){
   const jobs=jtJobs();
   const board=document.getElementById('jtBoard');
@@ -1375,7 +1428,7 @@ function showView(v){
   if(v==='dashboard') renderDashboard();
   if(v==='score') renderScore();
   if(v==='clients') renderClients();
-  if(v==='reviews') renderJobTracker();
+  if(v==='reviews'){ renderJobTracker(); syncLeadsIntoJobTracker(); }
   if(v==='content') renderContentStudio();
   if(v==='settings') loadSettings();
   window.scrollTo({top:0});
@@ -2159,6 +2212,7 @@ async function onLoggedIn(){
   }
   await loadFromSupabase();
   boot(); // start the app (will seed only if they have no data yet)
+  syncLeadsIntoJobTracker(); // pull in any web enquiries waiting for this business
 }
 
 // Returns true if the logged-in user has an active subscription.
