@@ -756,7 +756,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="view" id="view-report">
     <div class="panel no-print">
       <div class="panel-title">Monthly Report Generator</div>
-      <div class="panel-sub">Enter this month's numbers and get a clean, plain-English summary of how you're tracking — ready to print or save as a PDF for your records.</div>
+      <div class="panel-sub">Pre-filled from your real activity this month — edit anything before generating, or <a href="#" onclick="prefillReportFields(true);return false">refill from your activity →</a></div>
       <div class="field-row">
         <div class="field"><label>Report month</label><input id="mMonth" placeholder="e.g. June 2026"></div>
         <div class="field"><label>Score this month</label><input id="mScore" type="number" placeholder="72"></div>
@@ -1351,6 +1351,7 @@ function toggleReviewReceived(){
   const j=(c.jobs||[]).find(x=>x.id===_editingJobId); if(!j) return;
   const cb=document.getElementById('jReviewReceived');
   j.reviewReceived = cb ? cb.checked : false;
+  if(j.reviewReceived && !j.reviewReceivedAt) j.reviewReceivedAt = Date.now();
   scheduleSave();
 }
 
@@ -1564,6 +1565,7 @@ function showView(v){
   if(v==='report'){
     const c=activeClient();
     if(c && !c.viewedReport){ c.viewedReport=true; scheduleSave(); }
+    prefillReportFields(false);
   }
   if(v==='connect') renderWidgetEmbed();
   if(v==='settings') loadSettings();
@@ -2175,6 +2177,57 @@ Return ONLY raw JSON:
 }
 
 /* ============ MONTHLY REPORT ============ */
+// Pre-fill the report form with real numbers from the client's own activity in
+// Locale, so the owner starts from what actually happened this month instead of
+// a blank form. They can still edit anything before generating — this is a
+// starting point, not a claim that these are the final figures.
+function computeReportMonthData(c){
+  const now=new Date();
+  const mStart=new Date(now.getFullYear(), now.getMonth(), 1).getTime();
+  const jobs=c.jobs||[];
+  const content=c.content||[];
+
+  const newThisMonth=jobs.filter(j=>(j.createdAt||0)>=mStart).length;
+  const quotedThisMonth=jobs.filter(j=>j.stage==='quoted' && (j.createdAt||0)>=mStart).length;
+  const wonThisMonth=jobs.filter(j=>['booked','done','review'].includes(j.stage) && (j.bookedAt||0)>=mStart).length;
+  const reviewsThisMonth=jobs.filter(j=>j.reviewReceived && (j.reviewReceivedAt||0)>=mStart).length;
+  const reviewReqsThisMonth=jobs.filter(j=>j.reviewRequested && (j.reviewRequestedAt||0)>=mStart).length;
+  const postedThisMonth=content.filter(p=>{
+    if(!p.done||!p.date) return false;
+    const [py,pm]=p.date.split('-').map(Number);
+    return py===now.getFullYear() && pm===now.getMonth()+1;
+  }).length;
+
+  const workParts=[];
+  if(postedThisMonth) workParts.push(`Posted ${postedThisMonth} piece${postedThisMonth===1?'':'s'} of content`);
+  if(reviewReqsThisMonth) workParts.push(`sent ${reviewReqsThisMonth} review request${reviewReqsThisMonth===1?'':'s'}`);
+  if(wonThisMonth) workParts.push(`booked ${wonThisMonth} job${wonThisMonth===1?'':'s'}`);
+  const work=workParts.length ? workParts.join(', ')+'.' : '';
+
+  return {
+    month: now.toLocaleDateString('en-AU',{month:'long',year:'numeric'}),
+    score: c.score ?? '',
+    prev: c.prevScore ?? '',
+    revs: reviewsThisMonth || '',
+    calls: (newThisMonth||quotedThisMonth) ? `${newThisMonth} new enquir${newThisMonth===1?'y':'ies'}, ${quotedThisMonth} quote${quotedThisMonth===1?'':'s'} sent` : '',
+    work
+  };
+}
+function prefillReportFields(force){
+  const c=activeClient(); if(!c) return;
+  // Don't clobber a report the owner is already partway through editing —
+  // only auto-fill if the form looks untouched, unless explicitly asked to refill.
+  const untouched = !val('mMonth') && !val('mScore');
+  if(!force && !untouched) return;
+  const d=computeReportMonthData(c);
+  document.getElementById('mMonth').value=d.month;
+  document.getElementById('mScore').value=d.score;
+  document.getElementById('mPrev').value=d.prev;
+  document.getElementById('mRevs').value=d.revs;
+  document.getElementById('mCalls').value=d.calls;
+  document.getElementById('mWork').value=d.work;
+  if(force) toast('Refilled from your real activity this month');
+}
 async function runReport(){
   const c=activeClient(); if(!c){toast('Select a client first');return;}
   const m={month:val('mMonth'),score:val('mScore'),prev:val('mPrev'),revs:val('mRevs'),views:val('mViews'),calls:val('mCalls'),work:val('mWork')};

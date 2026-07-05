@@ -278,6 +278,14 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
 @media(max-width:880px){.trust-grid{grid-template-columns:1fr 1fr}}
 @media(max-width:520px){.trust-grid{grid-template-columns:1fr}}
 
+.faq-list{max-width:760px;margin-top:36px;display:flex;flex-direction:column;gap:10px}
+.faq-item{border:1px solid var(--line);background:var(--surface);border-radius:14px;padding:4px 22px}
+.faq-item summary{cursor:pointer;padding:16px 0;font-size:15.5px;font-weight:600;color:var(--charcoal);letter-spacing:-0.01em;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.faq-item summary::-webkit-details-marker{display:none}
+.faq-item summary::after{content:'+';font-size:20px;font-weight:400;color:var(--muted);flex-shrink:0;transition:transform .15s}
+.faq-item[open] summary::after{content:'\2212'}
+.faq-item p{font-size:14px;color:var(--muted);line-height:1.65;padding:0 0 18px}
+
 .contact-wrap{margin-top:38px;max-width:680px}
 .contact-card{border:1px solid var(--line);background:var(--surface);border-radius:20px;padding:32px;box-shadow:0 16px 50px var(--shadow)}
 .cf-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
@@ -317,6 +325,7 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
     <a href="#trust">Trust</a>
     <a href="#contact">Contact</a>
     <a href="#pricing">Pricing</a>
+    <a href="#faq">FAQ</a>
     <a href="/audit" class="btn btn-primary">Get your free score</a>
   </div>
 </nav>
@@ -623,6 +632,53 @@ footer{border-top:1px solid var(--line);padding:32px 0;display:flex;align-items:
       <h3>Honest about results</h3>
       <p>We help you get found and follow up — but we'll never promise magic rankings or guaranteed revenue. Just real tools that do what they say.</p>
     </div>
+  </div>
+</section>
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="eyebrow">Questions</div>
+  <h2>Straight answers before you sign up.</h2>
+  <div class="faq-list">
+    <details class="faq-item">
+      <summary>Is Locale a marketing agency or software?</summary>
+      <p>Both, depending on what you need. The Toolkit ($97/mo) is software you run yourself. Managed ($800/mo) is done-for-you, including a real photographer and videographer behind the camera each month.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Do I need a new website?</summary>
+      <p>No. The Toolkit works alongside whatever you've already got. If you'd like a rebuild, that's included in Managed — but it's never required to get started.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can Locale guarantee leads or rankings?</summary>
+      <p>No, and we won't pretend to. We help you get found, look trustworthy, and follow up every enquiry — real tools that do what they say, not promises about results we can't control.</p>
+    </details>
+    <details class="faq-item">
+      <summary>What access do you need from me?</summary>
+      <p>To run the Toolkit yourself, just your own Locale login. If you connect Google or social accounts for live data, that's done through their official secure sign-in — Locale never sees or stores your passwords, and you can disconnect any time.</p>
+    </details>
+    <details class="faq-item">
+      <summary>How much time do I need to put in?</summary>
+      <p>With the Toolkit, a few minutes here and there — checking your Job Tracker for anything needing follow-up, and keeping content ticking along. With Managed, as little as you like — we run it.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Does Locale replace my existing systems?</summary>
+      <p>No. It doesn't require you to change your phone number, inbox, or booking process — it sits alongside them and gives you one place to track enquiries through to a won job.</p>
+    </details>
+    <details class="faq-item">
+      <summary>How quickly can I get started?</summary>
+      <p>Your free visibility score takes about two minutes, no card required. Toolkit access starts the moment you sign up. Managed kicks off with a call to scope your first shoot.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Is this suitable for a small or solo business?</summary>
+      <p>Yes — it's built specifically for owner-operators and small local teams, not enterprise marketing departments.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Is there a minimum commitment? Can I cancel?</summary>
+      <p>Month to month, no contracts, no lock-in. If Locale isn't earning its keep, you walk away — no fee, no hard feelings.</p>
+    </details>
+    <details class="faq-item">
+      <summary>What happens after I sign up for the Toolkit?</summary>
+      <p>You get your login, run your first Visibility Score, and land on a dashboard that walks you through getting your first job tracked, your first content planned, and your first report seen.</p>
+    </details>
   </div>
 </section>
 <!-- CONTACT / LEAD CAPTURE -->
