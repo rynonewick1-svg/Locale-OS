@@ -801,6 +801,15 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <div class="panel-sub">This is where Locale goes from being a system you manage → to one that works alongside you. Connect the tools your business already runs on, and Locale can pull your real reviews, profile views and search data straight into your dashboard — so your score reflects live numbers, not estimates — plus help you stay consistent and follow up, with you in control of every action.</div>
       <div style="background:var(--surface2);border:1px solid var(--border);border-radius:12px;padding:14px 16px;margin:14px 0 22px;font-size:13px;color:var(--muted);line-height:1.6"><strong style="color:var(--text)">Already live:</strong> your dashboard tracks your real activity inside Locale — active quotes, jobs won, and content posted — automatically. <strong style="color:var(--text)">Coming with the connections below:</strong> live data from Google &amp; social pulled straight in.</div>
 
+      <div class="panel" style="margin:0 0 22px;padding:20px 22px;border:1px solid var(--border)">
+        <div class="panel-title">📋 Add Locale to your website</div>
+        <div class="panel-sub">Paste this enquiry form anywhere on your own site. Every enquiry lands straight in your Job Tracker at the "Enquiry" stage, flagged for follow-up — and both you and the customer get an instant email the moment it's submitted.</div>
+        <div id="widgetSnippet" style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;font-family:monospace;font-size:12.5px;color:var(--text);overflow-x:auto;white-space:pre-wrap;word-break:break-all;margin:14px 0"></div>
+        <button class="btn btn-primary" onclick="copyWidgetSnippet()">Copy code</button>
+        <span id="widgetCopyMsg" style="margin-left:12px;font-size:12.5px;color:var(--muted)"></span>
+        <div style="margin-top:14px;font-size:12.5px;color:var(--muted);line-height:1.6">Paste this into your website's HTML wherever you'd like the form to appear — most site builders (Squarespace, Wix, WordPress) have an "embed code" or "custom HTML" block for exactly this.</div>
+      </div>
+
       <div class="conn-card">
         <div class="conn-ic">📧</div>
         <div class="conn-meta">
@@ -1077,6 +1086,39 @@ async function connectPlatform(key, endpoint, label){
 })();
 
 function activeClient(){ return S.clients.find(c=>c.id===S.activeId) || null; }
+
+/* ============ WEBSITE WIDGET EMBED ============ */
+function attrEscape(s){ return String(s||'').replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/</g,'&lt;'); }
+function renderWidgetEmbed(){
+  const el=document.getElementById('widgetSnippet');
+  if(!el) return;
+  const c=activeClient();
+  const bizName=(c && c.name) ? c.name : 'My Business';
+  const ownerEmail=(_currentUser && _currentUser.email) ? _currentUser.email : '';
+  const ownerId=(_currentUser && _currentUser.id) ? _currentUser.id : '';
+  // NB: this string ends up inside app.html's own <script> tag, so the closing
+  // script tag inside it must be escaped or the browser will end our script early.
+  const snippet='<script src="'+location.origin+'/widget.js" data-owner="'+attrEscape(ownerId)+'" data-business="'+attrEscape(bizName)+'" data-email="'+attrEscape(ownerEmail)+'"><\/script>';
+  el.textContent=snippet;
+}
+function copyWidgetSnippet(){
+  const el=document.getElementById('widgetSnippet');
+  const msg=document.getElementById('widgetCopyMsg');
+  if(!el) return;
+  const text=el.textContent;
+  const done=()=>{ if(msg){ msg.textContent='Copied!'; setTimeout(()=>{ if(msg) msg.textContent=''; },2000); } };
+  const fail=()=>{ if(msg) msg.textContent='Could not copy — please select and copy manually.'; };
+  if(navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(done).catch(fail);
+  } else {
+    try{
+      const ta=document.createElement('textarea');
+      ta.value=text; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      done();
+    }catch(e){ fail(); }
+  }
+}
 
 /* ============ JOB TRACKER ============ */
 const JT_STAGES=[
@@ -1454,6 +1496,7 @@ function showView(v){
     const c=activeClient();
     if(c && !c.viewedReport){ c.viewedReport=true; scheduleSave(); }
   }
+  if(v==='connect') renderWidgetEmbed();
   if(v==='settings') loadSettings();
   window.scrollTo({top:0});
 }
