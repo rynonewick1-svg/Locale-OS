@@ -514,6 +514,8 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
   <div class="api-banner no-print" id="apiBanner" style="display:none">
     ⚡ AI tools are in demo mode. <a onclick="showView('settings')">Add your Anthropic API key in Settings</a> to enable live AI generation (~1¢ per use).
   </div>
+  <!-- Trial banner -->
+  <div class="api-banner no-print" id="trialBanner" style="display:none"></div>
 
   <!-- ========== DASHBOARD ========== -->
   <!-- ONBOARDING WELCOME (first run only) -->
@@ -2467,20 +2469,37 @@ async function onLoggedIn(){
   await loadFromSupabase();
   boot(); // start the app (will seed only if they have no data yet)
   syncLeadsIntoJobTracker(); // pull in any web enquiries waiting for this business
+  renderTrialBanner();
 }
 
-// Returns true if the logged-in user has an active subscription.
+// Returns true if the logged-in user has active or trialing access.
+let _subInfo = null; // { status, trial_ends_at } — kept for the trial banner
 async function checkSubscription(){
   if(!sb || !_currentUser) return false;
   try {
     const { data, error } = await sb.from('subscriptions')
-      .select('status').eq('user_id', _currentUser.id).maybeSingle();
+      .select('status, trial_ends_at').eq('user_id', _currentUser.id).maybeSingle();
     if(error){ console.warn('sub check error', error.message); return false; }
-    return !!(data && data.status === 'active');
+    _subInfo = data || null;
+    return !!(data && (data.status === 'active' || data.status === 'trialing'));
   } catch(e){ console.warn('sub check failed', e); return false; }
 }
 
-// Show the subscribe screen (when no active subscription).
+// Shows a small persistent "X days left in your trial" banner. Silent once the
+// trial has converted to a paid subscription (status !== 'trialing').
+function renderTrialBanner(){
+  const el=document.getElementById('trialBanner');
+  if(!el) return;
+  if(!_subInfo || _subInfo.status!=='trialing' || !_subInfo.trial_ends_at){ el.style.display='none'; return; }
+  const end=new Date(_subInfo.trial_ends_at).getTime();
+  const daysLeft=Math.max(0, Math.ceil((end-Date.now())/86400000));
+  el.style.display='flex';
+  el.innerHTML = daysLeft>0
+    ? `✨ ${daysLeft} day${daysLeft===1?'':'s'} left in your free trial — then $97/month. <a onclick="showView('settings')">Manage billing</a>`
+    : `✨ Your free trial ends today — $97/month starts after. <a onclick="showView('settings')">Manage billing</a>`;
+}
+
+// Show the subscribe screen (when no active/trialing subscription).
 function showPaywall(){
   document.querySelector('.app').style.display = 'none';
   let pw = document.getElementById('paywallScreen');
@@ -2490,9 +2509,9 @@ function showPaywall(){
     pw.innerHTML = `
       <div class="pw-card">
         <div class="pw-logo">Locale</div>
-        <h2>Start your Toolkit</h2>
-        <p>Get your visibility score, AI tools, and everything you need to get found — for <strong>$97/month</strong>. Cancel anytime.</p>
-        <button class="btn btn-primary pw-btn" onclick="startCheckout(this)">Subscribe — $97/month</button>
+        <h2>Start your free trial</h2>
+        <p>Try the full Toolkit free for <strong>14 days</strong> — your visibility score, Job Tracker, Content Studio and more. Then <strong>$97/month</strong>. Cancel any time before your trial ends and you won't be charged.</p>
+        <button class="btn btn-primary pw-btn" onclick="startCheckout(this)">Start your free 14-day trial</button>
         <button class="pw-logout" onclick="sb.auth.signOut().then(()=>location.reload())">Log out</button>
       </div>`;
     document.body.appendChild(pw);
@@ -2502,6 +2521,7 @@ function showPaywall(){
 
 // Kick off Stripe Checkout.
 async function startCheckout(btn){
+  const originalText = btn.textContent;
   btn.disabled = true; btn.textContent = 'Loading…';
   try {
     const r = await fetch('/api/checkout', {
@@ -2510,9 +2530,9 @@ async function startCheckout(btn){
     });
     const data = await r.json();
     if(data.url){ window.location.href = data.url; }
-    else { alert(data.error || 'Could not start checkout'); btn.disabled=false; btn.textContent='Subscribe — $97/month'; }
+    else { alert(data.error || 'Could not start checkout'); btn.disabled=false; btn.textContent=originalText; }
   } catch(e){
-    alert('Checkout error — try again'); btn.disabled=false; btn.textContent='Subscribe — $97/month';
+    alert('Checkout error — try again'); btn.disabled=false; btn.textContent=originalText;
   }
 }
 
