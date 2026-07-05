@@ -675,7 +675,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       <div class="field-row">
         <div class="field"><label>Value <span class="jt-opt">$ estimate</span></label><input id="jValue" type="number" placeholder="4200"></div>
         <div class="field"><label>Stage</label>
-          <select id="jStage">
+          <select id="jStage" onchange="onJobStageChange()">
             <option value="enquiry">Enquiry</option>
             <option value="quoted">Quoted</option>
             <option value="booked">Booked</option>
@@ -685,6 +685,7 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
       </div>
       <div class="field"><label>Notes <span class="jt-opt">optional</span></label><textarea id="jNotes" placeholder="e.g. Tricky access, quoted a bit higher. Keen to start before Christmas."></textarea></div>
       <label class="jt-check"><input type="checkbox" id="jFollow"> <span>Needs follow-up — flag this so it doesn't go cold</span></label>
+      <div id="jReviewBlock" style="display:none;margin-top:6px;padding:14px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:12px"></div>
       <div class="jt-modal-actions">
         <button class="btn btn-ghost" id="jtDeleteBtn" onclick="deleteJob()" style="display:none">Delete</button>
         <div style="flex:1"></div>
@@ -907,13 +908,14 @@ textarea{resize:vertical;line-height:1.6;min-height:80px}
     <div class="panel">
       <div class="panel-title">Your business</div>
       <div class="field"><label>Business name (appears on your reports)</label><input id="setAgency" placeholder="e.g. Harbour Plumbing"></div>
+      <div class="field"><label>Google review link <span style="color:var(--muted);font-weight:400">(used when you send a review request from Job Tracker)</span></label><input id="setReviewLink" placeholder="https://g.page/r/.../review"></div>
       <button class="btn btn-primary" onclick="saveSettings()">Save</button>
     </div>
     <div class="panel">
       <div class="panel-title">Data</div>
-      <div class="panel-sub">All client data lives in this browser. Export regularly as a backup.</div>
+      <div class="panel-sub">Your business data is saved to your Locale account automatically as you work — accessible from any device you log in on.</div>
       <button class="btn" onclick="exportData()">Export all data (JSON)</button>
-      <button class="btn btn-danger" onclick="if(confirm('Reset all your data? This cannot be undone.')){localStorage.clear();location.reload()}" style="margin-left:8px">Reset everything</button>
+      <button class="btn btn-danger" onclick="resetEverything()" style="margin-left:8px">Reset everything</button>
     </div>
   </div>
 
@@ -1274,16 +1276,83 @@ function openJobModal(id){
     document.getElementById('jNotes').value=j.notes||'';
     document.getElementById('jFollow').checked=!!j.followUp;
     delBtn.style.display='inline-flex';
+    renderJobReviewBlock(j);
   } else {
     title.textContent='Add a job';
     ['jCustomer','jPhone','jEmail','jJob','jValue','jNotes'].forEach(f=>document.getElementById(f).value='');
     document.getElementById('jStage').value='enquiry';
     document.getElementById('jFollow').checked=false;
     delBtn.style.display='none';
+    const rb=document.getElementById('jReviewBlock'); if(rb){ rb.style.display='none'; rb.innerHTML=''; }
   }
   modal.style.display='flex';
 }
 function closeJobModal(){ document.getElementById('jtModal').style.display='none'; _editingJobId=null; }
+
+// Show the "send a review request" action once a job reaches Done/Review — this is
+// the last leg of the five-stage journey (Recommended). Owner confirmation is
+// required for "review received" since Locale can't verify a Google review was
+// actually left; it only knows what it was told to send and when.
+function onJobStageChange(){
+  if(!_editingJobId) return; // only meaningful once a job actually exists
+  const c=activeClient(); if(!c) return;
+  const j=(c.jobs||[]).find(x=>x.id===_editingJobId);
+  if(j) renderJobReviewBlock(j);
+}
+function renderJobReviewBlock(j){
+  const el=document.getElementById('jReviewBlock');
+  if(!el) return;
+  const stage=document.getElementById('jStage').value;
+  if(!_editingJobId || (stage!=='done' && stage!=='review')){ el.style.display='none'; el.innerHTML=''; return; }
+  el.style.display='block';
+  const email=document.getElementById('jEmail').value.trim();
+  if(!email){
+    el.innerHTML='<div style="font-size:12.5px;color:var(--muted);line-height:1.5">Add the customer\'s email above to send a review request.</div>';
+    return;
+  }
+  if(!j.reviewRequested){
+    el.innerHTML='<button type="button" class="btn btn-secondary" id="jReviewSendBtn" onclick="sendReviewRequestForJob()">✉ Send review request</button>';
+  } else {
+    const dateStr=j.reviewRequestedAt ? new Date(j.reviewRequestedAt).toLocaleDateString('en-AU',{day:'numeric',month:'short'}) : '';
+    el.innerHTML=
+      '<div style="font-size:13px;color:var(--green);font-weight:600;margin-bottom:8px">✓ Review requested'+(dateStr?' '+esc(dateStr):'')+'</div>'+
+      '<label class="jt-check" style="margin-bottom:10px"><input type="checkbox" id="jReviewReceived"'+(j.reviewReceived?' checked':'')+' onchange="toggleReviewReceived()"> <span>Review received</span></label><br>'+
+      '<button type="button" class="btn btn-ghost" id="jReviewSendBtn" style="font-size:12.5px;padding:6px 12px" onclick="sendReviewRequestForJob()">Send again</button>';
+  }
+}
+async function sendReviewRequestForJob(){
+  const c=activeClient(); if(!c||!_editingJobId) return;
+  const j=(c.jobs||[]).find(x=>x.id===_editingJobId); if(!j) return;
+  const email=document.getElementById('jEmail').value.trim();
+  if(!email){ toast('Add the customer\'s email first'); return; }
+  const btn=document.getElementById('jReviewSendBtn');
+  if(btn){ btn.disabled=true; btn.textContent='Sending…'; }
+  try{
+    const r=await fetch('/api/send-review-request',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({ to:email, customerName:j.customer||'', businessName:c.name||'', reviewLink:c.reviewLink||'' })
+    });
+    const data=await r.json().catch(()=>({}));
+    j.reviewRequested=true; j.reviewRequestedAt=Date.now();
+    scheduleSave();
+    renderJobReviewBlock(j);
+    if(data && data.sent===false){
+      toast('Saved — email sending isn\'t connected yet, so nothing actually went out.');
+    } else {
+      toast('Review request sent to '+(j.customer||'the customer'));
+    }
+  }catch(e){
+    if(btn){ btn.disabled=false; btn.textContent='✉ Send review request'; }
+    toast('Could not send — check your connection and try again');
+  }
+}
+function toggleReviewReceived(){
+  const c=activeClient(); if(!c||!_editingJobId) return;
+  const j=(c.jobs||[]).find(x=>x.id===_editingJobId); if(!j) return;
+  const cb=document.getElementById('jReviewReceived');
+  j.reviewReceived = cb ? cb.checked : false;
+  scheduleSave();
+}
 
 function saveJob(){
   const c=activeClient(); if(!c) return;
@@ -2176,10 +2245,14 @@ function deleteClient(id){
 async function loadSettings(){
   document.getElementById('setKey').value=S.settings.apiKey||'';
   document.getElementById('setAgency').value=S.settings.agencyName||'';
+  const c=activeClient();
+  document.getElementById('setReviewLink').value=(c && c.reviewLink) || '';
   try{ const res=await fetch('/api/generate',{method:'OPTIONS'}); if(res.ok) document.getElementById('secureNote').style.display='block'; }catch(e){}
 }
 function saveSettings(){
   S.settings={...S.settings,apiKey:val('setKey'),agencyName:val('setAgency')};
+  const c=activeClient();
+  if(c){ c.reviewLink=val('setReviewLink'); scheduleSave(); }
   refreshApiStatus(); toast('Settings saved');
 }
 async function testKey(){
@@ -2196,6 +2269,17 @@ async function testKey(){
 function exportData(){
   const blob=new Blob([JSON.stringify({settings:{agencyName:S.settings.agencyName},clients:S.clients},null,2)],{type:'application/json'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='locale-backup-'+new Date().toISOString().slice(0,10)+'.json'; a.click();
+}
+async function resetEverything(){
+  if(!confirm('Reset all your data? This cannot be undone.')) return;
+  try{
+    if(sb && _currentUser){
+      const { error } = await sb.from('businesses').delete().eq('user_id', _currentUser.id);
+      if(error) console.error('Reset failed to clear Supabase data:', error.message);
+    }
+  }catch(e){ console.error('Reset error:', e); }
+  localStorage.clear();
+  location.reload();
 }
 
 /* ============ HELPERS ============ */
